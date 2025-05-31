@@ -19,8 +19,11 @@ public class UsuarioServiceImpl implements UsuarioService {
     }
 
     @Override
-    public boolean validarCredenciales(String nombreUsuario, String contrasenia) {
-        Usuario usuario = buscarPorNombreUsuario(nombreUsuario);
-        return usuario != null && usuario.getContrasenia().equals(contrasenia);
+    public Usuario validarCredenciales(String nombreUsuario, String contrasenia) {
+    Usuario usuario = buscarPorNombreUsuario(nombreUsuario);
+    if (usuario != null && usuario.getContrasenia().equals(contrasenia)) {
+        return usuario;
     }
+    return null;
+}
 }

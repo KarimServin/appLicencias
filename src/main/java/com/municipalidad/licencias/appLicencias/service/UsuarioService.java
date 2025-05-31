@@ -9,5 +9,5 @@ import com.municipalidad.licencias.appLicencias.model.Usuario;
 
 public interface UsuarioService {
     Usuario buscarPorNombreUsuario(String nombreUsuario);
-    boolean validarCredenciales(String nombreUsuario, String contrasenia);
+    Usuario validarCredenciales(String nombreUsuario, String contrasenia);
 }

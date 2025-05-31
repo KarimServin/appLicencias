@@ -3,6 +3,7 @@
 package com.municipalidad.licencias.appLicencias.ui;
 
 import com.municipalidad.licencias.appLicencias.controller.UsuarioController;
+import com.municipalidad.licencias.appLicencias.model.Usuario;
 import javax.swing.JOptionPane;
 
 
@@ -100,7 +101,7 @@ public class PantallaLogin extends javax.swing.JFrame {
                 .addComponent(jLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(txtTitulo)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 33, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(txtUsuario)
                     .addComponent(campoUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -138,13 +139,16 @@ public class PantallaLogin extends javax.swing.JFrame {
 
     private void btnIngresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIngresarActionPerformed
         
-        String usuario = campoUsuario.getText();
+        String usuarioNombre = campoUsuario.getText();
     String contrasenia = new String(campoPassword.getPassword());
 
-    boolean exito = usuarioController.login(usuario, contrasenia);
-    if (exito) {
+    Usuario usuario = usuarioController.login(usuarioNombre, contrasenia);
+    if (usuario!=null) {
         JOptionPane.showMessageDialog(null, "Login exitoso");
-        // Aquí podrías abrir la siguiente ventana o funcionalidad
+        // Abre el menu principal
+        PantallaMenuPrincipal menu = new PantallaMenuPrincipal(usuario);  // pasar usuario al menú
+        menu.setVisible(true);
+        this.dispose(); 
     } else {
         JOptionPane.showMessageDialog(null, "Usuario o contraseña incorrectos");
     }
