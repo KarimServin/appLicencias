@@ -16,7 +16,7 @@ public class UsuarioController {
     @Autowired
     private UsuarioService usuarioService;
 
-    public boolean login(String nombreUsuario, String contrasenia) {
+    public Usuario login(String nombreUsuario, String contrasenia) {
         return usuarioService.validarCredenciales(nombreUsuario, contrasenia);
     }
 
