@@ -18,6 +18,7 @@ public class PantallaMenuPrincipal extends javax.swing.JFrame {
     public PantallaMenuPrincipal(Usuario usuario) {
         this.usuario = usuario;
         initComponents();
+        this.setLocationRelativeTo(null);
     }
 
     /**
@@ -73,7 +74,7 @@ public class PantallaMenuPrincipal extends javax.swing.JFrame {
         );
 
         labelBienvenidaNombre.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        labelBienvenidaNombre.setText("Bienvenido, nombre!");
+        labelBienvenidaNombre.setText("Bienvenido, " + usuario.getNombreUsuario() + "!");
 
         javax.swing.GroupLayout panelBienvenidaLayout = new javax.swing.GroupLayout(panelBienvenida);
         panelBienvenida.setLayout(panelBienvenidaLayout);

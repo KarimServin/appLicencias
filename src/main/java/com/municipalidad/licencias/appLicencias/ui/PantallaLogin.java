@@ -22,6 +22,7 @@ public class PantallaLogin extends javax.swing.JFrame {
     public PantallaLogin(UsuarioController usuarioController) {
         this.usuarioController = usuarioController;
         initComponents();
+        this.setLocationRelativeTo(null);
     }
 
     /**
