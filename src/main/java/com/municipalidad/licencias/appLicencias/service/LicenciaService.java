@@ -23,34 +23,47 @@ public class LicenciaService {
         this.licenciaRepo = licenciaRepo;
     }
 
-    public boolean puedeEmitirLicencia(Long titularId, String claseSolicitada) {
-        Titular titular = titularRepo.findById(titularId).orElseThrow(() -> new RuntimeException("Titular no encontrado"));
+    public boolean puedeEmitirLicencia(Long titularId, ClaseLicencia claseSolicitada) {
+        Titular titular = titularRepo.findById(titularId)
+                .orElseThrow(() -> new RuntimeException("Titular no encontrado"));
         int edad = Period.between(titular.getFechaNacimiento(), LocalDate.now()).getYears();
 
-        if ("A".equalsIgnoreCase(claseSolicitada) || "B".equalsIgnoreCase(claseSolicitada) 
-            || "F".equalsIgnoreCase(claseSolicitada) || "G".equalsIgnoreCase(claseSolicitada)) {
-            return edad >= 17;
+        // Lógica según clase (igual que antes, con Enum)
+        switch (claseSolicitada) {
+            case A:
+            case B:
+            case F:
+            case G:
+                return edad >= 17;
+            case C:
+            case D:
+            case E:
+                if (edad < 21) return false;
+                if (titular.isTuvoLicenciaProfesional()) return true;
+                if (edad >= 65) return false;
+                List<Licencia> licenciasClaseB = licenciaRepo.findByTitularIdAndClase(titularId, ClaseLicencia.B);
+                if (licenciasClaseB.isEmpty()) return false;
+                LocalDate fechaDesde = licenciasClaseB.stream()
+                        .map(Licencia::getFechaEmision)
+                        .min(LocalDate::compareTo)
+                        .orElse(LocalDate.now());
+                return Period.between(fechaDesde, LocalDate.now()).getYears() >= 1;
+            default:
+                return false;
         }
-
-        if ("C".equalsIgnoreCase(claseSolicitada) || "D".equalsIgnoreCase(claseSolicitada) || "E".equalsIgnoreCase(claseSolicitada)) {
-            if (edad < 21) return false;
-            if (titular.isTuvoLicenciaProfesional()) return true;
-            if (edad >= 65) return false;
-
-            // Validar que tuvo licencia clase B al menos 1 año
-            List<Licencia> licenciasClaseB = licenciaRepo.findByTitularIdAndClase(titularId, "B");
-            if (licenciasClaseB.isEmpty()) return false;
-
-            LocalDate fechaDesde = licenciasClaseB.stream()
-                .map(Licencia::getFechaEmision)
-                .min(LocalDate::compareTo)
-                .orElse(LocalDate.now());
-
-            return Period.between(fechaDesde, LocalDate.now()).getYears() >= 1;
-        }
-
-        return false;
     }
 
+     public Licencia emitirLicencia(Long titularId, Licencia licencia) {
+        Titular titular = titularRepo.findById(titularId)
+                .orElseThrow(() -> new RuntimeException("Titular no encontrado"));
+
+        if (!puedeEmitirLicencia(titularId, licencia.getClase())) {
+            throw new RuntimeException("No cumple los requisitos para emitir esta licencia");
+        }
+
+        licencia.setTitular(titular);
+        licencia.setFechaEmision(LocalDate.now());
+        return licenciaRepo.save(licencia);
+    }
     // Otros métodos: emitir licencia, registrar titular, etc.
 }
