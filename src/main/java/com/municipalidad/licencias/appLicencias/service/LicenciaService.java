@@ -2,7 +2,6 @@ package com.municipalidad.licencias.appLicencias.service;
 
 import java.time.LocalDate;
 import java.time.Period;
-import java.util.List;
 
 import org.springframework.stereotype.Service;
 
@@ -23,46 +22,39 @@ public class LicenciaService {
         this.licenciaRepo = licenciaRepo;
     }
 
-    public boolean puedeEmitirLicencia(Long titularId, ClaseLicencia claseSolicitada) {
-        Titular titular = titularRepo.findById(titularId)
+    public boolean puedeEmitirLicencia(Long dni, ClaseLicencia claseSolicitada) {
+        Titular titular = titularRepo.findById(dni)
                 .orElseThrow(() -> new RuntimeException("Titular no encontrado"));
+
         int edad = Period.between(titular.getFechaNacimiento(), LocalDate.now()).getYears();
 
         switch (claseSolicitada) {
-            case A:
-            case B:
-            case F:
-            case G:
+            case A, B, F, G:
                 return edad >= 17;
-            case C:
-            case D:
-            case E:
+            case C, D, E:
                 if (edad < 21) return false;
                 if (titular.isTuvoLicenciaProfesional()) return true;
                 if (edad >= 65) return false;
-                List<Licencia> licenciasClaseB = licenciaRepo.findByTitularIdAndClase(titularId, ClaseLicencia.B);
-                if (licenciasClaseB.isEmpty()) return false;
-                LocalDate fechaDesde = licenciasClaseB.stream()
-                        .map(Licencia::getFechaEmision)
-                        .min(LocalDate::compareTo)
-                        .orElse(LocalDate.now());
-                return Period.between(fechaDesde, LocalDate.now()).getYears() >= 1;
+                if (titular.getFechaLicenciaClaseB() == null) return false;
+                return Period.between(titular.getFechaLicenciaClaseB(), LocalDate.now()).getYears() >= 1;
             default:
                 return false;
         }
     }
 
-     public Licencia emitirLicencia(Long titularId, Licencia licencia) {
-        Titular titular = titularRepo.findById(titularId)
+    public Licencia emitirLicencia(Long dni, ClaseLicencia clase) {
+        Titular titular = titularRepo.findById(dni)
                 .orElseThrow(() -> new RuntimeException("Titular no encontrado"));
 
-        if (!puedeEmitirLicencia(titularId, licencia.getClase())) {
+        if (!puedeEmitirLicencia(dni, clase)) {
             throw new RuntimeException("No cumple los requisitos para emitir esta licencia");
         }
 
+        Licencia licencia = new Licencia();
+        licencia.setClase(clase);
         licencia.setTitular(titular);
         licencia.setFechaEmision(LocalDate.now());
+
         return licenciaRepo.save(licencia);
     }
-   
 }
