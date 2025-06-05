@@ -28,7 +28,6 @@ public class LicenciaService {
                 .orElseThrow(() -> new RuntimeException("Titular no encontrado"));
         int edad = Period.between(titular.getFechaNacimiento(), LocalDate.now()).getYears();
 
-        // Lógica según clase (igual que antes, con Enum)
         switch (claseSolicitada) {
             case A:
             case B:
@@ -65,5 +64,5 @@ public class LicenciaService {
         licencia.setFechaEmision(LocalDate.now());
         return licenciaRepo.save(licencia);
     }
-    // Otros métodos: emitir licencia, registrar titular, etc.
+   
 }
