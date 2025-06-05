@@ -1,0 +1,27 @@
+package com.municipalidad.licencias.appLicencias.controller;
+
+
+import org.springframework.stereotype.Controller;
+import com.municipalidad.licencias.appLicencias.model.ClaseLicencia;
+import com.municipalidad.licencias.appLicencias.model.Licencia;
+import com.municipalidad.licencias.appLicencias.service.LicenciaService;
+
+@Controller
+public class LicenciaController {
+
+    private final LicenciaService licenciaService;
+
+    public LicenciaController(LicenciaService licenciaService) {
+        this.licenciaService = licenciaService;
+    }
+
+    public boolean puedeEmitir(Long dni,  ClaseLicencia clase) {
+        return licenciaService.puedeEmitirLicencia(dni, clase);
+    }
+
+
+    public Licencia emitirLicencia( Long dni, Licencia licencia) {
+        return licenciaService.emitirLicencia(dni, licencia);
+    }
+
+}
