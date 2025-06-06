@@ -4,7 +4,11 @@
  */
 package com.municipalidad.licencias.appLicencias.ui;
 
+import com.municipalidad.licencias.appLicencias.controller.LicenciaController;
+import com.municipalidad.licencias.appLicencias.controller.TitularController;
+import com.municipalidad.licencias.appLicencias.controller.UsuarioController;
 import com.municipalidad.licencias.appLicencias.model.Usuario;
+import com.municipalidad.licencias.appLicencias.singleton.SesionMenuPrincipal;
 import javax.swing.JOptionPane;
 
 /**
@@ -12,7 +16,9 @@ import javax.swing.JOptionPane;
  * @author karim
  */
 public class PantallaMenuPrincipal extends javax.swing.JFrame {
-
+    private TitularController titularController;
+    private LicenciaController licenciaController;
+    private UsuarioController usuarioController;
     private Usuario usuario;
     
     public PantallaMenuPrincipal(Usuario usuario) {
@@ -100,7 +106,7 @@ public class PantallaMenuPrincipal extends javax.swing.JFrame {
             }
         });
 
-        btnAltaTitular.setText("Alta Titular");
+        btnAltaTitular.setText("Cargar Titular");
         btnAltaTitular.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnAltaTitularActionPerformed(evt);
@@ -138,7 +144,7 @@ public class PantallaMenuPrincipal extends javax.swing.JFrame {
         });
 
         btnAltaUsuario.setBackground(new java.awt.Color(0, 204, 153));
-        btnAltaUsuario.setText("Alta de Usuario");
+        btnAltaUsuario.setText("Cargar de Usuario");
         btnAltaUsuario.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnAltaUsuarioActionPerformed(evt);
@@ -238,32 +244,35 @@ public class PantallaMenuPrincipal extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnEmitirNuevaLicenciaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEmitirNuevaLicenciaActionPerformed
-        // TODO add your handling code here:
+        new PantallaEmitirLicencia(licenciaController, titularController).setVisible(true);
+        SesionMenuPrincipal.setVisible(false);
     }//GEN-LAST:event_btnEmitirNuevaLicenciaActionPerformed
 
     private void btnAltaTitularActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAltaTitularActionPerformed
-        // TODO add your handling code here:
+        new PantallaCargarTitular(titularController, null).setVisible(true);
+        SesionMenuPrincipal.setVisible(false);
     }//GEN-LAST:event_btnAltaTitularActionPerformed
 
     private void btnRenovarLicenciaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRenovarLicenciaActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnRenovarLicenciaActionPerformed
+        JOptionPane.showMessageDialog(this, "Esta funcionalidad no está disponible.", "Acceso Denegado", JOptionPane.WARNING_MESSAGE);    }//GEN-LAST:event_btnRenovarLicenciaActionPerformed
 
     private void btnListarLicExpiradasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnListarLicExpiradasActionPerformed
-        // TODO add your handling code here:
+        JOptionPane.showMessageDialog(this, "Esta funcionalidad no está disponible.", "Acceso Denegado", JOptionPane.WARNING_MESSAGE);
     }//GEN-LAST:event_btnListarLicExpiradasActionPerformed
 
     private void btnListarLicVigentesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnListarLicVigentesActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnListarLicVigentesActionPerformed
+        JOptionPane.showMessageDialog(this, "Esta funcionalidad no está disponible.", "Acceso Denegado", JOptionPane.WARNING_MESSAGE);    }//GEN-LAST:event_btnListarLicVigentesActionPerformed
 
     private void btnModificarDatosTitularActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnModificarDatosTitularActionPerformed
-        
+        JOptionPane.showMessageDialog(this, "Esta funcionalidad no está disponible.", "Acceso Denegado", JOptionPane.WARNING_MESSAGE);
     }//GEN-LAST:event_btnModificarDatosTitularActionPerformed
 
     private void btnAltaUsuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAltaUsuarioActionPerformed
         if (!usuario.isEsSuperusuario()) {
         JOptionPane.showMessageDialog(this, "Debe ser superusuario para realizar esta acción.", "Acceso Denegado", JOptionPane.WARNING_MESSAGE);
+        } else {
+            new PantallaCrearUsuario(usuarioController).setVisible(true);
+            SesionMenuPrincipal.setVisible(false);
         }
         
     }//GEN-LAST:event_btnAltaUsuarioActionPerformed
@@ -271,6 +280,10 @@ public class PantallaMenuPrincipal extends javax.swing.JFrame {
     private void btnModificarDatosUsuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnModificarDatosUsuarioActionPerformed
         if (!usuario.isEsSuperusuario()) {
         JOptionPane.showMessageDialog(this, "Debe ser superusuario para realizar esta acción.", "Acceso Denegado", JOptionPane.WARNING_MESSAGE);
+        } else {
+            JOptionPane.showMessageDialog(this, "Esta funcionalidad no está disponible.", "Acceso Denegado", JOptionPane.WARNING_MESSAGE);
+            //new PantallaCrearUsuario().setVisible(true);
+            //SesionMenuPrincipal.setVisible(false);
         }
     }//GEN-LAST:event_btnModificarDatosUsuarioActionPerformed
 

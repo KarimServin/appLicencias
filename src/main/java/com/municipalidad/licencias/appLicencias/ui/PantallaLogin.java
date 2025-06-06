@@ -4,6 +4,8 @@ package com.municipalidad.licencias.appLicencias.ui;
 
 import com.municipalidad.licencias.appLicencias.controller.UsuarioController;
 import com.municipalidad.licencias.appLicencias.model.Usuario;
+import com.municipalidad.licencias.appLicencias.singleton.SesionMenuPrincipal;
+import com.municipalidad.licencias.appLicencias.singleton.SesionUsuario;
 import javax.swing.JOptionPane;
 
 
@@ -146,9 +148,11 @@ public class PantallaLogin extends javax.swing.JFrame {
     Usuario usuario = usuarioController.login(usuarioNombre, contrasenia);
     if (usuario!=null) {
         JOptionPane.showMessageDialog(null, "Login exitoso");
+        SesionUsuario.setUsuarioActual(usuario);
         // Abre el menu principal
         PantallaMenuPrincipal menu = new PantallaMenuPrincipal(usuario);  // pasar usuario al menú
-        menu.setVisible(true);
+        SesionMenuPrincipal.setMenu(menu);
+        SesionMenuPrincipal.setVisible(true);
         this.dispose(); 
     } else {
         JOptionPane.showMessageDialog(null, "Usuario o contraseña incorrectos");

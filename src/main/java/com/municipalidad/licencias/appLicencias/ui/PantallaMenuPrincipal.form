@@ -198,7 +198,7 @@
         </Component>
         <Component class="javax.swing.JButton" name="btnAltaTitular">
           <Properties>
-            <Property name="text" type="java.lang.String" value="Alta Titular"/>
+            <Property name="text" type="java.lang.String" value="Cargar Titular"/>
           </Properties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnAltaTitularActionPerformed"/>
@@ -246,7 +246,7 @@
             <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
               <Color blue="99" green="cc" red="0" type="rgb"/>
             </Property>
-            <Property name="text" type="java.lang.String" value="Alta de Usuario"/>
+            <Property name="text" type="java.lang.String" value="Cargar de Usuario"/>
           </Properties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnAltaUsuarioActionPerformed"/>
