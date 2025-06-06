@@ -20,7 +20,7 @@ public class TitularService {
     public Titular crearTitular(Long dni, String nombre, LocalDate fechaNacimiento,
                                  char grupoSanguineo, char factorSanguineo,
                                  boolean esDonante, boolean tuvoLicenciaProfesional,
-                                 LocalDate fechaLicenciaClaseB) {
+                                 LocalDate fechaLicenciaClaseB, Long telefono, String email) {
         if (titularRepo.existsById(dni)) {
             throw new RuntimeException("Ya existe un titular con ese DNI.");
         }
@@ -34,6 +34,8 @@ public class TitularService {
         titular.setEsDonante(esDonante);
         titular.setTuvoLicenciaProfesional(tuvoLicenciaProfesional);
         titular.setFechaLicenciaClaseB(fechaLicenciaClaseB);
+        titular.setTelefono(telefono);
+        titular.setEmail(email);
 
         return titularRepo.save(titular);
     }

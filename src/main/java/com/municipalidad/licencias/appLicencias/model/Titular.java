@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 
 package com.municipalidad.licencias.appLicencias.model;
 
@@ -27,7 +23,17 @@ public class Titular {
 
     private LocalDate fechaNacimiento;
 
+    private char grupoSanguineo;
+
+    private char factorSanguineo;
+
+    private boolean esDonante;
+
     private boolean tuvoLicenciaProfesional;
 
     private LocalDate fechaLicenciaClaseB;
+
+    private long telefono;
+
+    private String email;
 }
