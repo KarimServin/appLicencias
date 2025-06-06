@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import com.municipalidad.licencias.appLicencias.model.ClaseLicencia;
 import com.municipalidad.licencias.appLicencias.model.Licencia;
 import com.municipalidad.licencias.appLicencias.model.Titular;
+import com.municipalidad.licencias.appLicencias.model.Usuario;
 import com.municipalidad.licencias.appLicencias.repository.LicenciaRepository;
 import com.municipalidad.licencias.appLicencias.repository.TitularRepository;
 
@@ -42,7 +43,7 @@ public class LicenciaService {
         }
     }
 
-    public Licencia emitirLicencia(Long dni, ClaseLicencia clase) {
+    public Licencia emitirLicencia(Long dni, ClaseLicencia clase, String observaciones, Usuario usuario) {
         Titular titular = titularRepo.findById(dni)
                 .orElseThrow(() -> new RuntimeException("Titular no encontrado"));
 
@@ -54,6 +55,8 @@ public class LicenciaService {
         licencia.setClase(clase);
         licencia.setTitular(titular);
         licencia.setFechaEmision(LocalDate.now());
+        licencia.setObservaciones(observaciones);
+        licencia.setUsuario(usuario);
 
         return licenciaRepo.save(licencia);
     }
