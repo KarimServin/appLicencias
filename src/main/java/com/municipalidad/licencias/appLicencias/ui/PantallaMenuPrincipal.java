@@ -144,7 +144,7 @@ public class PantallaMenuPrincipal extends javax.swing.JFrame {
         });
 
         btnAltaUsuario.setBackground(new java.awt.Color(0, 204, 153));
-        btnAltaUsuario.setText("Cargar de Usuario");
+        btnAltaUsuario.setText("Crear Usuario");
         btnAltaUsuario.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnAltaUsuarioActionPerformed(evt);
@@ -254,6 +254,7 @@ public class PantallaMenuPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_btnAltaTitularActionPerformed
 
     private void btnRenovarLicenciaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRenovarLicenciaActionPerformed
+
         JOptionPane.showMessageDialog(this, "Esta funcionalidad no está disponible.", "Acceso Denegado", JOptionPane.WARNING_MESSAGE);    }//GEN-LAST:event_btnRenovarLicenciaActionPerformed
 
     private void btnListarLicExpiradasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnListarLicExpiradasActionPerformed

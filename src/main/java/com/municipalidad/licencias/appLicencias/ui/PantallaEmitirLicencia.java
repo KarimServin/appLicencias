@@ -166,7 +166,7 @@ public class PantallaEmitirLicencia extends javax.swing.JFrame {
     private void aceptarButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_aceptarButtonActionPerformed
         ClaseLicencia claseSelec;
         String selec = clasesDD.getSelectedItem().toString().toUpperCase();
-        claseSelec = ClaseLicencia.valueOf(selec);
+        claseSelec = ClaseLicencia.valueOf(selec.substring(6, 6));
         long dniTitular = Long.parseLong(numDocField.getText().replaceAll("[^\\d]", ""));
         if(Titular.class.isInstance(titularController.buscarTitular(dniTitular))){
             if(licenciaController.puedeEmitir(dniTitular, claseSelec)){

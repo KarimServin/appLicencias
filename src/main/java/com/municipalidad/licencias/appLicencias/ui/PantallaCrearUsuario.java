@@ -148,13 +148,21 @@ public class PantallaCrearUsuario extends javax.swing.JFrame {
 
     private void contraseñaFieldFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_contraseñaFieldFocusLost
         String cont = contraseñaField.getText();
-        if (cont.length() < 8 && cont.length() > 16) {
-            JOptionPane.showMessageDialog(
-                    null, 
-                    "El campo debe tener entre 8 y 16 caracteres.", 
+        if(contraseñaField.getText() == null){
+            JOptionPane.showMessageDialog(contraseñaField, 
+                    "El campo es obligatorio", 
                     "Error de validación", 
                     JOptionPane.ERROR_MESSAGE);
             contraseñaField.requestFocus();
+        } else{
+            if (cont.length() < 8 && cont.length() > 16) {
+                JOptionPane.showMessageDialog(
+                        contraseñaField, 
+                        "La contraseña debe tener entre 8 y 16 caracteres.", 
+                        "Error de validación", 
+                        JOptionPane.ERROR_MESSAGE);
+                contraseñaField.requestFocus();
+            }
         }
     }//GEN-LAST:event_contraseñaFieldFocusLost
 
@@ -168,12 +176,20 @@ public class PantallaCrearUsuario extends javax.swing.JFrame {
     }//GEN-LAST:event_aceptarButtonActionPerformed
 
     private void usuarioFieldFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_usuarioFieldFocusLost
-        if(usuarioController.obtenerUsuario(usuarioField.getText().trim()) != null){
+        if(usuarioField.getText() == null){
             JOptionPane.showMessageDialog(usuarioField, 
-                    "El nombre de usuario no está disponible", 
+                    "El campo es obligatorio", 
                     "Error de validación", 
                     JOptionPane.ERROR_MESSAGE);
             usuarioField.requestFocus();
+        } else {
+            if(usuarioController.obtenerUsuario(usuarioField.getText().trim()) != null){
+                JOptionPane.showMessageDialog(usuarioField, 
+                        "El nombre de usuario no está disponible", 
+                        "Error de validación", 
+                        JOptionPane.ERROR_MESSAGE);
+                usuarioField.requestFocus();
+            }
         }
     }//GEN-LAST:event_usuarioFieldFocusLost
 
