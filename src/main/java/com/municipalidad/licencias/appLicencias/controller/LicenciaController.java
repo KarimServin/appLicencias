@@ -20,7 +20,6 @@ public class LicenciaController {
         return licenciaService.puedeEmitirLicencia(dni, clase);
     }
 
-
     public Licencia emitirLicencia( Long dni, ClaseLicencia clase, String observaciones, Usuario usuario) {
         return licenciaService.emitirLicencia(dni, clase, observaciones, usuario);
     }
