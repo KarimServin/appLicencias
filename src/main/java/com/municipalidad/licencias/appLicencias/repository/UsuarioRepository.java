@@ -2,14 +2,11 @@
 package com.municipalidad.licencias.appLicencias.repository;
 
 import com.municipalidad.licencias.appLicencias.model.Usuario;
-import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.Optional;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
-/**
- *
- * @author karim
- */
-
+@Repository
 public interface UsuarioRepository extends JpaRepository<Usuario, Long> {
 
     // busca un usuario por nombre
