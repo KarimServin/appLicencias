@@ -5,10 +5,6 @@ import com.municipalidad.licencias.appLicencias.service.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
-/**
- *
- * @author karim
- */
 @Controller
 public class UsuarioController {
 
@@ -21,5 +17,9 @@ public class UsuarioController {
 
     public Usuario obtenerUsuario(String nombreUsuario) {
         return usuarioService.buscarPorNombreUsuario(nombreUsuario);
+    }
+    
+    public void altaUsuario(String nombreUsuario, String contrasenia, boolean esSuperusuario){
+    usuarioService.guardarUsuario(nombreUsuario, contrasenia, esSuperusuario);
     }
 }  
