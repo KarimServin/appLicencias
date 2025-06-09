@@ -21,8 +21,11 @@ public class PantallaMenuPrincipal extends javax.swing.JFrame {
     private UsuarioController usuarioController;
     private Usuario usuario;
     
-    public PantallaMenuPrincipal(Usuario usuario) {
+    public PantallaMenuPrincipal(Usuario usuario, TitularController t, LicenciaController l, UsuarioController u) {
         this.usuario = usuario;
+        this.titularController = t;
+        this.licenciaController = l;
+        this.usuarioController = u;
         initComponents();
         this.setLocationRelativeTo(null);
     }

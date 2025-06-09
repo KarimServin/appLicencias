@@ -2,6 +2,8 @@
 
 package com.municipalidad.licencias.appLicencias.ui;
 
+import com.municipalidad.licencias.appLicencias.controller.LicenciaController;
+import com.municipalidad.licencias.appLicencias.controller.TitularController;
 import com.municipalidad.licencias.appLicencias.controller.UsuarioController;
 import com.municipalidad.licencias.appLicencias.model.Usuario;
 import com.municipalidad.licencias.appLicencias.singleton.SesionMenuPrincipal;
@@ -18,11 +20,15 @@ import javax.swing.JOptionPane;
 public class PantallaLogin extends javax.swing.JFrame {
 
     private UsuarioController usuarioController;
+    private TitularController titularController;
+    private LicenciaController licenciaController;
     /**
      * Creates new form pantallaLogin
      */
-    public PantallaLogin(UsuarioController usuarioController) {
+    public PantallaLogin(UsuarioController usuarioController, TitularController t, LicenciaController l) {
         this.usuarioController = usuarioController;
+        this.titularController = t;
+        this.licenciaController = l;
         initComponents();
         this.setLocationRelativeTo(null);
     }
@@ -150,7 +156,7 @@ public class PantallaLogin extends javax.swing.JFrame {
         JOptionPane.showMessageDialog(null, "Login exitoso");
         SesionUsuario.setUsuarioActual(usuario);
         // Abre el menu principal
-        PantallaMenuPrincipal menu = new PantallaMenuPrincipal(usuario);  // pasar usuario al menú
+        PantallaMenuPrincipal menu = new PantallaMenuPrincipal(usuario, titularController, licenciaController, usuarioController);  // pasar usuario al menú
         SesionMenuPrincipal.setMenu(menu);
         SesionMenuPrincipal.setVisible(true);
         this.dispose(); 
