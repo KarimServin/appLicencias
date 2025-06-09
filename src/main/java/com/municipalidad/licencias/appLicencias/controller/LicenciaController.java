@@ -20,7 +20,7 @@ public class LicenciaController {
     }
 
 
-    public Licencia emitirLicencia( Long dni, Licencia licencia) {
+    public Licencia emitirLicencia( Long dni, ClaseLicencia licencia) {
         return licenciaService.emitirLicencia(dni, licencia);
     }
 

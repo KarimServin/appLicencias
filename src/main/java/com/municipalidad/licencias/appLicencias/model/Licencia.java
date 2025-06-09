@@ -33,7 +33,21 @@ public class Licencia {
     private ClaseLicencia clase;// A, B, C, D, E, F, G
 
     private LocalDate fechaEmision;
+    
+    private LocalDate fechaVencimiento;
 
     @ManyToOne
     private Titular titular;
+    
+    public void setFechaVencimiento(int vigencia) {
+    
+    LocalDate fechaAux =  this.fechaEmision;
+    
+    int mesAux = this.fechaEmision.getMonthValue();
+    int diaAux = this.fechaEmision.getDayOfMonth();
+    
+    this.fechaVencimiento = fechaAux.plusYears(vigencia);
+    this.fechaVencimiento.withMonth(mesAux);
+    this.fechaVencimiento.withDayOfMonth(diaAux);
+    }
 }

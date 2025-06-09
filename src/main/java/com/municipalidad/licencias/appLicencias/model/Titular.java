@@ -22,6 +22,12 @@ import lombok.Setter;
 public class Titular {
     @Id
     private Long id;
+    
+    private boolean esDonante;
+    
+    private char grupoSanguineo;
+    
+    private char factorSanguineo;
 
     private String nombre;
 
