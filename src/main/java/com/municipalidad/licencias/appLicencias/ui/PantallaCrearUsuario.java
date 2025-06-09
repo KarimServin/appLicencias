@@ -32,7 +32,7 @@ public class PantallaCrearUsuario extends javax.swing.JFrame {
         cancelarButton = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setPreferredSize(new java.awt.Dimension(570, 388));
+        setSize(new java.awt.Dimension(482, 176));
 
         labelMenuPrincipal.setText("Crear Usuario Administrador - Sistema de gestión de licencias");
 
@@ -140,24 +140,24 @@ public class PantallaCrearUsuario extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(aceptarButton)
                     .addComponent(cancelarButton))
-                .addGap(0, 132, Short.MAX_VALUE))
+                .addGap(0, 8, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void contraseñaFieldFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_contraseñaFieldFocusLost
-        String cont = contraseñaField.getText();
-        if(contraseñaField.getText() == null){
-            JOptionPane.showMessageDialog(contraseñaField, 
+        if(contraseñaField.getText().trim() == null || contraseñaField.getText().trim().isBlank()){
+            JOptionPane.showMessageDialog(null, 
                     "El campo es obligatorio", 
                     "Error de validación", 
                     JOptionPane.ERROR_MESSAGE);
             contraseñaField.requestFocus();
         } else{
+            String cont = contraseñaField.getText();
             if (cont.length() < 8 && cont.length() > 16) {
                 JOptionPane.showMessageDialog(
-                        contraseñaField, 
+                        null, 
                         "La contraseña debe tener entre 8 y 16 caracteres.", 
                         "Error de validación", 
                         JOptionPane.ERROR_MESSAGE);
@@ -176,15 +176,15 @@ public class PantallaCrearUsuario extends javax.swing.JFrame {
     }//GEN-LAST:event_aceptarButtonActionPerformed
 
     private void usuarioFieldFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_usuarioFieldFocusLost
-        if(usuarioField.getText() == null){
-            JOptionPane.showMessageDialog(usuarioField, 
+        if(usuarioField.getText().trim() == null || usuarioField.getText().trim().isBlank()){
+            JOptionPane.showMessageDialog(null, 
                     "El campo es obligatorio", 
                     "Error de validación", 
                     JOptionPane.ERROR_MESSAGE);
             usuarioField.requestFocus();
         } else {
             if(usuarioController.obtenerUsuario(usuarioField.getText().trim()) != null){
-                JOptionPane.showMessageDialog(usuarioField, 
+                JOptionPane.showMessageDialog(null, 
                         "El nombre de usuario no está disponible", 
                         "Error de validación", 
                         JOptionPane.ERROR_MESSAGE);

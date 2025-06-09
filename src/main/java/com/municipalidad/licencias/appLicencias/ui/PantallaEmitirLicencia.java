@@ -40,7 +40,8 @@ public class PantallaEmitirLicencia extends javax.swing.JFrame {
         jLabel6 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setPreferredSize(new java.awt.Dimension(570, 388));
+        setLocationByPlatform(true);
+        setSize(new java.awt.Dimension(590, 254));
 
         labelMenuPrincipal.setText("Emitir Nueva Licencia - Sistema de gestión de licencias");
 
@@ -53,9 +54,9 @@ public class PantallaEmitirLicencia extends javax.swing.JFrame {
             .addGroup(panelEncabezadoLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(labelLogoSF)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 139, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 162, Short.MAX_VALUE)
                 .addComponent(labelMenuPrincipal)
-                .addGap(29, 29, 29))
+                .addContainerGap())
         );
         panelEncabezadoLayout.setVerticalGroup(
             panelEncabezadoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -109,7 +110,7 @@ public class PantallaEmitirLicencia extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addComponent(panelEncabezado, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 59, Short.MAX_VALUE))
+                .addGap(0, 0, Short.MAX_VALUE))
             .addGroup(layout.createSequentialGroup()
                 .addGap(15, 15, 15)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -124,16 +125,16 @@ public class PantallaEmitirLicencia extends javax.swing.JFrame {
                                 .addComponent(jLabel5)
                                 .addComponent(jLabel6))
                             .addGap(50, 50, 50)
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                .addComponent(clasesDD, javax.swing.GroupLayout.PREFERRED_SIZE, 439, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(clasesDD, 0, 1, Short.MAX_VALUE)
                                 .addGroup(layout.createSequentialGroup()
-                                    .addComponent(tipoDocDD, javax.swing.GroupLayout.PREFERRED_SIZE, 157, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(tipoDocDD, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                     .addGap(18, 18, 18)
                                     .addComponent(jLabel2)
                                     .addGap(18, 18, 18)
-                                    .addComponent(numDocField, javax.swing.GroupLayout.PREFERRED_SIZE, 151, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addComponent(numDocField))
                                 .addComponent(observacionesField)))))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(9, 9, 9))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -157,33 +158,59 @@ public class PantallaEmitirLicencia extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(aceptarButton)
                     .addComponent(cancelarButton))
-                .addContainerGap(151, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void aceptarButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_aceptarButtonActionPerformed
-        ClaseLicencia claseSelec;
-        String selec = clasesDD.getSelectedItem().toString().toUpperCase();
-        claseSelec = ClaseLicencia.valueOf(selec.substring(6, 6));
-        long dniTitular = Long.parseLong(numDocField.getText().replaceAll("[^\\d]", ""));
-        if(Titular.class.isInstance(titularController.buscarTitular(dniTitular))){
-            if(licenciaController.puedeEmitir(dniTitular, claseSelec)){
-                licenciaController.emitirLicencia(dniTitular, claseSelec, observacionesField.getText().trim(), SesionUsuario.getUsuarioActual());
-                JOptionPane.showMessageDialog(//try catch? excepcion?
-                        null,
-                        "La licencia ha sido creada con éxito.",
-                        "Exito",
-                        JOptionPane.INFORMATION_MESSAGE);
-            } else {
-                JOptionPane.showMessageDialog(
-                        null,
-                        "El titular no puede emitir licencia de la clase seleccionada.",
-                        "Error",
-                        JOptionPane.ERROR_MESSAGE);
+        if(numDocField.getText().trim()!=null || !numDocField.getText().trim().isBlank()){
+            ClaseLicencia claseSelec;
+            String selec = clasesDD.getSelectedItem().toString().toUpperCase();
+            claseSelec = ClaseLicencia.valueOf(String.valueOf(selec.charAt(6)));
+            long dniTitular = Long.parseLong(numDocField.getText().replaceAll("[^\\d]", ""));
+            try {
+                if(Titular.class.isInstance(titularController.buscarTitular(dniTitular))){
+                    if(licenciaController.puedeEmitir(dniTitular, claseSelec)){
+                        licenciaController.emitirLicencia(dniTitular, claseSelec, observacionesField.getText().trim(), SesionUsuario.getUsuarioActual());
+                        JOptionPane.showMessageDialog(
+                                null,
+                                "La licencia ha sido creada con éxito.",
+                                "Exito",
+                                JOptionPane.INFORMATION_MESSAGE);
+                    } else {
+                        JOptionPane.showMessageDialog(
+                                null,
+                                "El titular no puede emitir licencia de la clase seleccionada.",
+                                "Error",
+                                JOptionPane.ERROR_MESSAGE);
+                    }
+                }
+            } catch (RuntimeException e){
+                int opcion =  JOptionPane.showOptionDialog(
+                            null,
+                            "El titular no está registrado. ¿Desea registrarlo?",
+                            "Titular no encontrado",
+                            JOptionPane.YES_NO_OPTION,
+                            JOptionPane.QUESTION_MESSAGE,
+                            null,
+                            new Object[]{"Aceptar", "Cancelar"},
+                            "Aceptar");
+                if(opcion == JOptionPane.YES_OPTION){
+                    new PantallaCargarTitular(titularController, clasesDD.getSelectedItem().toString().toUpperCase()).setVisible(true);
+                    this.dispose();
+                } else {
+                    numDocField.setText("");
+                    numDocField.requestFocus();
+                }
             }
-        }        
+        } else JOptionPane.showMessageDialog(
+                null,
+                "Hay campos vacíos",
+                "Error",
+                JOptionPane.ERROR_MESSAGE);
+         
     }//GEN-LAST:event_aceptarButtonActionPerformed
 
     private void cancelarButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelarButtonActionPerformed
@@ -192,22 +219,32 @@ public class PantallaEmitirLicencia extends javax.swing.JFrame {
     }//GEN-LAST:event_cancelarButtonActionPerformed
 
     private void numDocFieldFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_numDocFieldFocusLost
-        Long dni = Long.parseLong(numDocField.getText());
-        if(titularController.buscarTitular(dni) == null){
-            int opcion =  JOptionPane.showOptionDialog(
-                    null,
-                    "El titular no está registrado. ¿Desea registrarlo?",
-                    "Titular no encontrado",
-                    JOptionPane.YES_NO_OPTION,
-                    JOptionPane.QUESTION_MESSAGE,
-                    null,
-                    new Object[]{"Aceptar", "Cancelar"},
-                    "Aceptar");
-            if(opcion == JOptionPane.YES_OPTION){
-                new PantallaCargarTitular(titularController, clasesDD.getSelectedItem().toString().toUpperCase()).setVisible(true);
-            } else {
-                numDocField.setText("");
-                numDocField.requestFocus();
+        if(numDocField.getText().trim() == null || numDocField.getText().trim().isBlank()){
+            JOptionPane.showMessageDialog(numDocField, 
+                    "El campo es obligatorio", 
+                    "Error de validación", 
+                    JOptionPane.ERROR_MESSAGE);
+            numDocField.requestFocus();
+        } else{
+            Long dni = Long.valueOf(numDocField.getText());
+            try{
+                titularController.buscarTitular(dni);
+            } catch (RuntimeException e){
+                int opcion =  JOptionPane.showOptionDialog(
+                            null,
+                            "El titular no está registrado. ¿Desea registrarlo?",
+                            "Titular no encontrado",
+                            JOptionPane.YES_NO_OPTION,
+                            JOptionPane.QUESTION_MESSAGE,
+                            null,
+                            new Object[]{"Aceptar", "Cancelar"},
+                            "Aceptar");
+                if(opcion == JOptionPane.YES_OPTION){
+                    new PantallaCargarTitular(titularController, clasesDD.getSelectedItem().toString().toUpperCase()).setVisible(true);
+                } else {
+                    numDocField.setText("");
+                    numDocField.requestFocus();
+                }
             }
         }
     }//GEN-LAST:event_numDocFieldFocusLost
