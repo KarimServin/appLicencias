@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import com.municipalidad.licencias.appLicencias.model.ClaseLicencia;
 import com.municipalidad.licencias.appLicencias.model.Licencia;
 import com.municipalidad.licencias.appLicencias.model.Titular;
+import com.municipalidad.licencias.appLicencias.model.Usuario;
 import com.municipalidad.licencias.appLicencias.repository.LicenciaRepository;
 import com.municipalidad.licencias.appLicencias.repository.TitularRepository;
 
@@ -42,7 +43,7 @@ public class LicenciaService {
         }
     }
 
-    public Licencia emitirLicencia(Long dni, ClaseLicencia clase) {
+    public Licencia emitirLicencia(Long dni, ClaseLicencia clase, String observaciones, Usuario usuario) {
         Titular titular = titularRepo.findById(dni)
                 .orElseThrow(() -> new RuntimeException("Titular no encontrado"));
 
@@ -55,13 +56,14 @@ public class LicenciaService {
         licencia.setTitular(titular);
         licencia.setFechaEmision(LocalDate.now());
         licencia.setFechaVencimiento(calcularVigencia(licencia, titular));
+        licencia.setObservaciones(observaciones);
+        licencia.setUsuario(usuario);
 
         return licenciaRepo.save(licencia);
     }
     
     public int calcularVigencia(Licencia licencia, Titular titular) {
     int edad = Period.between(titular.getFechaNacimiento(), LocalDate.now()).getYears();
-    int vigencia;
     if(edad < 21) {
         if(licenciaRepo.findByTitularId(titular.getId()).isEmpty())
             return 1;
@@ -78,56 +80,119 @@ public class LicenciaService {
     ClaseLicencia claseLicencia = licencia.getClase();
     int vigencia = this.calcularVigencia(licencia, licencia.getTitular());
     switch(claseLicencia) {
-        case(claseLicencia.A):
+        case ClaseLicencia.A:
             switch(vigencia) {
-                case(5): return 40;
-                case(4): return 30;
-                case(3): return 25;
-                case(1): return 20;
+                case(5) -> {
+                    return 40;
             }
-        case(claseLicencia.B):
+                case(4) -> {
+                    return 30;
+            }
+                case(3) -> {
+                    return 25;
+            }
+                case(1) -> {
+                    return 20;
+            }
+            }
+
+        case ClaseLicencia.B:
             switch(vigencia) {
-                case(5): return 40;
-                case(4): return 30;
-                case(3): return 25;
-                case(1): return 20;
+                case(5) -> {
+                    return 40;
             }
-        case(claseLicencia.C):
+                case(4) -> {
+                    return 30;
+            }
+                case(3) -> {
+                    return 25;
+            }
+                case(1) -> {
+                    return 20;
+            }
+            }
+
+        case ClaseLicencia.C:
             switch(vigencia) {
-                case(5): return 47;
-                case(4): return 35;
-                case(3): return 30;
-                case(1): return 23;
+                case(5) -> {
+                    return 47;
             }
-        case(claseLicencia.D):
+                case(4) -> {
+                    return 35;
+            }
+                case(3) -> {
+                    return 30;
+            }
+                case(1) -> {
+                    return 23;
+            }
+            }
+
+        case ClaseLicencia.D:
             switch(vigencia) {
-                case(5): return 100;
-                case(4): return 90;
-                case(3): return 70;
-                case(1): return 50;
+                case(5) -> {
+                    return 100;
             }
-        case(claseLicencia.E):
+                case(4) -> {
+                    return 90;
+            }
+                case(3) -> {
+                    return 70;
+            }
+                case(1) -> {
+                    return 50;
+            }
+            }
+
+        case ClaseLicencia.E:
             switch(vigencia) {
-                case(5): return 59;
-                case(4): return 44;
-                case(3): return 39;
-                case(1): return 29
-                        ;
+                case(5) -> {
+                    return 59;
             }
-        case(claseLicencia.F):
+                case(4) -> {
+                    return 44;
+            }
+                case(3) -> {
+                    return 39;
+            }
+                case(1) -> {
+                    return 29
+                            ;
+            }
+            }
+
+        case ClaseLicencia.F:
             switch(vigencia) {
-                case(5): return 20;
-                case(4): return 15;
-                case(3): return 10;
-                case(1): return 5;
+                case(5) -> {
+                    return 20;
             }
-        case(claseLicencia.G):
+                case(4) -> {
+                    return 15;
+            }
+                case(3) -> {
+                    return 10;
+            }
+                case(1) -> {
+                    return 5;
+            }
+            }
+
+        case ClaseLicencia.G:
             switch(vigencia) {
-                case(5): return 40;
-                case(4): return 30;
-                case(3): return 25;
-                case(1): return 20;
+                case(5) -> {
+                    return 40;
             }
+                case(4) -> {
+                    return 30;
+            }
+                case(3) -> {
+                    return 25;
+            }
+                case(1) -> {
+                    return 20;
+            }
+            }
+
     }
     return 0;
     }

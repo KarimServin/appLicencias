@@ -4,6 +4,7 @@ package com.municipalidad.licencias.appLicencias.controller;
 import org.springframework.stereotype.Controller;
 import com.municipalidad.licencias.appLicencias.model.ClaseLicencia;
 import com.municipalidad.licencias.appLicencias.model.Licencia;
+import com.municipalidad.licencias.appLicencias.model.Usuario;
 import com.municipalidad.licencias.appLicencias.service.LicenciaService;
 
 @Controller
@@ -19,9 +20,8 @@ public class LicenciaController {
         return licenciaService.puedeEmitirLicencia(dni, clase);
     }
 
-
-    public Licencia emitirLicencia( Long dni, ClaseLicencia licencia) {
-        return licenciaService.emitirLicencia(dni, licencia);
+    public Licencia emitirLicencia( Long dni, ClaseLicencia clase, String observaciones, Usuario usuario) {
+        return licenciaService.emitirLicencia(dni, clase, observaciones, usuario);
     }
 
 }

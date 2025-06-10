@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 
 package com.municipalidad.licencias.appLicencias.model;
 
@@ -35,6 +31,11 @@ public class Licencia {
     private LocalDate fechaEmision;
     
     private LocalDate fechaVencimiento;
+
+    @ManyToOne
+    private Usuario usuario;
+
+    private String observaciones;
 
     @ManyToOne
     private Titular titular;
