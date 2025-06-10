@@ -55,9 +55,147 @@ public class LicenciaService {
         licencia.setClase(clase);
         licencia.setTitular(titular);
         licencia.setFechaEmision(LocalDate.now());
+        licencia.setFechaVencimiento(calcularVigencia(licencia, titular));
         licencia.setObservaciones(observaciones);
         licencia.setUsuario(usuario);
 
         return licenciaRepo.save(licencia);
     }
+    
+    public int calcularVigencia(Licencia licencia, Titular titular) {
+    int edad = Period.between(titular.getFechaNacimiento(), LocalDate.now()).getYears();
+    if(edad < 21) {
+        if(licenciaRepo.findByTitularId(titular.getId()).isEmpty())
+            return 1;
+        else return 3;
+    }
+    if(edad >= 21 && edad < 47) return 5;
+    if(edad >= 47 && edad < 61) return 4;
+    if(edad >= 61 && edad <= 70) return 3;
+    if(edad > 70) return 1;
+    return 0;
+    }
+    
+    public int calcularCosto(Licencia licencia) {
+    ClaseLicencia claseLicencia = licencia.getClase();
+    int vigencia = this.calcularVigencia(licencia, licencia.getTitular());
+    switch(claseLicencia) {
+        case ClaseLicencia.A:
+            switch(vigencia) {
+                case(5) -> {
+                    return 40;
+            }
+                case(4) -> {
+                    return 30;
+            }
+                case(3) -> {
+                    return 25;
+            }
+                case(1) -> {
+                    return 20;
+            }
+            }
+
+        case ClaseLicencia.B:
+            switch(vigencia) {
+                case(5) -> {
+                    return 40;
+            }
+                case(4) -> {
+                    return 30;
+            }
+                case(3) -> {
+                    return 25;
+            }
+                case(1) -> {
+                    return 20;
+            }
+            }
+
+        case ClaseLicencia.C:
+            switch(vigencia) {
+                case(5) -> {
+                    return 47;
+            }
+                case(4) -> {
+                    return 35;
+            }
+                case(3) -> {
+                    return 30;
+            }
+                case(1) -> {
+                    return 23;
+            }
+            }
+
+        case ClaseLicencia.D:
+            switch(vigencia) {
+                case(5) -> {
+                    return 100;
+            }
+                case(4) -> {
+                    return 90;
+            }
+                case(3) -> {
+                    return 70;
+            }
+                case(1) -> {
+                    return 50;
+            }
+            }
+
+        case ClaseLicencia.E:
+            switch(vigencia) {
+                case(5) -> {
+                    return 59;
+            }
+                case(4) -> {
+                    return 44;
+            }
+                case(3) -> {
+                    return 39;
+            }
+                case(1) -> {
+                    return 29
+                            ;
+            }
+            }
+
+        case ClaseLicencia.F:
+            switch(vigencia) {
+                case(5) -> {
+                    return 20;
+            }
+                case(4) -> {
+                    return 15;
+            }
+                case(3) -> {
+                    return 10;
+            }
+                case(1) -> {
+                    return 5;
+            }
+            }
+
+        case ClaseLicencia.G:
+            switch(vigencia) {
+                case(5) -> {
+                    return 40;
+            }
+                case(4) -> {
+                    return 30;
+            }
+                case(3) -> {
+                    return 25;
+            }
+                case(1) -> {
+                    return 20;
+            }
+            }
+
+    }
+    return 0;
+    }
+    
+    
 }
