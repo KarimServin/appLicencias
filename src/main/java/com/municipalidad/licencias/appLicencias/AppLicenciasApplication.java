@@ -13,7 +13,9 @@ import org.springframework.context.ConfigurableApplicationContext;
 public class AppLicenciasApplication {
 
 	public static void main(String[] args) {
-		ConfigurableApplicationContext context = SpringApplication.run(AppLicenciasApplication.class, args);
+		try {
+                    ConfigurableApplicationContext context = SpringApplication.run(AppLicenciasApplication.class, args);
+                
                 // Obtené el controlador (Spring sí lo maneja)
                 
                 
@@ -28,7 +30,9 @@ public class AppLicenciasApplication {
 			PantallaLogin login = new PantallaLogin(usuarioController, titularController, licenciaController);
 			login.setVisible(true);
 		});
-        
+        } catch (Exception e) {
+        e.printStackTrace();
+    }
                 
 	}
 
