@@ -16,18 +16,18 @@ import lombok.Data;
 public class Titular {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    
+    private boolean esDonante;
+    
+    private char grupoSanguineo;
+    
+    private char factorSanguineo;
 
     private Long dni;
     
     private String nombre;
 
     private LocalDate fechaNacimiento;
-
-    private char grupoSanguineo;
-
-    private char factorSanguineo;
-
-    private boolean esDonante;
 
     private boolean tuvoLicenciaProfesional;
 
