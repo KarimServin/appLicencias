@@ -19,15 +19,15 @@ public class TitularController {
         this.titularService = titularService;
     }
 
-    public void crearTitular(Long dni, String nombre, LocalDate fechaNacimiento,
-                                char grupoSanguineo, char factorSanguineo,
-                                boolean esDonante, boolean tuvoLicenciaProfesional,
-                                LocalDate fechaLicenciaClaseB, Long telefono, String email) {
-       titularService.guardarTitular(dni, nombre, fechaNacimiento,
-                                           grupoSanguineo, factorSanguineo,
-                                           esDonante, tuvoLicenciaProfesional,
-                                           fechaLicenciaClaseB, telefono, email);
-    }
+  public Titular crearTitular(Long dni, String nombre, LocalDate fechaNacimiento,
+                            char grupoSanguineo, char factorSanguineo,
+                            boolean esDonante, boolean tuvoLicenciaProfesional,
+                            LocalDate fechaLicenciaClaseB, Long telefono, String email) {
+    return titularService.guardarTitular(dni, nombre, fechaNacimiento,
+                                         grupoSanguineo, factorSanguineo,
+                                         esDonante, tuvoLicenciaProfesional,
+                                         fechaLicenciaClaseB, telefono, email);
+}
 
     public Titular buscarTitular(Long dni) {
         return titularService.buscarPorDni(dni)

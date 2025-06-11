@@ -24,4 +24,7 @@ public class LicenciaController {
         return licenciaService.emitirLicencia(dni, clase, observaciones, usuario);
     }
 
+    public int calcularCosto(Licencia licencia){
+         return licenciaService.calcularCosto(licencia);
+}
 }

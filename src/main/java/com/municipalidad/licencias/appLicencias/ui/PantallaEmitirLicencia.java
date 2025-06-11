@@ -5,6 +5,7 @@ import com.municipalidad.licencias.appLicencias.controller.LicenciaController;
 import com.municipalidad.licencias.appLicencias.controller.TitularController;
 import com.municipalidad.licencias.appLicencias.model.ClaseLicencia;
 import com.municipalidad.licencias.appLicencias.model.Titular;
+import com.municipalidad.licencias.appLicencias.service.PDFService;
 import com.municipalidad.licencias.appLicencias.singleton.SesionMenuPrincipal;
 import com.municipalidad.licencias.appLicencias.singleton.SesionUsuario;
 import javax.swing.JOptionPane;
@@ -12,12 +13,14 @@ import javax.swing.JOptionPane;
 public class PantallaEmitirLicencia extends javax.swing.JFrame {
     LicenciaController licenciaController;
     TitularController titularController;
+    PDFService pdfs;
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(PantallaEmitirLicencia.class.getName());
     
     public PantallaEmitirLicencia() {}
     public PantallaEmitirLicencia(LicenciaController licenciaControl, TitularController titularControl) {
         licenciaController = licenciaControl;
         titularController = titularControl;
+        pdfs = new PDFService();
         initComponents();
     }
 
@@ -173,12 +176,16 @@ public class PantallaEmitirLicencia extends javax.swing.JFrame {
             try {
                 if(Titular.class.isInstance(titularController.buscarTitular(dniTitular))){
                     if(licenciaController.puedeEmitir(dniTitular, claseSelec)){
-                        licenciaController.emitirLicencia(dniTitular, claseSelec, observacionesField.getText().trim(), SesionUsuario.getUsuarioActual());
-                        JOptionPane.showMessageDialog(
+                        com.municipalidad.licencias.appLicencias.model.Licencia licencia = licenciaController.emitirLicencia(dniTitular, claseSelec, observacionesField.getText().trim(), SesionUsuario.getUsuarioActual());
+                      JOptionPane.showMessageDialog(
                                 null,
                                 "La licencia ha sido creada con éxito.",
                                 "Exito",
                                 JOptionPane.INFORMATION_MESSAGE);
+                         Titular titular = titularController.buscarTitular(dniTitular);
+                pdfs.imprimirLicencia(titular);
+                pdfs.imprimirComprobante(titular,licenciaController.calcularCosto(licencia));
+         
                     } else {
                         JOptionPane.showMessageDialog(
                                 null,
