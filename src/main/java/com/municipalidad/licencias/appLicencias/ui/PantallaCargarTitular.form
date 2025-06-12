@@ -174,9 +174,6 @@
   </Layout>
   <SubComponents>
     <Component class="javax.swing.JTextField" name="domicilioField">
-      <Events>
-        <EventHandler event="focusLost" listener="java.awt.event.FocusListener" parameters="java.awt.event.FocusEvent" handler="domicilioFieldFocusLost"/>
-      </Events>
     </Component>
     <Component class="javax.swing.JLabel" name="jLabel10">
       <Properties>
@@ -295,9 +292,6 @@
         </Property>
         <Property name="text" type="java.lang.String" value="dd/mm/aaaa"/>
       </Properties>
-      <Events>
-        <EventHandler event="focusLost" listener="java.awt.event.FocusListener" parameters="java.awt.event.FocusEvent" handler="fechaNacFieldFocusLost"/>
-      </Events>
     </Component>
     <Component class="javax.swing.JCheckBox" name="donanteCheck">
       <Properties>
@@ -310,9 +304,6 @@
           <Format format="########" subtype="-1" type="5"/>
         </Property>
       </Properties>
-      <Events>
-        <EventHandler event="focusLost" listener="java.awt.event.FocusListener" parameters="java.awt.event.FocusEvent" handler="numDocFieldFocusLost"/>
-      </Events>
     </Component>
     <Component class="javax.swing.JLabel" name="jLabel1">
       <Properties>
@@ -330,9 +321,6 @@
       </Properties>
     </Component>
     <Component class="javax.swing.JTextField" name="apellidoField">
-      <Events>
-        <EventHandler event="focusLost" listener="java.awt.event.FocusListener" parameters="java.awt.event.FocusEvent" handler="apellidoFieldFocusLost"/>
-      </Events>
     </Component>
     <Component class="javax.swing.JLabel" name="jLabel3">
       <Properties>
@@ -340,9 +328,6 @@
       </Properties>
     </Component>
     <Component class="javax.swing.JTextField" name="nombreField">
-      <Events>
-        <EventHandler event="focusLost" listener="java.awt.event.FocusListener" parameters="java.awt.event.FocusEvent" handler="nombreFieldFocusLost"/>
-      </Events>
     </Component>
     <Component class="javax.swing.JButton" name="aceptarButton">
       <Properties>
@@ -376,14 +361,8 @@
           <Format format="### ###-####" subtype="-1" type="5"/>
         </Property>
       </Properties>
-      <Events>
-        <EventHandler event="focusLost" listener="java.awt.event.FocusListener" parameters="java.awt.event.FocusEvent" handler="telefonoFieldFocusLost"/>
-      </Events>
     </Component>
     <Component class="javax.swing.JTextField" name="correoField">
-      <Events>
-        <EventHandler event="focusLost" listener="java.awt.event.FocusListener" parameters="java.awt.event.FocusEvent" handler="correoFieldFocusLost"/>
-      </Events>
     </Component>
   </SubComponents>
 </Form>

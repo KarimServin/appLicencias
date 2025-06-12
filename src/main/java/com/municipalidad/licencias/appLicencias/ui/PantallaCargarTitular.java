@@ -58,12 +58,6 @@ public class PantallaCargarTitular extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setSize(new java.awt.Dimension(596, 350));
 
-        domicilioField.addFocusListener(new java.awt.event.FocusAdapter() {
-            public void focusLost(java.awt.event.FocusEvent evt) {
-                domicilioFieldFocusLost(evt);
-            }
-        });
-
         jLabel10.setText("Nombre");
 
         jLabel4.setText("Fecha de nacimiento");
@@ -106,11 +100,6 @@ public class PantallaCargarTitular extends javax.swing.JFrame {
 
         fechaNacField.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.DateFormatter(new java.text.SimpleDateFormat("dd/MM/yyyy"))));
         fechaNacField.setText("dd/mm/aaaa");
-        fechaNacField.addFocusListener(new java.awt.event.FocusAdapter() {
-            public void focusLost(java.awt.event.FocusEvent evt) {
-                fechaNacFieldFocusLost(evt);
-            }
-        });
 
         donanteCheck.setText("Si / No");
 
@@ -119,11 +108,6 @@ public class PantallaCargarTitular extends javax.swing.JFrame {
         } catch (java.text.ParseException ex) {
             ex.printStackTrace();
         }
-        numDocField.addFocusListener(new java.awt.event.FocusAdapter() {
-            public void focusLost(java.awt.event.FocusEvent evt) {
-                numDocFieldFocusLost(evt);
-            }
-        });
 
         jLabel1.setText("Tipo de documento");
 
@@ -131,19 +115,7 @@ public class PantallaCargarTitular extends javax.swing.JFrame {
 
         jLabel2.setText("N° de documento");
 
-        apellidoField.addFocusListener(new java.awt.event.FocusAdapter() {
-            public void focusLost(java.awt.event.FocusEvent evt) {
-                apellidoFieldFocusLost(evt);
-            }
-        });
-
         jLabel3.setText("Domicilio");
-
-        nombreField.addFocusListener(new java.awt.event.FocusAdapter() {
-            public void focusLost(java.awt.event.FocusEvent evt) {
-                nombreFieldFocusLost(evt);
-            }
-        });
 
         aceptarButton.setText("Aceptar");
         aceptarButton.addActionListener(new java.awt.event.ActionListener() {
@@ -168,17 +140,6 @@ public class PantallaCargarTitular extends javax.swing.JFrame {
         } catch (java.text.ParseException ex) {
             ex.printStackTrace();
         }
-        telefonoField.addFocusListener(new java.awt.event.FocusAdapter() {
-            public void focusLost(java.awt.event.FocusEvent evt) {
-                telefonoFieldFocusLost(evt);
-            }
-        });
-
-        correoField.addFocusListener(new java.awt.event.FocusAdapter() {
-            public void focusLost(java.awt.event.FocusEvent evt) {
-                correoFieldFocusLost(evt);
-            }
-        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -299,43 +260,6 @@ public class PantallaCargarTitular extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void correoFieldFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_correoFieldFocusLost
-        String formato = "^[\\w.-]+@[\\w.-]+\\.[a-zA-Z]{2,}$";
-        String correo = correoField.getText().trim();
-        if(correo == null || correo.isBlank() || (!correo.matches(formato))){
-             JOptionPane.showMessageDialog(
-                null,
-                "El correo no es válido, vuelva a intentar.",
-                "Error",
-                JOptionPane.ERROR_MESSAGE);
-             correoField.requestFocus();
-        }
-    }//GEN-LAST:event_correoFieldFocusLost
-
-    private void apellidoFieldFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_apellidoFieldFocusLost
-        if(apellidoField.getText().trim()==null || apellidoField.getText().trim().isBlank()) JOptionPane.showMessageDialog(
-                null,
-                "El campo es obligatorio.",
-                "Error",
-                JOptionPane.ERROR_MESSAGE);
-    }//GEN-LAST:event_apellidoFieldFocusLost
-
-    private void nombreFieldFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_nombreFieldFocusLost
-        if(nombreField.getText().trim()==null || nombreField.getText().trim().isBlank()) JOptionPane.showMessageDialog(
-                null,
-                "El campo es obligatorio.",
-                "Error",
-                JOptionPane.ERROR_MESSAGE);
-    }//GEN-LAST:event_nombreFieldFocusLost
-
-    private void domicilioFieldFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_domicilioFieldFocusLost
-        if(domicilioField.getText().trim()==null || domicilioField.getText().trim().isBlank()) JOptionPane.showMessageDialog(
-                null,
-                "El campo es obligatorio.",
-                "Error",
-                JOptionPane.ERROR_MESSAGE);
-    }//GEN-LAST:event_domicilioFieldFocusLost
-
     private void aceptarButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_aceptarButtonActionPerformed
         if(numDocField.getText().trim()!=null && 
                 (apellidoField.getText().trim()!=null || !apellidoField.getText().trim().isBlank()) && 
@@ -384,33 +308,6 @@ public class PantallaCargarTitular extends javax.swing.JFrame {
         SesionMenuPrincipal.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_cancelarButtonActionPerformed
-
-    private void telefonoFieldFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_telefonoFieldFocusLost
-        if(telefonoField.getText().trim()==null || telefonoField.getText().trim().isBlank()) 
-            JOptionPane.showMessageDialog(
-                null,
-                "El campo es obligatorio.",
-                "Error",
-                JOptionPane.ERROR_MESSAGE);
-    }//GEN-LAST:event_telefonoFieldFocusLost
-
-    private void fechaNacFieldFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_fechaNacFieldFocusLost
-        if(fechaNacField.getText().trim()==null || fechaNacField.getText().trim().isBlank()) 
-            JOptionPane.showMessageDialog(
-                null,
-                "El campo es obligatorio.",
-                "Error",
-                JOptionPane.ERROR_MESSAGE);
-    }//GEN-LAST:event_fechaNacFieldFocusLost
-
-    private void numDocFieldFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_numDocFieldFocusLost
-        if(numDocField.getText().trim()==null || numDocField.getText().trim().isBlank()) 
-            JOptionPane.showMessageDialog(
-                null,
-                "El campo es obligatorio.",
-                "Error",
-                JOptionPane.ERROR_MESSAGE);
-    }//GEN-LAST:event_numDocFieldFocusLost
 
     /**
      * @param args the command line arguments
