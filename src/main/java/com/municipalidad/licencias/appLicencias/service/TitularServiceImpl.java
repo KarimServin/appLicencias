@@ -29,7 +29,7 @@ public class TitularServiceImpl implements TitularService {
         }
 
         Titular titular = new Titular();
-        titular.setDni(dni);
+        titular.setId(dni);
         titular.setNombre(nombre);
         titular.setFechaNacimiento(fechaNacimiento);
         titular.setGrupoSanguineo(grupoSanguineo);
