@@ -87,80 +87,80 @@ public class LicenciaService {
         case ClaseLicencia.A:
             switch(vigencia) {
                 case(5) -> {
-                    return 40;
+                    return 48;
             }
                 case(4) -> {
-                    return 30;
+                    return 38;
             }
                 case(3) -> {
-                    return 25;
+                    return 33;
             }
                 case(1) -> {
-                    return 20;
+                    return 28;
             }
             }
 
         case ClaseLicencia.B:
             switch(vigencia) {
                 case(5) -> {
-                    return 40;
+                    return 48;
             }
                 case(4) -> {
-                    return 30;
+                    return 38;
             }
                 case(3) -> {
-                    return 25;
+                    return 33;
             }
                 case(1) -> {
-                    return 20;
+                    return 28;
             }
             }
 
         case ClaseLicencia.C:
             switch(vigencia) {
                 case(5) -> {
-                    return 47;
+                    return 55;
             }
                 case(4) -> {
-                    return 35;
+                    return 43;
             }
                 case(3) -> {
-                    return 30;
+                    return 38;
             }
                 case(1) -> {
-                    return 23;
+                    return 31;
             }
             }
 
         case ClaseLicencia.D:
             switch(vigencia) {
                 case(5) -> {
-                    return 100;
+                    return 108;
             }
                 case(4) -> {
-                    return 90;
+                    return 98;
             }
                 case(3) -> {
-                    return 70;
+                    return 78;
             }
                 case(1) -> {
-                    return 50;
+                    return 58;
             }
             }
 
         case ClaseLicencia.E:
             switch(vigencia) {
                 case(5) -> {
-                    return 59;
+                    return 67;
             }
                 case(4) -> {
-                    return 44;
+                    return 52;
             }
                 case(3) -> {
-                    return 39;
+                    return 47;
             }
                 case(1) -> {
-                    return 29
+                    return 37
                             ;
             }
             }
@@ -168,32 +168,32 @@ public class LicenciaService {
         case ClaseLicencia.F:
             switch(vigencia) {
                 case(5) -> {
-                    return 20;
+                    return 28;
             }
                 case(4) -> {
-                    return 15;
+                    return 23;
             }
                 case(3) -> {
-                    return 10;
+                    return 18;
             }
                 case(1) -> {
-                    return 5;
+                    return 13;
             }
             }
 
         case ClaseLicencia.G:
             switch(vigencia) {
                 case(5) -> {
-                    return 40;
+                    return 48;
             }
                 case(4) -> {
-                    return 30;
+                    return 38;
             }
                 case(3) -> {
-                    return 25;
+                    return 33;
             }
                 case(1) -> {
-                    return 20;
+                    return 28;
             }
             }
 
