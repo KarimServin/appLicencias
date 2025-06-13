@@ -165,11 +165,11 @@ public class PantallaEmitirLicencia extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void aceptarButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_aceptarButtonActionPerformed
-        if(numDocField.getText().trim()!=null || !numDocField.getText().trim().isBlank()){
+        try{
             ClaseLicencia claseSelec;
             String selec = clasesDD.getSelectedItem().toString().toUpperCase();
             claseSelec = ClaseLicencia.valueOf(String.valueOf(selec.charAt(6)));
-            long dniTitular = Long.parseLong(numDocField.getText().replaceAll("[^\\d]", ""));
+            long dniTitular = Long.valueOf(numDocField.getText());
             try {
                 if(Titular.class.isInstance(titularController.buscarTitular(dniTitular))){
                     if(licenciaController.puedeEmitir(dniTitular, claseSelec)){
@@ -202,14 +202,17 @@ public class PantallaEmitirLicencia extends javax.swing.JFrame {
                     this.dispose();
                 } else {
                     numDocField.setText("");
-                    numDocField.requestFocus();
+                    //numDocField.requestFocus();
                 }
             }
-        } else JOptionPane.showMessageDialog(
+        } catch(NumberFormatException e){
+            JOptionPane.showMessageDialog(
                 null,
-                "Hay campos vacíos",
+                "El número de documento no es válido",
                 "Error",
                 JOptionPane.ERROR_MESSAGE);
+        }
+        
          
     }//GEN-LAST:event_aceptarButtonActionPerformed
 
@@ -224,27 +227,35 @@ public class PantallaEmitirLicencia extends javax.swing.JFrame {
                     "El campo es obligatorio", 
                     "Error de validación", 
                     JOptionPane.ERROR_MESSAGE);
-            numDocField.requestFocus();
-        } else{
-            Long dni = Long.valueOf(numDocField.getText());
+            //numDocField.requestFocus();
+        }else{
             try{
-                titularController.buscarTitular(dni);
-            } catch (RuntimeException e){
-                int opcion =  JOptionPane.showOptionDialog(
-                            null,
-                            "El titular no está registrado. ¿Desea registrarlo?",
-                            "Titular no encontrado",
-                            JOptionPane.YES_NO_OPTION,
-                            JOptionPane.QUESTION_MESSAGE,
-                            null,
-                            new Object[]{"Aceptar", "Cancelar"},
-                            "Aceptar");
-                if(opcion == JOptionPane.YES_OPTION){
-                    new PantallaCargarTitular(titularController, clasesDD.getSelectedItem().toString().toUpperCase()).setVisible(true);
-                } else {
-                    numDocField.setText("");
-                    numDocField.requestFocus();
+                Long dni = Long.valueOf(numDocField.getText());
+                try{
+                    titularController.buscarTitular(dni);
+                } catch (RuntimeException e){
+                    int opcion =  JOptionPane.showOptionDialog(
+                                null,
+                                "El titular no está registrado. ¿Desea registrarlo?",
+                                "Titular no encontrado",
+                                JOptionPane.YES_NO_OPTION,
+                                JOptionPane.QUESTION_MESSAGE,
+                                null,
+                                new Object[]{"Aceptar", "Cancelar"},
+                                "Aceptar");
+                    if(opcion == JOptionPane.YES_OPTION){
+                        new PantallaCargarTitular(titularController, clasesDD.getSelectedItem().toString().toUpperCase()).setVisible(true);
+                    } else {
+                        numDocField.setText("");
+                        //numDocField.requestFocus();
+                    }
                 }
+            } catch (NumberFormatException e){
+                JOptionPane.showMessageDialog(
+                    null,
+                    "El número de documento completado no es válido",
+                    "Error",
+                    JOptionPane.ERROR_MESSAGE);
             }
         }
     }//GEN-LAST:event_numDocFieldFocusLost

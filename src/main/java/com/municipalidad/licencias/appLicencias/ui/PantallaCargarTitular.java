@@ -6,6 +6,7 @@ import com.municipalidad.licencias.appLicencias.model.Titular;
 import com.municipalidad.licencias.appLicencias.singleton.SesionMenuPrincipal;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import javax.swing.JOptionPane;
 
 public class PantallaCargarTitular extends javax.swing.JFrame {
@@ -308,7 +309,7 @@ public class PantallaCargarTitular extends javax.swing.JFrame {
                 "El correo no es válido, vuelva a intentar.",
                 "Error",
                 JOptionPane.ERROR_MESSAGE);
-             correoField.requestFocus();
+            //correoField.requestFocus();
         }
     }//GEN-LAST:event_correoFieldFocusLost
 
@@ -337,46 +338,60 @@ public class PantallaCargarTitular extends javax.swing.JFrame {
     }//GEN-LAST:event_domicilioFieldFocusLost
 
     private void aceptarButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_aceptarButtonActionPerformed
-        if(numDocField.getText().trim()!=null && 
-                (apellidoField.getText().trim()!=null || !apellidoField.getText().trim().isBlank()) && 
-                (telefonoField.getText().trim()!=null || !telefonoField.getText().trim().isBlank()) && 
-                (fechaNacField.getText().trim()!=null || !fechaNacField.getText().trim().isBlank()) && 
-                (correoField.getText().trim()!=null || !correoField.getText().trim().isBlank() || (!correoField.getText().trim().matches("^[\\w.-]+@[\\w.-]+\\.[a-zA-Z]{2,}$"))) && 
-                (nombreField.getText().trim()!=null || !nombreField.getText().trim().isBlank()) &&
-                (domicilioField.getText().trim()!=null || !domicilioField.getText().trim().isBlank())){
-            Long dni = Long.valueOf(numDocField.getText().replaceAll("[^\\d]", ""));
-            String nombreCompleto = apellidoField.getText().trim() + " " + nombreField.getText().trim();
-            LocalDate fechaNacimiento = LocalDate.parse(fechaNacField.getText(), DateTimeFormatter.ofPattern("dd/MM/yyyy"));
-            char grupoSanguineo = grupoDD.getSelectedItem().toString().charAt(0);
-            char factorSanguineo = factorDD.getSelectedItem().toString().charAt(0);
-            boolean esDonante = donanteCheck.isSelected();
-            String tel = telefonoField.getText().replaceAll("[^\\d]", "");
-            long telefono = Long.parseLong(tel);
-            String correo = correoField.getText();
-            try{
-                if(Titular.class.isInstance(titularController.crearTitular(dni, nombreCompleto, fechaNacimiento,
-                                    grupoSanguineo, factorSanguineo,
-                                    esDonante, false, null, telefono, correo))){
+        try{
+            if((numDocField.getText().trim()!=null && !numDocField.getText().trim().isBlank()) &&
+                    (apellidoField.getText().trim()!=null && !apellidoField.getText().trim().isBlank()) && 
+                    (telefonoField.getText().trim()!=null && !telefonoField.getText().trim().isBlank()) && 
+                    (fechaNacField.getText().trim()!=null && !fechaNacField.getText().trim().isBlank()) && 
+                    (correoField.getText().trim()!=null && !correoField.getText().trim().isBlank() && (correoField.getText().trim().matches("^[\\w.-]+@[\\w.-]+\\.[a-zA-Z]{2,}$"))) && 
+                    (nombreField.getText().trim()!=null && !nombreField.getText().trim().isBlank()) &&
+                    (domicilioField.getText().trim()!=null && !domicilioField.getText().trim().isBlank())){
+                Long dni = Long.valueOf(numDocField.getText().replaceAll("[^\\d]", ""));
+                String nombreCompleto = apellidoField.getText().trim() + " " + nombreField.getText().trim();
+                LocalDate fechaNacimiento = LocalDate.parse(fechaNacField.getText(), DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+                char grupoSanguineo = grupoDD.getSelectedItem().toString().charAt(0);
+                char factorSanguineo = factorDD.getSelectedItem().toString().charAt(0);
+                boolean esDonante = donanteCheck.isSelected();
+                String tel = telefonoField.getText().replaceAll("[^\\d]", "");
+                long telefono = Long.valueOf(tel);
+                String correo = correoField.getText();
+                try{
+                    if(Titular.class.isInstance(titularController.crearTitular(dni, nombreCompleto, fechaNacimiento,
+                                        grupoSanguineo, factorSanguineo,
+                                        esDonante, false, null, telefono, correo))){
+                        JOptionPane.showMessageDialog(
+                        null,
+                        "El titular ha sido registrado con éxito.",
+                        "Éxito",
+                        JOptionPane.INFORMATION_MESSAGE);
+                        this.dispose();
+                        SesionMenuPrincipal.setVisible(true);
+                    }
+                } catch (RuntimeException e){
                     JOptionPane.showMessageDialog(
-                    null,
-                    "El titular ha sido registrado con éxito.",
-                    "Éxito",
-                    JOptionPane.INFORMATION_MESSAGE);
-                    this.dispose();
-                    SesionMenuPrincipal.setVisible(true);
+                        null,
+                        "El titular ya está registrado.",
+                        "Error",
+                        JOptionPane.ERROR_MESSAGE);
                 }
-            } catch (RuntimeException e){
-                JOptionPane.showMessageDialog(
+            } else JOptionPane.showMessageDialog(
                     null,
-                    "El titular ya está registrado.",
+                    "Hay campos vacíos.",
                     "Error",
                     JOptionPane.ERROR_MESSAGE);
-            }
-        } else JOptionPane.showMessageDialog(
-                null,
-                "Hay campos vacíos.",
-                "Error",
-                JOptionPane.ERROR_MESSAGE);
+        } catch (DateTimeParseException e){
+            JOptionPane.showMessageDialog(
+                    null,
+                    "Hubo un error con el campo fecha.",
+                    "Error",
+                    JOptionPane.ERROR_MESSAGE);
+        } catch (NumberFormatException e){
+            JOptionPane.showMessageDialog(
+                    null,
+                    "Hubo un error con un campo numérico.",
+                    "Error",
+                    JOptionPane.ERROR_MESSAGE);
+        }
         
     }//GEN-LAST:event_aceptarButtonActionPerformed
 
@@ -386,12 +401,20 @@ public class PantallaCargarTitular extends javax.swing.JFrame {
     }//GEN-LAST:event_cancelarButtonActionPerformed
 
     private void telefonoFieldFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_telefonoFieldFocusLost
-        if(telefonoField.getText().trim()==null || telefonoField.getText().trim().isBlank()) 
+        try{
+            if(telefonoField.getText().trim()==null || telefonoField.getText().trim().isBlank()) 
             JOptionPane.showMessageDialog(
                 null,
                 "El campo es obligatorio.",
                 "Error",
                 JOptionPane.ERROR_MESSAGE);
+        } catch (NumberFormatException e){
+            JOptionPane.showMessageDialog(
+                null,
+                "El campo completado no es válido",
+                "Error",
+                JOptionPane.ERROR_MESSAGE);
+        }
     }//GEN-LAST:event_telefonoFieldFocusLost
 
     private void fechaNacFieldFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_fechaNacFieldFocusLost
@@ -404,12 +427,21 @@ public class PantallaCargarTitular extends javax.swing.JFrame {
     }//GEN-LAST:event_fechaNacFieldFocusLost
 
     private void numDocFieldFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_numDocFieldFocusLost
-        if(numDocField.getText().trim()==null || numDocField.getText().trim().isBlank()) 
+        try{
+            Long.valueOf(numDocField.getText());
+            if(numDocField.getText().trim()==null || numDocField.getText().trim().isBlank()) 
             JOptionPane.showMessageDialog(
                 null,
                 "El campo es obligatorio.",
                 "Error",
                 JOptionPane.ERROR_MESSAGE);
+        } catch (NumberFormatException e){
+            JOptionPane.showMessageDialog(
+                null,
+                "El campo completado no es válido",
+                "Error",
+                JOptionPane.ERROR_MESSAGE);
+        }
     }//GEN-LAST:event_numDocFieldFocusLost
 
     /**

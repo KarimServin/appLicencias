@@ -152,7 +152,7 @@ public class PantallaCrearUsuario extends javax.swing.JFrame {
                     "El campo es obligatorio", 
                     "Error de validación", 
                     JOptionPane.ERROR_MESSAGE);
-            contraseñaField.requestFocus();
+            //contraseñaField.requestFocus();
         } else{
             String cont = contraseñaField.getText();
             if (cont.length() < 8 && cont.length() > 16) {
@@ -161,7 +161,7 @@ public class PantallaCrearUsuario extends javax.swing.JFrame {
                         "La contraseña debe tener entre 8 y 16 caracteres.", 
                         "Error de validación", 
                         JOptionPane.ERROR_MESSAGE);
-                contraseñaField.requestFocus();
+                //contraseñaField.requestFocus();
             }
         }
     }//GEN-LAST:event_contraseñaFieldFocusLost
@@ -181,14 +181,14 @@ public class PantallaCrearUsuario extends javax.swing.JFrame {
                     "El campo es obligatorio", 
                     "Error de validación", 
                     JOptionPane.ERROR_MESSAGE);
-            usuarioField.requestFocus();
+            //usuarioField.requestFocus();
         } else {
             if(usuarioController.obtenerUsuario(usuarioField.getText().trim()) != null){
                 JOptionPane.showMessageDialog(null, 
                         "El nombre de usuario no está disponible", 
                         "Error de validación", 
                         JOptionPane.ERROR_MESSAGE);
-                usuarioField.requestFocus();
+                //usuarioField.requestFocus();
             }
         }
     }//GEN-LAST:event_usuarioFieldFocusLost
