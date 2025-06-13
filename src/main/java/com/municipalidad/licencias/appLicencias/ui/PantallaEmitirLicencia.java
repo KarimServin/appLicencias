@@ -172,20 +172,31 @@ public class PantallaEmitirLicencia extends javax.swing.JFrame {
             long dniTitular = Long.parseLong(numDocField.getText().replaceAll("[^\\d]", ""));
             try {
                 if(Titular.class.isInstance(titularController.buscarTitular(dniTitular))){
-                    if(licenciaController.puedeEmitir(dniTitular, claseSelec)){
+                    if(licenciaController.poseeLicencia(claseSelec, titularController.buscarTitular(dniTitular))){
+                        JOptionPane.showMessageDialog(
+                                null,
+                                "El titular ya posee una licencia de este tipo.",
+                                "Error",
+                                JOptionPane.ERROR_MESSAGE);
+                    }
+                    else if(licenciaController.puedeEmitir(dniTitular, claseSelec)){
                         licenciaController.emitirLicencia(dniTitular, claseSelec, observacionesField.getText().trim(), SesionUsuario.getUsuarioActual());
                         JOptionPane.showMessageDialog(
                                 null,
                                 "La licencia ha sido creada con éxito.",
                                 "Exito",
                                 JOptionPane.INFORMATION_MESSAGE);
-                    } else {
+                        this.dispose();
+                        SesionMenuPrincipal.setVisible(true);
+                    }
+                    else {
                         JOptionPane.showMessageDialog(
                                 null,
                                 "El titular no puede emitir licencia de la clase seleccionada.",
                                 "Error",
                                 JOptionPane.ERROR_MESSAGE);
                     }
+                    
                 }
             } catch (RuntimeException e){
                 int opcion =  JOptionPane.showOptionDialog(

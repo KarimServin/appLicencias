@@ -292,7 +292,7 @@ public class PantallaCargarTitular extends javax.swing.JFrame {
             } catch (RuntimeException e){
                 JOptionPane.showMessageDialog(
                     null,
-                    "El titular ya está registrado.",
+                    e.getMessage(),
                     "Error",
                     JOptionPane.ERROR_MESSAGE);
             }

@@ -52,7 +52,7 @@ public class LicenciaService {
         }
 
         Licencia licencia = new Licencia();
-        licencia.setClase(clase);
+        licencia.setClaseLicencia(clase);
         licencia.setTitular(titular);
         licencia.setFechaEmision(LocalDate.now());
         licencia.setFechaVencimiento(calcularVigencia(licencia, titular));
@@ -60,6 +60,10 @@ public class LicenciaService {
         licencia.setUsuario(usuario);
 
         return licenciaRepo.save(licencia);
+    }
+    
+    public boolean estaVigente(ClaseLicencia clase,Titular titular){
+        return licenciaRepo.existsByClaseLicenciaAndTitularId(clase, titular.getId());
     }
     
     public int calcularVigencia(Licencia licencia, Titular titular) {
@@ -77,7 +81,7 @@ public class LicenciaService {
     }
     
     public int calcularCosto(Licencia licencia) {
-    ClaseLicencia claseLicencia = licencia.getClase();
+    ClaseLicencia claseLicencia = licencia.getClaseLicencia();
     int vigencia = this.calcularVigencia(licencia, licencia.getTitular());
     switch(claseLicencia) {
         case ClaseLicencia.A:
