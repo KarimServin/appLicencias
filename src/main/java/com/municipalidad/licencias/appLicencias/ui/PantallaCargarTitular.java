@@ -14,14 +14,22 @@ public class PantallaCargarTitular extends javax.swing.JFrame {
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(PantallaCargarTitular.class.getName());
     private TitularController titularController;
     private String clase;
+    private String dni;
     
     public PantallaCargarTitular() {}
+    
+    public PantallaCargarTitular(TitularController titularController, String clase, String dni) {
+        this.titularController = titularController;
+        this.clase = clase;
+        this.dni = dni;
+        initComponents();
+        numDocField.setText(dni);
+    }
     
     public PantallaCargarTitular(TitularController titularController, String clase) {
         this.titularController = titularController;
         this.clase = clase;
         initComponents();
-        
     }
 
     @SuppressWarnings("unchecked")
@@ -58,6 +66,12 @@ public class PantallaCargarTitular extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setSize(new java.awt.Dimension(596, 350));
+
+        domicilioField.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                domicilioFieldFocusLost(evt);
+            }
+        });
 
         jLabel10.setText("Nombre");
 
@@ -101,6 +115,11 @@ public class PantallaCargarTitular extends javax.swing.JFrame {
 
         fechaNacField.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.DateFormatter(new java.text.SimpleDateFormat("dd/MM/yyyy"))));
         fechaNacField.setText("dd/mm/aaaa");
+        fechaNacField.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                fechaNacFieldFocusLost(evt);
+            }
+        });
 
         donanteCheck.setText("Si / No");
 
@@ -109,6 +128,11 @@ public class PantallaCargarTitular extends javax.swing.JFrame {
         } catch (java.text.ParseException ex) {
             ex.printStackTrace();
         }
+        numDocField.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                numDocFieldFocusLost(evt);
+            }
+        });
 
         jLabel1.setText("Tipo de documento");
 
@@ -116,7 +140,19 @@ public class PantallaCargarTitular extends javax.swing.JFrame {
 
         jLabel2.setText("N° de documento");
 
+        apellidoField.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                apellidoFieldFocusLost(evt);
+            }
+        });
+
         jLabel3.setText("Domicilio");
+
+        nombreField.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                nombreFieldFocusLost(evt);
+            }
+        });
 
         aceptarButton.setText("Aceptar");
         aceptarButton.addActionListener(new java.awt.event.ActionListener() {
@@ -141,6 +177,17 @@ public class PantallaCargarTitular extends javax.swing.JFrame {
         } catch (java.text.ParseException ex) {
             ex.printStackTrace();
         }
+        telefonoField.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                telefonoFieldFocusLost(evt);
+            }
+        });
+
+        correoField.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                correoFieldFocusLost(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -337,7 +384,7 @@ public class PantallaCargarTitular extends javax.swing.JFrame {
                 }
             } else JOptionPane.showMessageDialog(
                     null,
-                    e.getMessage(),
+                    "Hay campos erróneos.",
                     "Error",
                     JOptionPane.ERROR_MESSAGE);
         } catch (DateTimeParseException e){
@@ -369,6 +416,7 @@ public class PantallaCargarTitular extends javax.swing.JFrame {
                 "El campo es obligatorio.",
                 "Error",
                 JOptionPane.ERROR_MESSAGE);
+            else Long.valueOf(telefonoField.getText().replaceAll("[^\\d]", ""));
         } catch (NumberFormatException e){
             JOptionPane.showMessageDialog(
                 null,
@@ -379,23 +427,32 @@ public class PantallaCargarTitular extends javax.swing.JFrame {
     }//GEN-LAST:event_telefonoFieldFocusLost
 
     private void fechaNacFieldFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_fechaNacFieldFocusLost
-        if(fechaNacField.getText().trim()==null || fechaNacField.getText().trim().isBlank()) 
+        try{
+            if(fechaNacField.getText().trim()==null || fechaNacField.getText().trim().isBlank()) 
             JOptionPane.showMessageDialog(
                 null,
                 "El campo es obligatorio.",
                 "Error",
                 JOptionPane.ERROR_MESSAGE);
+            else LocalDate.parse(fechaNacField.getText(), DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+        } catch (DateTimeParseException e){
+            JOptionPane.showMessageDialog(
+                    null,
+                    "Hubo un error con el campo fecha.",
+                    "Error",
+                    JOptionPane.ERROR_MESSAGE);
+        }
     }//GEN-LAST:event_fechaNacFieldFocusLost
 
     private void numDocFieldFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_numDocFieldFocusLost
         try{
-            Long.valueOf(numDocField.getText());
             if(numDocField.getText().trim()==null || numDocField.getText().trim().isBlank()) 
             JOptionPane.showMessageDialog(
                 null,
                 "El campo es obligatorio.",
                 "Error",
                 JOptionPane.ERROR_MESSAGE);
+            else Long.valueOf(numDocField.getText());
         } catch (NumberFormatException e){
             JOptionPane.showMessageDialog(
                 null,

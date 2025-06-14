@@ -215,7 +215,6 @@ public class PantallaEmitirLicencia extends javax.swing.JFrame {
                                 "Error",
                                 JOptionPane.ERROR_MESSAGE);
                     }
-                    
                 }
             } catch (RuntimeException e){
                 int opcion =  JOptionPane.showOptionDialog(
@@ -228,7 +227,7 @@ public class PantallaEmitirLicencia extends javax.swing.JFrame {
                             new Object[]{"Aceptar", "Cancelar"},
                             "Aceptar");
                 if(opcion == JOptionPane.YES_OPTION){
-                    new PantallaCargarTitular(titularController, clasesDD.getSelectedItem().toString().toUpperCase()).setVisible(true);
+                    new PantallaCargarTitular(titularController, clasesDD.getSelectedItem().toString().toUpperCase(), numDocField.getText().trim()).setVisible(true);
                     this.dispose();
                 } else {
                     numDocField.setText("");
@@ -242,8 +241,6 @@ public class PantallaEmitirLicencia extends javax.swing.JFrame {
                 "Error",
                 JOptionPane.ERROR_MESSAGE);
         }
-        
-         
     }//GEN-LAST:event_aceptarButtonActionPerformed
 
     private void cancelarButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelarButtonActionPerformed
@@ -274,7 +271,8 @@ public class PantallaEmitirLicencia extends javax.swing.JFrame {
                                 new Object[]{"Aceptar", "Cancelar"},
                                 "Aceptar");
                     if(opcion == JOptionPane.YES_OPTION){
-                        new PantallaCargarTitular(titularController, clasesDD.getSelectedItem().toString().toUpperCase()).setVisible(true);
+                        new PantallaCargarTitular(titularController, clasesDD.getSelectedItem().toString().toUpperCase(), numDocField.getText().trim()).setVisible(true);
+                        this.dispose();
                     } else {
                         numDocField.setText("");
                         //numDocField.requestFocus();
