@@ -28,5 +28,8 @@ public class LicenciaController {
     public Licencia emitirLicencia( Long dni, ClaseLicencia clase, String observaciones, Usuario usuario) {
         return licenciaService.emitirLicencia(dni, clase, observaciones, usuario);
     }
+    public int calcularCosto(Licencia licencia) {
+        return licenciaService.calcularCosto(licencia);
+    }
 
 }

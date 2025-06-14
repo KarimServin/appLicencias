@@ -4,7 +4,9 @@ package com.municipalidad.licencias.appLicencias.ui;
 import com.municipalidad.licencias.appLicencias.controller.LicenciaController;
 import com.municipalidad.licencias.appLicencias.controller.TitularController;
 import com.municipalidad.licencias.appLicencias.model.ClaseLicencia;
+import com.municipalidad.licencias.appLicencias.model.Licencia;
 import com.municipalidad.licencias.appLicencias.model.Titular;
+import com.municipalidad.licencias.appLicencias.service.PDFService;
 import com.municipalidad.licencias.appLicencias.singleton.SesionMenuPrincipal;
 import com.municipalidad.licencias.appLicencias.singleton.SesionUsuario;
 import javax.swing.JOptionPane;
@@ -12,12 +14,14 @@ import javax.swing.JOptionPane;
 public class PantallaEmitirLicencia extends javax.swing.JFrame {
     LicenciaController licenciaController;
     TitularController titularController;
+    PDFService pdfs;
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(PantallaEmitirLicencia.class.getName());
     
     public PantallaEmitirLicencia() {}
     public PantallaEmitirLicencia(LicenciaController licenciaControl, TitularController titularControl) {
         licenciaController = licenciaControl;
         titularController = titularControl;
+        pdfs = new PDFService();
         initComponents();
     }
 
@@ -170,6 +174,7 @@ public class PantallaEmitirLicencia extends javax.swing.JFrame {
             String selec = clasesDD.getSelectedItem().toString().toUpperCase();
             claseSelec = ClaseLicencia.valueOf(String.valueOf(selec.charAt(6)));
             long dniTitular = Long.parseLong(numDocField.getText().replaceAll("[^\\d]", ""));
+            Licencia licencia;
             try {
                 if(Titular.class.isInstance(titularController.buscarTitular(dniTitular))){
                     if(licenciaController.poseeLicencia(claseSelec, titularController.buscarTitular(dniTitular))){
@@ -180,12 +185,26 @@ public class PantallaEmitirLicencia extends javax.swing.JFrame {
                                 JOptionPane.ERROR_MESSAGE);
                     }
                     else if(licenciaController.puedeEmitir(dniTitular, claseSelec)){
-                        licenciaController.emitirLicencia(dniTitular, claseSelec, observacionesField.getText().trim(), SesionUsuario.getUsuarioActual());
+                         licencia = licenciaController.emitirLicencia(dniTitular, claseSelec, observacionesField.getText().trim(), SesionUsuario.getUsuarioActual());
                         JOptionPane.showMessageDialog(
                                 null,
                                 "La licencia ha sido creada con éxito.",
                                 "Exito",
                                 JOptionPane.INFORMATION_MESSAGE);
+                        JOptionPane.showMessageDialog(
+                                null,
+                                "Por favor seleccione la carpeta donde deseea guardar la licencia",
+                                "Aceptar",
+                                JOptionPane.INFORMATION_MESSAGE);
+                        
+                         Titular titular = titularController.buscarTitular(dniTitular);
+                         pdfs.imprimirLicencia(titular,licencia);
+                         JOptionPane.showMessageDialog(
+                                null,
+                                "Por favor seleccione la carpeta donde deseea guardar el comprobante",
+                                "Aceptar",
+                                JOptionPane.INFORMATION_MESSAGE);
+                         pdfs.imprimirComprobante(titular,licencia,licenciaController.calcularCosto(licencia));
                         this.dispose();
                         SesionMenuPrincipal.setVisible(true);
                     }
