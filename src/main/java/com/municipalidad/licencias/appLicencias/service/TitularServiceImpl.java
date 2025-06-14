@@ -24,12 +24,12 @@ public class TitularServiceImpl implements TitularService {
                                  char grupoSanguineo, char factorSanguineo,
                                  boolean esDonante, boolean tuvoLicenciaProfesional,
                                  LocalDate fechaLicenciaClaseB, Long telefono, String email) {
-        if (titularRepository.existsById(dni)) { //chequear funcion
+        if (titularRepository.existsById(dni)) {
             throw new RuntimeException("Ya existe un titular con ese DNI.");
         }
 
         Titular titular = new Titular();
-        titular.setDni(dni);
+        titular.setId(dni);
         titular.setNombre(nombre);
         titular.setFechaNacimiento(fechaNacimiento);
         titular.setGrupoSanguineo(grupoSanguineo);

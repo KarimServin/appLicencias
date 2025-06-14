@@ -26,13 +26,13 @@ public class Licencia {
     private Long id;
 
     @Enumerated(EnumType.STRING)
-    private ClaseLicencia clase;// A, B, C, D, E, F, G
+    private ClaseLicencia claseLicencia;// A, B, C, D, E, F, G
 
     private LocalDate fechaEmision;
     
     private LocalDate fechaVencimiento;
 
-    @ManyToOne
+    @ManyToOne // preguntar
     private Usuario usuario;
 
     private String observaciones;
