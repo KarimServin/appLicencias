@@ -13,6 +13,7 @@ public class PantallaCrearUsuario extends javax.swing.JFrame {
     public PantallaCrearUsuario(UsuarioController usuarioControl) {
         this.usuarioController=usuarioControl;
         initComponents();
+        this.setLocationRelativeTo(null);
     }
     
     @SuppressWarnings("unchecked")
@@ -173,6 +174,11 @@ public class PantallaCrearUsuario extends javax.swing.JFrame {
 
     private void aceptarButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_aceptarButtonActionPerformed
         //crear el usuario
+        
+        usuarioController.altaUsuario(usuarioField.getText(), contraseñaField.getText(), privilegiosCheckBox.isSelected());
+        JOptionPane.showMessageDialog(null, "Login exitoso");
+        SesionMenuPrincipal.setVisible(true);
+        this.dispose();
     }//GEN-LAST:event_aceptarButtonActionPerformed
 
     private void usuarioFieldFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_usuarioFieldFocusLost
