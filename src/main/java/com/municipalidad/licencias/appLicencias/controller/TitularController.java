@@ -24,7 +24,7 @@ public class TitularController {
     public Titular crearTitular(Long dni, String nombre, LocalDate fechaNacimiento,
                             char grupoSanguineo, char factorSanguineo,
                             boolean esDonante, boolean tuvoLicenciaProfesional,
-                            LocalDate fechaLicenciaClaseB, Long telefono, String email) {
+                            LocalDate fechaLicenciaClaseB, Long telefono, String email, String direccion) {
     if (buscarTitularPorDni(dni).isPresent()) {
         throw new TitularExistenteException("Ya existe un titular con ese DNI");
     }
@@ -37,7 +37,7 @@ public class TitularController {
     return titularService.guardarTitular(dni, nombre, fechaNacimiento,
                                          grupoSanguineo, factorSanguineo,
                                          esDonante, tuvoLicenciaProfesional,
-                                         fechaLicenciaClaseB, telefono, email);
+                                         fechaLicenciaClaseB, telefono, email, direccion);
 }
 
     private int calcularEdad(LocalDate fechaNacimiento) {

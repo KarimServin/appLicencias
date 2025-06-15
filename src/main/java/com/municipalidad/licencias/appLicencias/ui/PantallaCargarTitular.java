@@ -363,10 +363,11 @@ public class PantallaCargarTitular extends javax.swing.JFrame {
                 String tel = telefonoField.getText().replaceAll("[^\\d]", "");
                 long telefono = Long.valueOf(tel);
                 String correo = correoField.getText();
+                String domicilio = domicilioField.getText().trim();
                 try{
                     if(Titular.class.isInstance(titularController.crearTitular(dni, nombreCompleto, fechaNacimiento,
                                         grupoSanguineo, factorSanguineo,
-                                        esDonante, false, null, telefono, correo))){
+                                        esDonante, false, null, telefono, correo, domicilio))){
                         JOptionPane.showMessageDialog(
                         null,
                         "El titular ha sido registrado con éxito.",

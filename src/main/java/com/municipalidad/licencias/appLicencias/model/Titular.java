@@ -23,6 +23,8 @@ public class Titular {
     
     private String nombre;
 
+    private String direccion;
+
     private LocalDate fechaNacimiento;
 
     private boolean tuvoLicenciaProfesional;

@@ -23,7 +23,7 @@ public class TitularServiceImpl implements TitularService {
     public Titular guardarTitular(Long dni, String nombre, LocalDate fechaNacimiento,
                                  char grupoSanguineo, char factorSanguineo,
                                  boolean esDonante, boolean tuvoLicenciaProfesional,
-                                 LocalDate fechaLicenciaClaseB, Long telefono, String email) {
+                                 LocalDate fechaLicenciaClaseB, Long telefono, String email, String direccion) {
         if (titularRepository.existsById(dni)) {
             throw new RuntimeException("Ya existe un titular con ese DNI.");
         }
@@ -39,6 +39,7 @@ public class TitularServiceImpl implements TitularService {
         titular.setFechaLicenciaClaseB(fechaLicenciaClaseB);
         titular.setTelefono(telefono);
         titular.setEmail(email);
+        titular.setDireccion(direccion);
 
         return titularRepository.save(titular);
     }
