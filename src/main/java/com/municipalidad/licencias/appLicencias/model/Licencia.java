@@ -42,15 +42,15 @@ public class Licencia {
      @JoinColumn(name = "titular_dni")
     private Titular titular;
     
-    public void setFechaVencimiento(int vigencia) {
+    public void setFechaVencimiento(int vigencia, LocalDate fechaNac) {
     
     LocalDate fechaAux =  this.fechaEmision;
     
-    int mesAux = this.fechaEmision.getMonthValue();
-    int diaAux = this.fechaEmision.getDayOfMonth();
+    int mesAux = fechaNac.getMonthValue();
+    int diaAux = fechaNac.getDayOfMonth();
     
-    this.fechaVencimiento = fechaAux.plusYears(vigencia);
-    this.fechaVencimiento.withMonth(mesAux);
-    this.fechaVencimiento.withDayOfMonth(diaAux);
+this.fechaVencimiento = fechaAux.plusYears(vigencia)
+                                .withMonth(mesAux)
+                                .withDayOfMonth(diaAux);
     }
 }
