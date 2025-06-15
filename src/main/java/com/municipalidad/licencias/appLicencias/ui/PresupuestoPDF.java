@@ -34,7 +34,7 @@ public class PresupuestoPDF extends javax.swing.JPanel implements Printable{
         txtApellido.setText(titular.getNombre());
         txtFechaNacimiento.setText(titular.getFechaNacimiento().toString());
         //txtDireccion.setText(titular.get);
-        txtLicencia.setText(titular.getId().toString());
+        txtLicencia.setText(titular.getDni().toString());
         txtGrupoSanguineo.setText(Character.toString(titular.getGrupoSanguineo()));
         
         if(titular.isEsDonante()){

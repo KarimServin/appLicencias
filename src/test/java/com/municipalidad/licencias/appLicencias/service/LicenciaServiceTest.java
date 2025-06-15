@@ -44,7 +44,7 @@ public class LicenciaServiceTest {
     public void calcularVigenciaLicenciaMenorDe21(){
     titular.setFechaNacimiento(LocalDate.of(2008, 7, 1));
     licencia.setClaseLicencia(ClaseLicencia.A);
-    if(licenciaRepo.findByTitularId(titular.getId()).isEmpty())
+    if(licenciaRepo.findByTitularDni(titular.getDni()).isEmpty())
         Assertions.assertEquals(1, licenciaService.calcularVigencia(licencia, titular));
     else
         Assertions.assertEquals(3, licenciaService.calcularVigencia(licencia, titular));

@@ -29,6 +29,8 @@ public class LicenciaService {
 
         int edad = Period.between(titular.getFechaNacimiento(), LocalDate.now()).getYears();
 
+        if (edad < 17) return false;
+        if(edad > 90) return false;
         switch (claseSolicitada) {
             case A, B, F, G:
                 return edad >= 17;
@@ -63,13 +65,13 @@ public class LicenciaService {
     }
     
     public boolean estaVigente(ClaseLicencia clase,Titular titular){
-        return licenciaRepo.existsByClaseLicenciaAndTitularId(clase, titular.getId());
+        return licenciaRepo.existsByClaseLicenciaAndTitularDni(clase, titular.getDni());
     }
     
     public int calcularVigencia(Licencia licencia, Titular titular) {
     int edad = Period.between(titular.getFechaNacimiento(), LocalDate.now()).getYears();
     if(edad < 21) {
-        if(licenciaRepo.findByTitularId(titular.getId()).isEmpty())
+        if(licenciaRepo.findByTitularDni(titular.getDni()).isEmpty())
             return 1;
         else return 3;
     }

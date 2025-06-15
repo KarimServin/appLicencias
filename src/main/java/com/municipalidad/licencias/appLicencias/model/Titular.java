@@ -13,7 +13,7 @@ import lombok.Data;
 @Entity
 public class Titular {
     @Id 
-    private Long id;
+    private Long dni;
     
     private boolean esDonante;
     

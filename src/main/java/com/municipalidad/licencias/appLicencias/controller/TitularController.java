@@ -22,15 +22,26 @@ public class TitularController {
     }
 
     public Titular crearTitular(Long dni, String nombre, LocalDate fechaNacimiento,
-                                char grupoSanguineo, char factorSanguineo,
-                                boolean esDonante, boolean tuvoLicenciaProfesional,
-                                LocalDate fechaLicenciaClaseB, Long telefono, String email) {
-       if(buscarTitularPorDni(dni).isPresent()){ throw new TitularExistenteException("Ya existe un titular con ese dni");}
-        return titularService.guardarTitular(dni, nombre, fechaNacimiento,
-                                           grupoSanguineo, factorSanguineo,
-                                           esDonante, tuvoLicenciaProfesional,
-                                           fechaLicenciaClaseB, telefono, email);
-      
+                            char grupoSanguineo, char factorSanguineo,
+                            boolean esDonante, boolean tuvoLicenciaProfesional,
+                            LocalDate fechaLicenciaClaseB, Long telefono, String email) {
+    if (buscarTitularPorDni(dni).isPresent()) {
+        throw new TitularExistenteException("Ya existe un titular con ese DNI");
+    }
+
+    int edad = calcularEdad(fechaNacimiento);
+    if (edad < 17 || edad > 90) {
+        throw new RuntimeException("La edad del titular debe estar entre 17 y 90 años.");
+    }
+
+    return titularService.guardarTitular(dni, nombre, fechaNacimiento,
+                                         grupoSanguineo, factorSanguineo,
+                                         esDonante, tuvoLicenciaProfesional,
+                                         fechaLicenciaClaseB, telefono, email);
+}
+
+    private int calcularEdad(LocalDate fechaNacimiento) {
+        return java.time.Period.between(fechaNacimiento, LocalDate.now()).getYears();
     }
 
     public Optional<Titular> buscarTitularPorDni(Long dni){

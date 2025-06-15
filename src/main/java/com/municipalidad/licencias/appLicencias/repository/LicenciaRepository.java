@@ -8,10 +8,10 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface LicenciaRepository extends JpaRepository<Licencia, Long> {
-    List<Licencia> findByTitularId(Long titularId);
+    List<Licencia> findByTitularDni(Long titularDni);
 
-    List<Licencia> findByTitularIdAndClaseLicencia(Long titularId, ClaseLicencia b);
-    
-    boolean existsByClaseLicenciaAndTitularId(ClaseLicencia claseLicencia, Long titularId);
+    List<Licencia> findByTitularDniAndClaseLicencia(Long titularDni, ClaseLicencia claseLicencia);
+
+    boolean existsByClaseLicenciaAndTitularDni(ClaseLicencia claseLicencia, Long titularDni);
 
 }
