@@ -57,7 +57,7 @@ public class LicenciaService {
         licencia.setClaseLicencia(clase);
         licencia.setTitular(titular);
         licencia.setFechaEmision(LocalDate.now());
-        licencia.setFechaVencimiento(calcularVigencia(licencia, titular));
+        licencia.setFechaVencimiento(calcularVigencia(licencia, titular), titular.getFechaNacimiento());
         licencia.setObservaciones(observaciones);
         licencia.setUsuario(usuario);
 
