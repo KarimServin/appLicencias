@@ -7,6 +7,7 @@ import org.springframework.stereotype.Controller;
 
 
 import com.municipalidad.licencias.appLicencias.model.Titular;
+import com.municipalidad.licencias.appLicencias.model.Usuario;
 import com.municipalidad.licencias.appLicencias.service.TitularServiceImpl;
 import java.util.Optional;
 
@@ -24,7 +25,7 @@ public class TitularController {
     public Titular crearTitular(Long dni, String nombre, LocalDate fechaNacimiento,
                             char grupoSanguineo, char factorSanguineo,
                             boolean esDonante, boolean tuvoLicenciaProfesional,
-                            LocalDate fechaLicenciaClaseB, Long telefono, String email, String direccion) {
+                            LocalDate fechaLicenciaClaseB, Long telefono, String email, String direccion, Usuario usuario) {
     if (buscarTitularPorDni(dni).isPresent()) {
         throw new TitularExistenteException("Ya existe un titular con ese DNI");
     }
@@ -37,7 +38,7 @@ public class TitularController {
     return titularService.guardarTitular(dni, nombre, fechaNacimiento,
                                          grupoSanguineo, factorSanguineo,
                                          esDonante, tuvoLicenciaProfesional,
-                                         fechaLicenciaClaseB, telefono, email, direccion);
+                                         fechaLicenciaClaseB, telefono, email, direccion, usuario);
 }
 
     private int calcularEdad(LocalDate fechaNacimiento) {

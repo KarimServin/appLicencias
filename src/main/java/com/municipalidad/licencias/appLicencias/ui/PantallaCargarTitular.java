@@ -4,6 +4,8 @@ package com.municipalidad.licencias.appLicencias.ui;
 import com.municipalidad.licencias.appLicencias.controller.TitularController;
 import com.municipalidad.licencias.appLicencias.model.Titular;
 import com.municipalidad.licencias.appLicencias.singleton.SesionMenuPrincipal;
+import com.municipalidad.licencias.appLicencias.singleton.SesionUsuario;
+
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
@@ -367,7 +369,7 @@ public class PantallaCargarTitular extends javax.swing.JFrame {
                 try{
                     if(Titular.class.isInstance(titularController.crearTitular(dni, nombreCompleto, fechaNacimiento,
                                         grupoSanguineo, factorSanguineo,
-                                        esDonante, false, null, telefono, correo, domicilio))){
+                                        esDonante, false, null, telefono, correo, domicilio, SesionUsuario.getUsuarioActual()))){
                         JOptionPane.showMessageDialog(
                         null,
                         "El titular ha sido registrado con éxito.",
