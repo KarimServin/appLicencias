@@ -13,4 +13,6 @@ public interface TitularService {
                                  boolean esDonante, boolean tuvoLicenciaProfesional,
                                  LocalDate fechaLicenciaClaseB, Long telefono, String email, String direccion, Usuario usuario);
     Optional<Titular> buscarPorDni(Long dni);
+
+    void actualizarTitular(Long dni, String nombre,boolean esDonante, Long telefono, String email, String direccion, Usuario usuario);
 }

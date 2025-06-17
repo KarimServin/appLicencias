@@ -53,4 +53,8 @@ public class TitularController {
         return titularService.buscarPorDni(dni)
                 .orElseThrow(() -> new RuntimeException("Titular no encontrado"));
     }
+
+    public void actualizarTitular(Long dni, String nombre, boolean esDonante, Long telefono, String email, String direccion, Usuario usuario) {
+        titularService.actualizarTitular(dni, nombre, esDonante, telefono, email, direccion, usuario);
+    }
 }

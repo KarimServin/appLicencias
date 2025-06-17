@@ -50,4 +50,20 @@ public class TitularServiceImpl implements TitularService {
     public Optional<Titular> buscarPorDni(Long dni) {
         return titularRepository.findById(dni);
     }
+
+    @Override
+    public void actualizarTitular(Long dni, String nombre, boolean esDonante, Long telefono, String email, String direccion, Usuario usuario) {
+
+        Titular titular = titularRepository.findById(dni)
+                .orElseThrow(() -> new RuntimeException("Titular no encontrado"));
+
+        titular.setNombre(nombre);
+        titular.setEsDonante(esDonante);
+        titular.setTelefono(telefono);
+        titular.setEmail(email);
+        titular.setDireccion(direccion);
+        titular.setUsuario(usuario);
+
+        titularRepository.save(titular);
+    }
 }
