@@ -203,5 +203,26 @@ public class LicenciaService {
     return 0;
     }
     
+    public Licencia renovarLicencia(Long dni, ClaseLicencia clase, String observaciones, Usuario usuario) {
+        Titular titular = titularRepo.findById(dni)
+                .orElseThrow(() -> new RuntimeException("Titular no encontrado"));
+        java.util.List<Licencia> licencias = licenciaRepo.findByTitularDniAndClaseLicencia(titular.getDni(), clase);
+        if (licencias.isEmpty()) {
+            throw new RuntimeException("Licencia no encontrada");
+        }
+        Licencia licencia = new Licencia();
+        licencia.setClaseLicencia(clase);
+        licencia.setTitular(titular);
+        licencia.setObservaciones(observaciones);
+        licencia.setUsuario(usuario);
+        licencia.setFechaVencimiento(calcularVigencia(licencia, titular), titular.getFechaNacimiento());
+        licencia.setFechaEmision(LocalDate.now());
+        licencia.setIdLicenciaAnterior(licencias.get(0).getId());
+        return licenciaRepo.save(licencia);
+    }
+
+    public java.util.List<Licencia> obtenerLicenciasPorTitular(Long dni) {
+        return licenciaRepo.findByTitularDni(dni);
+    }
     
 }

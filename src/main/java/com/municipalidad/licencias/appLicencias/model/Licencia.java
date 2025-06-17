@@ -41,6 +41,8 @@ public class Licencia {
     @ManyToOne
      @JoinColumn(name = "titular_dni")
     private Titular titular;
+
+    private Long idLicenciaAnterior;
     
     public void setFechaVencimiento(int vigencia, LocalDate fechaNac) {
     

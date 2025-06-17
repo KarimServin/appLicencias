@@ -1,6 +1,8 @@
 package com.municipalidad.licencias.appLicencias.controller;
 
 
+import java.util.List;
+
 import org.springframework.stereotype.Controller;
 import com.municipalidad.licencias.appLicencias.model.ClaseLicencia;
 import com.municipalidad.licencias.appLicencias.model.Licencia;
@@ -30,6 +32,14 @@ public class LicenciaController {
     }
     public int calcularCosto(Licencia licencia) {
         return licenciaService.calcularCosto(licencia);
+    }
+
+    public Licencia renovarLicencia(Long dni, ClaseLicencia clase, String observaciones, Usuario usuario) {
+        return licenciaService.renovarLicencia(dni, clase, observaciones, usuario);
+    }
+
+    public List<Licencia> obtenerLicenciasPorTitular(Long dni) {
+        return licenciaService.obtenerLicenciasPorTitular(dni);
     }
 
 }
