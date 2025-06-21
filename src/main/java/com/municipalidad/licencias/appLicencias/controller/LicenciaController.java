@@ -30,12 +30,17 @@ public class LicenciaController {
     public Licencia emitirLicencia( Long dni, ClaseLicencia clase, String observaciones, Usuario usuario) {
         return licenciaService.emitirLicencia(dni, clase, observaciones, usuario);
     }
+    
+    public Licencia emitirLicencia(Licencia licencia, String observaciones, Usuario usuario) {
+        return licenciaService.emitirLicencia(licencia, observaciones, usuario);
+    }
+
     public int calcularCosto(Licencia licencia) {
         return licenciaService.calcularCosto(licencia);
     }
 
-    public Licencia renovarLicencia(Long dni, ClaseLicencia clase, String observaciones, Usuario usuario) {
-        return licenciaService.renovarLicencia(dni, clase, observaciones, usuario);
+    public Licencia renovarLicencia(Licencia licencia, String observaciones, Usuario usuario) {
+        return licenciaService.renovarLicencia(licencia, observaciones, usuario);
     }
 
     public List<Licencia> obtenerLicenciasPorTitular(Long dni) {
