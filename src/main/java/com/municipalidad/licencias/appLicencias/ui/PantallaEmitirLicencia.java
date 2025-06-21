@@ -204,7 +204,7 @@ public class PantallaEmitirLicencia extends javax.swing.JFrame {
                                 "Por favor seleccione la carpeta donde deseea guardar el comprobante",
                                 "Aceptar",
                                 JOptionPane.INFORMATION_MESSAGE);
-                         pdfs.imprimirComprobante(titular,licencia,licenciaController.calcularCosto(licencia));
+                         pdfs.imprimirComprobante(titular,licencia,licenciaController.calcularCosto(licencia, false));
                         this.dispose();
                         SesionMenuPrincipal.setVisible(true);
                     }
