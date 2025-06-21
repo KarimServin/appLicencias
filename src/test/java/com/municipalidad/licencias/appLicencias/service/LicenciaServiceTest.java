@@ -76,87 +76,91 @@ public class LicenciaServiceTest {
     
     //pruebas unitarias correspondiente al módulo calcularCosto(licencia)
     @Test
+    public void calcularCostoLicenciaCopia() {
+        Assertions.assertEquals(50, licenciaService.calcularCosto(licencia, true));
+    }
+    @Test
     public void calcularCostoLicenciaAVigencia5Anios(){
-    titular.setFechaNacimiento(LocalDate.of(2000, 1, 22));
-    licencia.setClaseLicencia(ClaseLicencia.A);
-    Assertions.assertEquals(48, licenciaService.calcularCosto(licencia));
+        titular.setFechaNacimiento(LocalDate.of(2000, 1, 22));
+        licencia.setClaseLicencia(ClaseLicencia.A);
+        Assertions.assertEquals(48, licenciaService.calcularCosto(licencia, false));
     }
     @Test
     public void calcularCostoLicenciaAVigencia1Anios(){
-    titular.setFechaNacimiento(LocalDate.of(2008, 1, 22));
-    licencia.setClaseLicencia(ClaseLicencia.A);
-    Assertions.assertEquals(28, licenciaService.calcularCosto(licencia));
+        titular.setFechaNacimiento(LocalDate.of(2008, 1, 22));
+        licencia.setClaseLicencia(ClaseLicencia.A);
+        Assertions.assertEquals(28, licenciaService.calcularCosto(licencia, false));
     }
     @Test
     public void calcularCostoLicenciaBVigencia4Anios(){
-    titular.setFechaNacimiento(LocalDate.of(1975, 1, 22));
-    licencia.setClaseLicencia(ClaseLicencia.B);
-    Assertions.assertEquals(38, licenciaService.calcularCosto(licencia));
+        titular.setFechaNacimiento(LocalDate.of(1975, 1, 22));
+        licencia.setClaseLicencia(ClaseLicencia.B);
+        Assertions.assertEquals(38, licenciaService.calcularCosto(licencia, false));
     }
     @Test
     public void calcularCostoLicenciaBVigencia3Anios(){
-    titular.setFechaNacimiento(LocalDate.of(1960, 1, 22));
-    licencia.setClaseLicencia(ClaseLicencia.A);
-    Assertions.assertEquals(33, licenciaService.calcularCosto(licencia));
+        titular.setFechaNacimiento(LocalDate.of(1960, 1, 22));
+        licencia.setClaseLicencia(ClaseLicencia.A);
+        Assertions.assertEquals(33, licenciaService.calcularCosto(licencia, false));
     }
     @Test
     public void calcularCostoLicenciaCVigencia5Anios(){
-    titular.setFechaNacimiento(LocalDate.of(2001, 8, 22));
-    licencia.setClaseLicencia(ClaseLicencia.C);
-    Assertions.assertEquals(55, licenciaService.calcularCosto(licencia));
+        titular.setFechaNacimiento(LocalDate.of(2001, 8, 22));
+        licencia.setClaseLicencia(ClaseLicencia.C);
+        Assertions.assertEquals(55, licenciaService.calcularCosto(licencia, false));
     }
     @Test
     public void calcularCostoLicenciaCVigencia4Anios(){
-    titular.setFechaNacimiento(LocalDate.of(1974, 8, 12));
-    licencia.setClaseLicencia(ClaseLicencia.C);
-    Assertions.assertEquals(43, licenciaService.calcularCosto(licencia));
+        titular.setFechaNacimiento(LocalDate.of(1974, 8, 12));
+        licencia.setClaseLicencia(ClaseLicencia.C);
+        Assertions.assertEquals(43, licenciaService.calcularCosto(licencia, false));
     }
     @Test
     public void calcularCostoLicenciaDVigencia5Anios(){
-    titular.setFechaNacimiento(LocalDate.of(2000, 8, 12));
-    licencia.setClaseLicencia(ClaseLicencia.D);
-    Assertions.assertEquals(108, licenciaService.calcularCosto(licencia));
+        titular.setFechaNacimiento(LocalDate.of(2000, 8, 12));
+        licencia.setClaseLicencia(ClaseLicencia.D);
+        Assertions.assertEquals(108, licenciaService.calcularCosto(licencia, false));
     }
     @Test
     public void calcularCostoLicenciaDVigencia1Anios(){
-    titular.setFechaNacimiento(LocalDate.of(1950, 8, 12));
-    licencia.setClaseLicencia(ClaseLicencia.D);
-    Assertions.assertEquals(58, licenciaService.calcularCosto(licencia));
+        titular.setFechaNacimiento(LocalDate.of(1950, 8, 12));
+        licencia.setClaseLicencia(ClaseLicencia.D);
+        Assertions.assertEquals(58, licenciaService.calcularCosto(licencia, false));
     }
     @Test
     public void calcularCostoLicenciaEVigencia5Anios(){
-    titular.setFechaNacimiento(LocalDate.of(2000, 8, 12));
-    licencia.setClaseLicencia(ClaseLicencia.E);
-    Assertions.assertEquals(67, licenciaService.calcularCosto(licencia));
+        titular.setFechaNacimiento(LocalDate.of(2000, 8, 12));
+        licencia.setClaseLicencia(ClaseLicencia.E);
+        Assertions.assertEquals(67, licenciaService.calcularCosto(licencia, false));
     }
     @Test
     public void calcularCostoLicenciaEVigencia1Anios(){
-    titular.setFechaNacimiento(LocalDate.of(1951, 12, 12));
-    licencia.setClaseLicencia(ClaseLicencia.E);
-    Assertions.assertEquals(37, licenciaService.calcularCosto(licencia));
+        titular.setFechaNacimiento(LocalDate.of(1951, 12, 12));
+        licencia.setClaseLicencia(ClaseLicencia.E);
+        Assertions.assertEquals(37, licenciaService.calcularCosto(licencia, false));
     }
     @Test
     public void calcularCostoLicenciaFVigencia5Anios(){
-    titular.setFechaNacimiento(LocalDate.of(2002, 8, 12));
-    licencia.setClaseLicencia(ClaseLicencia.F);
-    Assertions.assertEquals(28, licenciaService.calcularCosto(licencia));
+        titular.setFechaNacimiento(LocalDate.of(2002, 8, 12));
+        licencia.setClaseLicencia(ClaseLicencia.F);
+        Assertions.assertEquals(28, licenciaService.calcularCosto(licencia, false));
     }
     @Test
     public void calcularCostoLicenciaFVigencia1Anios(){
-    titular.setFechaNacimiento(LocalDate.of(1952, 4, 12));
-    licencia.setClaseLicencia(ClaseLicencia.F);
-    Assertions.assertEquals(13, licenciaService.calcularCosto(licencia));
+        titular.setFechaNacimiento(LocalDate.of(1952, 4, 12));
+        licencia.setClaseLicencia(ClaseLicencia.F);
+        Assertions.assertEquals(13, licenciaService.calcularCosto(licencia, false));
     }
     @Test
     public void calcularCostoLicenciaGVigencia5Anios(){
-    titular.setFechaNacimiento(LocalDate.of(2002, 8, 12));
-    licencia.setClaseLicencia(ClaseLicencia.G);
-    Assertions.assertEquals(48, licenciaService.calcularCosto(licencia));
+        titular.setFechaNacimiento(LocalDate.of(2002, 8, 12));
+        licencia.setClaseLicencia(ClaseLicencia.G);
+        Assertions.assertEquals(48, licenciaService.calcularCosto(licencia, false));
     }
     @Test
     public void calcularCostoLicenciaGVigencia1Anios(){
-    titular.setFechaNacimiento(LocalDate.of(1950, 1, 1));
-    licencia.setClaseLicencia(ClaseLicencia.G);
-    Assertions.assertEquals(28, licenciaService.calcularCosto(licencia));
+        titular.setFechaNacimiento(LocalDate.of(1950, 1, 1));
+        licencia.setClaseLicencia(ClaseLicencia.G);
+        Assertions.assertEquals(28, licenciaService.calcularCosto(licencia, false));
     }
 }
