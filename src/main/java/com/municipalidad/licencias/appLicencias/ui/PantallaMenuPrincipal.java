@@ -7,8 +7,8 @@ package com.municipalidad.licencias.appLicencias.ui;
 import com.municipalidad.licencias.appLicencias.controller.LicenciaController;
 import com.municipalidad.licencias.appLicencias.controller.TitularController;
 import com.municipalidad.licencias.appLicencias.controller.UsuarioController;
-import com.municipalidad.licencias.appLicencias.model.Usuario;
 import com.municipalidad.licencias.appLicencias.singleton.SesionMenuPrincipal;
+import com.municipalidad.licencias.appLicencias.singleton.SesionUsuario;
 import javax.swing.JOptionPane;
 
 /**
@@ -19,10 +19,10 @@ public class PantallaMenuPrincipal extends javax.swing.JFrame {
     private TitularController titularController;
     private LicenciaController licenciaController;
     private UsuarioController usuarioController;
-    private Usuario usuario;
     
-    public PantallaMenuPrincipal(Usuario usuario, TitularController t, LicenciaController l, UsuarioController u) {
-        this.usuario = usuario;
+    
+    public PantallaMenuPrincipal(TitularController t, LicenciaController l, UsuarioController u) {
+        
         this.titularController = t;
         this.licenciaController = l;
         this.usuarioController = u;
@@ -83,7 +83,7 @@ public class PantallaMenuPrincipal extends javax.swing.JFrame {
         );
 
         labelBienvenidaNombre.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        labelBienvenidaNombre.setText("Bienvenido, " + usuario.getNombreUsuario() + "!");
+        labelBienvenidaNombre.setText("Bienvenido, " + SesionUsuario.getUsuarioActual().getNombreUsuario() + "!");
 
         javax.swing.GroupLayout panelBienvenidaLayout = new javax.swing.GroupLayout(panelBienvenida);
         panelBienvenida.setLayout(panelBienvenidaLayout);
@@ -272,7 +272,7 @@ public class PantallaMenuPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_btnModificarDatosTitularActionPerformed
 
     private void btnAltaUsuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAltaUsuarioActionPerformed
-        if (!usuario.isEsSuperusuario()) {
+        if (!SesionUsuario.getUsuarioActual().isEsSuperusuario()) {
         JOptionPane.showMessageDialog(this, "Debe ser superusuario para realizar esta acción.", "Acceso Denegado", JOptionPane.WARNING_MESSAGE);
         } else {
             new PantallaCrearUsuario(usuarioController).setVisible(true);
@@ -282,7 +282,7 @@ public class PantallaMenuPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_btnAltaUsuarioActionPerformed
 
     private void btnModificarDatosUsuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnModificarDatosUsuarioActionPerformed
-        if (!usuario.isEsSuperusuario()) {
+        if (!SesionUsuario.getUsuarioActual().isEsSuperusuario()) {
         JOptionPane.showMessageDialog(this, "Debe ser superusuario para realizar esta acción.", "Acceso Denegado", JOptionPane.WARNING_MESSAGE);
         } else {
             JOptionPane.showMessageDialog(this, "Esta funcionalidad no está disponible.", "Acceso Denegado", JOptionPane.WARNING_MESSAGE);

@@ -156,7 +156,7 @@ public class PantallaLogin extends javax.swing.JFrame {
         JOptionPane.showMessageDialog(null, "Login exitoso");
         SesionUsuario.setUsuarioActual(usuario);
         // Abre el menu principal
-        PantallaMenuPrincipal menu = new PantallaMenuPrincipal(usuario, titularController, licenciaController, usuarioController);  // pasar usuario al menú
+        PantallaMenuPrincipal menu = new PantallaMenuPrincipal(titularController, licenciaController, usuarioController);  // pasar usuario al menú
         SesionMenuPrincipal.setMenu(menu);
         SesionMenuPrincipal.setVisible(true);
         this.dispose(); 
