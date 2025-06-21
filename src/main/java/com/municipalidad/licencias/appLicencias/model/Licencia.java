@@ -41,8 +41,10 @@ public class Licencia {
     @ManyToOne
      @JoinColumn(name = "titular_dni")
     private Titular titular;
-
-    private Long idLicenciaAnterior;
+    
+    @ManyToOne
+    
+    private Licencia versionAnterior;
     
     public void setFechaVencimiento(int vigencia, LocalDate fechaNac) {
     
@@ -51,7 +53,7 @@ public class Licencia {
     int mesAux = fechaNac.getMonthValue();
     int diaAux = fechaNac.getDayOfMonth();
     
-this.fechaVencimiento = fechaAux.plusYears(vigencia)
+    this.fechaVencimiento = fechaAux.plusYears(vigencia)
                                 .withMonth(mesAux)
                                 .withDayOfMonth(diaAux);
     }

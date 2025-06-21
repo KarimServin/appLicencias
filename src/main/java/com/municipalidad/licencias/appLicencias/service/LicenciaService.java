@@ -64,6 +64,15 @@ public class LicenciaService {
         return licenciaRepo.save(licencia);
     }
     
+    public Licencia emitirLicencia(Licencia licencia,  String observaciones, Usuario usuario) {
+        Licencia copiaLicencia = licencia;
+        copiaLicencia.setObservaciones(observaciones);
+        copiaLicencia.setFechaEmision(LocalDate.now());
+        copiaLicencia.setUsuario(usuario);
+        
+        return licenciaRepo.save(copiaLicencia);
+    }
+    
     public boolean estaVigente(ClaseLicencia clase,Titular titular){
         return licenciaRepo.existsByClaseLicenciaAndTitularDni(clase, titular.getDni());
     }
@@ -203,22 +212,20 @@ public class LicenciaService {
     return 0;
     }
     
-    public Licencia renovarLicencia(Long dni, ClaseLicencia clase, String observaciones, Usuario usuario) {
-        Titular titular = titularRepo.findById(dni)
-                .orElseThrow(() -> new RuntimeException("Titular no encontrado"));
-        java.util.List<Licencia> licencias = licenciaRepo.findByTitularDniAndClaseLicencia(titular.getDni(), clase);
-        if (licencias.isEmpty()) {
-            throw new RuntimeException("Licencia no encontrada");
-        }
-        Licencia licencia = new Licencia();
-        licencia.setClaseLicencia(clase);
-        licencia.setTitular(titular);
-        licencia.setObservaciones(observaciones);
-        licencia.setUsuario(usuario);
-        licencia.setFechaVencimiento(calcularVigencia(licencia, titular), titular.getFechaNacimiento());
-        licencia.setFechaEmision(LocalDate.now());
-        licencia.setIdLicenciaAnterior(licencias.get(0).getId());
-        return licenciaRepo.save(licencia);
+    public Licencia renovarLicencia(Licencia licencia, String observaciones, Usuario usuario) {
+
+        Titular titular = licencia.getTitular();
+        
+        Licencia renovacionLicencia = new Licencia();
+        renovacionLicencia.setClaseLicencia(licencia.getClaseLicencia());
+        renovacionLicencia.setTitular(titular);
+        renovacionLicencia.setObservaciones(observaciones);
+        renovacionLicencia.setUsuario(usuario);
+        renovacionLicencia.setFechaVencimiento(calcularVigencia(licencia, titular), titular.getFechaNacimiento());
+        renovacionLicencia.setFechaEmision(LocalDate.now());
+        renovacionLicencia.setVersionAnterior(licencia);
+        
+        return licenciaRepo.save(renovacionLicencia);
     }
 
     public java.util.List<Licencia> obtenerLicenciasPorTitular(Long dni) {
