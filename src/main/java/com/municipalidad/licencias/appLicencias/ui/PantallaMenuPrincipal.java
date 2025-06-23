@@ -285,9 +285,9 @@ public class PantallaMenuPrincipal extends javax.swing.JFrame {
         if (!SesionUsuario.getUsuarioActual().isEsSuperusuario()) {
         JOptionPane.showMessageDialog(this, "Debe ser superusuario para realizar esta acción.", "Acceso Denegado", JOptionPane.WARNING_MESSAGE);
         } else {
-            JOptionPane.showMessageDialog(this, "Esta funcionalidad no está disponible.", "Acceso Denegado", JOptionPane.WARNING_MESSAGE);
-            //new PantallaCrearUsuario().setVisible(true);
-            //SesionMenuPrincipal.setVisible(false);
+            
+            new PantallaModificarUsuario(usuarioController).setVisible(true);
+            SesionMenuPrincipal.setVisible(false);
         }
     }//GEN-LAST:event_btnModificarDatosUsuarioActionPerformed
 

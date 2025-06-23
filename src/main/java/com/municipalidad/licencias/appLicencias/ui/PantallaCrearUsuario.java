@@ -176,7 +176,7 @@ public class PantallaCrearUsuario extends javax.swing.JFrame {
         //crear el usuario
         
         usuarioController.altaUsuario(usuarioField.getText(), contraseñaField.getText(), privilegiosCheckBox.isSelected());
-        JOptionPane.showMessageDialog(null, "Login exitoso");
+        JOptionPane.showMessageDialog(null, "Se ha creado el nuevo usuario con éxito");
         SesionMenuPrincipal.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_aceptarButtonActionPerformed
