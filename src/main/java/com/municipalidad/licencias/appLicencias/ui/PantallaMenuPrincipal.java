@@ -9,6 +9,7 @@ import com.municipalidad.licencias.appLicencias.controller.TitularController;
 import com.municipalidad.licencias.appLicencias.controller.UsuarioController;
 import com.municipalidad.licencias.appLicencias.singleton.SesionMenuPrincipal;
 import com.municipalidad.licencias.appLicencias.singleton.SesionUsuario;
+import java.util.HashSet;
 import javax.swing.JOptionPane;
 
 /**
@@ -131,6 +132,11 @@ public class PantallaMenuPrincipal extends javax.swing.JFrame {
         });
 
         btnEmitirCopiaLicencia.setText("Emitir Copia de Licencia");
+        btnEmitirCopiaLicencia.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEmitirCopiaLicenciaActionPerformed(evt);
+            }
+        });
 
         btnListarLicVigentes.setText("Listar Licencias Vigentes por criterio");
         btnListarLicVigentes.addActionListener(new java.awt.event.ActionListener() {
@@ -261,14 +267,26 @@ public class PantallaMenuPrincipal extends javax.swing.JFrame {
         JOptionPane.showMessageDialog(this, "Esta funcionalidad no está disponible.", "Acceso Denegado", JOptionPane.WARNING_MESSAGE);    }//GEN-LAST:event_btnRenovarLicenciaActionPerformed
 
     private void btnListarLicExpiradasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnListarLicExpiradasActionPerformed
-        JOptionPane.showMessageDialog(this, "Esta funcionalidad no está disponible.", "Acceso Denegado", JOptionPane.WARNING_MESSAGE);
+
+        PantallaListarLicenciasVencidas pv = new PantallaListarLicenciasVencidas();
+        pv.setVisible(true);
+        this.dispose();
+       
     }//GEN-LAST:event_btnListarLicExpiradasActionPerformed
 
     private void btnListarLicVigentesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnListarLicVigentesActionPerformed
+
+        PantallaListarLicencias pl = new PantallaListarLicencias();
+        pl.setVisible(true);   
+        this.dispose();
+                
+              
         JOptionPane.showMessageDialog(this, "Esta funcionalidad no está disponible.", "Acceso Denegado", JOptionPane.WARNING_MESSAGE);    }//GEN-LAST:event_btnListarLicVigentesActionPerformed
 
     private void btnModificarDatosTitularActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnModificarDatosTitularActionPerformed
+        
         JOptionPane.showMessageDialog(this, "Esta funcionalidad no está disponible.", "Acceso Denegado", JOptionPane.WARNING_MESSAGE);
+       
     }//GEN-LAST:event_btnModificarDatosTitularActionPerformed
 
     private void btnAltaUsuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAltaUsuarioActionPerformed
@@ -292,8 +310,18 @@ public class PantallaMenuPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_btnModificarDatosUsuarioActionPerformed
 
     private void btnSALIRActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSALIRActionPerformed
-        System.exit(0);
+       PantallaLogin login = new PantallaLogin(usuarioController, titularController, licenciaController);
+       login.setVisible(true);
+       this.dispose();
     }//GEN-LAST:event_btnSALIRActionPerformed
+
+    private void btnEmitirCopiaLicenciaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEmitirCopiaLicenciaActionPerformed
+      
+        
+        new PantallaEmitirCopiaLicencia(licenciaController, titularController).setVisible(true);
+        SesionMenuPrincipal.setVisible(false);
+        
+    }//GEN-LAST:event_btnEmitirCopiaLicenciaActionPerformed
 
    
 
