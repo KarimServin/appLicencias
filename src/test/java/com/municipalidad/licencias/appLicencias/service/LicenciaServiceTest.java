@@ -15,6 +15,7 @@ import static org.mockito.Mockito.*;
 import static org.junit.jupiter.api.Assertions.*;
 import java.time.LocalDate;
 import org.junit.jupiter.api.Assertions;
+import java.util.Optional;
 
 /**
  *
@@ -36,7 +37,9 @@ public class LicenciaServiceTest {
         licenciaRepo = mock(LicenciaRepository.class);
         licencia = new Licencia();
         titular = new Titular();
-        licencia.setTitular(titular);
+        licencia.setTitular(titular);        
+        Long dni = 40703261L;
+        titular.setDni(dni);
         licenciaService = new LicenciaService(titularRepo, licenciaRepo);
     }
     //pruebas unitarias correspondiente al módulo calcularVigencia(licencia, titular)
@@ -163,4 +166,66 @@ public class LicenciaServiceTest {
         licencia.setClaseLicencia(ClaseLicencia.G);
         Assertions.assertEquals(28, licenciaService.calcularCosto(licencia, false));
     }
+    
+    //pruebas unitarias correspodientes a las pruebas de puedeEmitirLicencia
+    @Test
+    public void noPuedeEmitirLicenciaNoProfesionalSiEsMenorDe17Anios() {
+        titular.setFechaNacimiento(LocalDate.of(2010, 1, 1));
+        when(titularRepo.findById(titular.getDni())).thenReturn(Optional.of(titular));
+        Assertions.assertFalse(licenciaService.puedeEmitirLicencia(titular.getDni(), ClaseLicencia.B));
+    }
+    @Test
+    public void puedeEmitirLicenciaNoProfesionalSiEsMayorDe17AniosYMenorDe90() {
+        titular.setFechaNacimiento(LocalDate.of(2008, 4, 19));
+        when(titularRepo.findById(titular.getDni())).thenReturn(Optional.of(titular));
+        Assertions.assertTrue(licenciaService.puedeEmitirLicencia(titular.getDni(), ClaseLicencia.G));
+    }
+    @Test
+    public void noPuedeEmitirLicenciaProfesionalSiEsMenorDe21YMayorA17() {
+        titular.setFechaNacimiento(LocalDate.of(2005, 3, 22));
+        when(titularRepo.findById(titular.getDni())).thenReturn(Optional.of(titular));
+        Assertions.assertFalse(licenciaService.puedeEmitirLicencia(titular.getDni(), ClaseLicencia.C));
+    }
+    @Test
+    public void noPuedeEmitirLicenciaProfesionalSiEsMayorA21YNoTieneLicenciaB() {
+        titular.setFechaNacimiento(LocalDate.of(2003, 3, 22));
+        when(titularRepo.findById(titular.getDni())).thenReturn(Optional.of(titular));
+        Assertions.assertFalse(licenciaService.puedeEmitirLicencia(titular.getDni(), ClaseLicencia.D));
+    }
+    @Test
+    public void noPuedeEmitirLicenciaProfesionalSiEsMayorA21YNoTieneLicenciaBHaceMasDeUnAnio() {
+        titular.setFechaNacimiento(LocalDate.of(2005, 3, 22));
+        when(titularRepo.findById(titular.getDni())).thenReturn(Optional.of(titular));
+        titular.setFechaLicenciaClaseB(LocalDate.of(2025, 3, 22));
+        Assertions.assertFalse(licenciaService.puedeEmitirLicencia(titular.getDni(), ClaseLicencia.E));
+    }
+    @Test
+    public void puedeEmitirLicenciaProfesionalSiEsMayorA21YTieneLicenciaBHaceMasDeUnAnio() {
+        titular.setFechaNacimiento(LocalDate.of(2000, 12, 25));
+        when(titularRepo.findById(titular.getDni())).thenReturn(Optional.of(titular));
+        titular.setFechaLicenciaClaseB(LocalDate.of(2020, 3, 11));
+        Assertions.assertTrue(licenciaService.puedeEmitirLicencia(titular.getDni(), ClaseLicencia.D));
+    }
+    @Test
+    public void NoPuedeEmitirLicenciaProfesionalSiEsMayorA65YNuncaTuvoLicenciaProfesional() {
+        titular.setFechaNacimiento(LocalDate.of(1960, 1, 25));
+        when(titularRepo.findById(titular.getDni())).thenReturn(Optional.of(titular));
+        titular.setTuvoLicenciaProfesional(false);
+        Assertions.assertFalse(licenciaService.puedeEmitirLicencia(titular.getDni(), ClaseLicencia.C));
+    }
+    @Test
+    public void puedeEmitirLicenciaProfesionalSiEsMayorA65YTuvoLicenciaProfesional() {
+        titular.setFechaNacimiento(LocalDate.of(1959, 10, 27));
+        when(titularRepo.findById(titular.getDni())).thenReturn(Optional.of(titular));
+        titular.setTuvoLicenciaProfesional(true);
+        Assertions.assertTrue(licenciaService.puedeEmitirLicencia(titular.getDni(), ClaseLicencia.C));
+    }
+    @Test
+    public void noPuedeEmitirLicenciaDeCualquierTipoSiEsMayorDe90() {
+        titular.setFechaNacimiento(LocalDate.of(1924, 12, 19));
+        when(titularRepo.findById(titular.getDni())).thenReturn(Optional.of(titular));
+        Assertions.assertFalse(licenciaService.puedeEmitirLicencia(titular.getDni(), ClaseLicencia.F));
+    }
+    
 }
+
