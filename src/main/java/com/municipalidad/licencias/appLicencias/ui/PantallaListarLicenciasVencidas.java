@@ -5,6 +5,7 @@
 package com.municipalidad.licencias.appLicencias.ui;
 
 import com.municipalidad.licencias.appLicencias.singleton.SesionMenuPrincipal;
+import java.awt.Toolkit;
 
 /**
  *
@@ -19,6 +20,7 @@ public class PantallaListarLicenciasVencidas extends javax.swing.JFrame {
      */
     public PantallaListarLicenciasVencidas() {
         initComponents();
+        setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource("/img/SantaFeCapital_Logo.png")));
         cargarTabla();
     }
 

@@ -9,7 +9,7 @@ import com.municipalidad.licencias.appLicencias.controller.TitularController;
 import com.municipalidad.licencias.appLicencias.controller.UsuarioController;
 import com.municipalidad.licencias.appLicencias.singleton.SesionMenuPrincipal;
 import com.municipalidad.licencias.appLicencias.singleton.SesionUsuario;
-import java.util.HashSet;
+import java.awt.Toolkit;
 import javax.swing.JOptionPane;
 
 /**
@@ -28,6 +28,7 @@ public class PantallaMenuPrincipal extends javax.swing.JFrame {
         this.licenciaController = l;
         this.usuarioController = u;
         initComponents();
+        setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource("/img/SantaFeCapital_Logo.png")));
         this.setLocationRelativeTo(null);
     }
 
@@ -262,10 +263,6 @@ public class PantallaMenuPrincipal extends javax.swing.JFrame {
         SesionMenuPrincipal.setVisible(false);
     }//GEN-LAST:event_btnAltaTitularActionPerformed
 
-    private void btnRenovarLicenciaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRenovarLicenciaActionPerformed
-
-        JOptionPane.showMessageDialog(this, "Esta funcionalidad no está disponible.", "Acceso Denegado", JOptionPane.WARNING_MESSAGE);    }//GEN-LAST:event_btnRenovarLicenciaActionPerformed
-
     private void btnListarLicExpiradasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnListarLicExpiradasActionPerformed
 
         PantallaListarLicenciasVencidas pv = new PantallaListarLicenciasVencidas();
@@ -322,6 +319,12 @@ public class PantallaMenuPrincipal extends javax.swing.JFrame {
         SesionMenuPrincipal.setVisible(false);
         
     }//GEN-LAST:event_btnEmitirCopiaLicenciaActionPerformed
+
+    private void btnRenovarLicenciaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRenovarLicenciaActionPerformed
+        PantallaRenovarLicencia pantallaRenovarLicencia = new PantallaRenovarLicencia(licenciaController, titularController);
+        pantallaRenovarLicencia.setVisible(true);
+        SesionMenuPrincipal.setVisible(false);
+    }//GEN-LAST:event_btnRenovarLicenciaActionPerformed
 
    
 

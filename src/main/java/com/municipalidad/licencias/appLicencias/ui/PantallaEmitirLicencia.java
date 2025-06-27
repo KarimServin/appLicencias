@@ -9,6 +9,7 @@ import com.municipalidad.licencias.appLicencias.model.Titular;
 import com.municipalidad.licencias.appLicencias.service.PDFService;
 import com.municipalidad.licencias.appLicencias.singleton.SesionMenuPrincipal;
 import com.municipalidad.licencias.appLicencias.singleton.SesionUsuario;
+import java.awt.Toolkit;
 import javax.swing.JOptionPane;
 
 public class PantallaEmitirLicencia extends javax.swing.JFrame {
@@ -17,13 +18,16 @@ public class PantallaEmitirLicencia extends javax.swing.JFrame {
     PDFService pdfs;
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(PantallaEmitirLicencia.class.getName());
     
-    public PantallaEmitirLicencia() {}
+    public PantallaEmitirLicencia() {
+        initComponents();
+        setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource("/img/SantaFeCapital_Logo.png")));
+    }
     public PantallaEmitirLicencia(LicenciaController licenciaControl, TitularController titularControl) {
         licenciaController = licenciaControl;
         titularController = titularControl;
         pdfs = new PDFService();
         initComponents();
-               
+        setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource("/img/SantaFeCapital_Logo.png")));               
     }
 
     @SuppressWarnings("unchecked")
@@ -179,11 +183,21 @@ public class PantallaEmitirLicencia extends javax.swing.JFrame {
             try {
                 if(Titular.class.isInstance(titularController.buscarTitular(dniTitular))){
                     if(licenciaController.poseeLicencia(claseSelec, titularController.buscarTitular(dniTitular))){
-                        JOptionPane.showMessageDialog(
+                        int opcion = JOptionPane.showOptionDialog(
                                 null,
-                                "El titular ya posee una licencia de este tipo.",
+                                "El titular ya posee una licencia de este tipo.\n ¿Desea renovarla?",
                                 "Error",
-                                JOptionPane.ERROR_MESSAGE);
+                                JOptionPane.YES_NO_OPTION,
+                                JOptionPane.QUESTION_MESSAGE,
+                                null,
+                                new Object[]{"Cancelar", "Aceptar"},
+                                "Aceptar");
+                        if(opcion == JOptionPane.YES_OPTION){
+                            new PantallaRenovarLicencia(licenciaController, titularController, numDocField.getText()).setVisible(true);
+                            this.dispose();
+                        } else {
+                            numDocField.setText("");
+                        }
                     }
                     else if(licenciaController.puedeEmitir(dniTitular, claseSelec)){
                          licencia = licenciaController.emitirLicencia(dniTitular, claseSelec, observacionesField.getText().trim(), SesionUsuario.getUsuarioActual());

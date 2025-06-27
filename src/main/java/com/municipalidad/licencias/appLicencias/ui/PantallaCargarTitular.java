@@ -5,6 +5,7 @@ import com.municipalidad.licencias.appLicencias.controller.TitularController;
 import com.municipalidad.licencias.appLicencias.model.Titular;
 import com.municipalidad.licencias.appLicencias.singleton.SesionMenuPrincipal;
 import com.municipalidad.licencias.appLicencias.singleton.SesionUsuario;
+import java.awt.Toolkit;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -25,6 +26,7 @@ public class PantallaCargarTitular extends javax.swing.JFrame {
         this.clase = clase;
         this.dni = dni;
         initComponents();
+        setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource("/img/SantaFeCapital_Logo.png")));
         numDocField.setText(dni);
     }
     
@@ -32,6 +34,7 @@ public class PantallaCargarTitular extends javax.swing.JFrame {
         this.titularController = titularController;
         this.clase = clase;
         initComponents();
+        setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource("/img/SantaFeCapital_Logo.png")));
     }
 
     @SuppressWarnings("unchecked")

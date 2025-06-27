@@ -224,6 +224,7 @@ public class LicenciaService {
         renovacionLicencia.setTitular(titular);
         renovacionLicencia.setObservaciones(observaciones);
         renovacionLicencia.setUsuario(usuario);
+        renovacionLicencia.setFechaEmision(licencia.getFechaEmision());
         renovacionLicencia.setFechaVencimiento(calcularVigencia(licencia, titular), titular.getFechaNacimiento());
         renovacionLicencia.setFechaEmision(LocalDate.now());
         renovacionLicencia.setVersionAnterior(licencia);

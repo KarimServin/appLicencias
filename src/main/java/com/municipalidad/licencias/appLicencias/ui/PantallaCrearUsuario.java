@@ -3,6 +3,7 @@ package com.municipalidad.licencias.appLicencias.ui;
 
 import com.municipalidad.licencias.appLicencias.controller.UsuarioController;
 import com.municipalidad.licencias.appLicencias.singleton.SesionMenuPrincipal;
+import java.awt.Toolkit;
 import javax.swing.JOptionPane;
 
 public class PantallaCrearUsuario extends javax.swing.JFrame {
@@ -13,6 +14,7 @@ public class PantallaCrearUsuario extends javax.swing.JFrame {
     public PantallaCrearUsuario(UsuarioController usuarioControl) {
         this.usuarioController=usuarioControl;
         initComponents();
+        setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource("/img/SantaFeCapital_Logo.png")));
         this.setLocationRelativeTo(null);
     }
     

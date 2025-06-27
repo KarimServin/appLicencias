@@ -8,6 +8,7 @@ import com.municipalidad.licencias.appLicencias.controller.UsuarioController;
 import com.municipalidad.licencias.appLicencias.model.Usuario;
 import com.municipalidad.licencias.appLicencias.singleton.SesionMenuPrincipal;
 import com.municipalidad.licencias.appLicencias.singleton.SesionUsuario;
+import java.awt.Toolkit;
 import javax.swing.JOptionPane;
 
 
@@ -30,6 +31,7 @@ public class PantallaLogin extends javax.swing.JFrame {
         this.titularController = t;
         this.licenciaController = l;
         initComponents();
+        setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource("/img/SantaFeCapital_Logo.png")));
         this.setLocationRelativeTo(null);
     }
 

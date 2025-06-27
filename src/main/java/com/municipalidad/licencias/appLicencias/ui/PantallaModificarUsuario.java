@@ -5,6 +5,7 @@ import java.util.List;
 import javax.swing.DefaultListModel;
 import com.municipalidad.licencias.appLicencias.controller.UsuarioController;
 import com.municipalidad.licencias.appLicencias.singleton.SesionMenuPrincipal;
+import java.awt.Toolkit;
 import java.util.Arrays;
 import javax.swing.JOptionPane;
 
@@ -19,6 +20,7 @@ public class PantallaModificarUsuario extends javax.swing.JFrame {
         usuarioSeleccionadoNombre = null;
         this.usuarioController = usuarioController;
         initComponents();
+        setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource("/img/SantaFeCapital_Logo.png")));
         cargarUsuariosVentana();
         this.setLocationRelativeTo(null);
     }

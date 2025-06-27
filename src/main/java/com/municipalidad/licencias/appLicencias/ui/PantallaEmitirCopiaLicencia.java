@@ -9,6 +9,7 @@ import com.municipalidad.licencias.appLicencias.model.Titular;
 import com.municipalidad.licencias.appLicencias.service.PDFService;
 import com.municipalidad.licencias.appLicencias.singleton.SesionMenuPrincipal;
 import com.municipalidad.licencias.appLicencias.singleton.SesionUsuario;
+import java.awt.Toolkit;
 import javax.swing.JOptionPane;
 
 public class PantallaEmitirCopiaLicencia extends javax.swing.JFrame {
@@ -23,7 +24,7 @@ public class PantallaEmitirCopiaLicencia extends javax.swing.JFrame {
         titularController = titularControl;
         pdfs = new PDFService();
         initComponents();
-        
+        setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource("/img/SantaFeCapital_Logo.png")));
     }
 
     @SuppressWarnings("unchecked")
