@@ -234,7 +234,7 @@ public class LicenciaService {
     }
     
     public List<Licencia> obtenerLicenciasExpiradas(){
-        return licenciaRepo.findByFechaVencimiento(LocalDate.now());
+        return licenciaRepo.findByFechaVencimientoLessThanEqual(LocalDate.now());
     }
 
     public java.util.List<Licencia> obtenerLicenciasPorTitular(Long dni) {
