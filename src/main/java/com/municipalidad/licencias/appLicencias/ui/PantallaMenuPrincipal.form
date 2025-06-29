@@ -24,31 +24,28 @@
     <DimensionLayout dim="0">
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" attributes="0">
-              <EmptySpace max="-2" attributes="0"/>
+              <EmptySpace min="-2" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
                   <Component id="panelBienvenida" max="32767" attributes="0"/>
-                  <Group type="102" attributes="0">
-                      <Component id="panelOpciones" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
-                  </Group>
+                  <Component id="panelOpciones" max="32767" attributes="0"/>
               </Group>
-              <EmptySpace max="-2" attributes="0"/>
+              <EmptySpace min="-2" max="-2" attributes="0"/>
           </Group>
           <Group type="102" alignment="0" attributes="0">
-              <Component id="panelEncabezado" min="-2" max="-2" attributes="0"/>
-              <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+              <Component id="panelEncabezado" max="32767" attributes="0"/>
+              <EmptySpace min="-2" pref="14" max="-2" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
     <DimensionLayout dim="1">
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" alignment="0" attributes="0">
-              <Component id="panelEncabezado" min="-2" max="-2" attributes="0"/>
-              <EmptySpace max="-2" attributes="0"/>
-              <Component id="panelBienvenida" min="-2" max="-2" attributes="0"/>
-              <EmptySpace type="unrelated" max="-2" attributes="0"/>
-              <Component id="panelOpciones" min="-2" max="-2" attributes="0"/>
-              <EmptySpace max="32767" attributes="0"/>
+              <Component id="panelEncabezado" max="32767" attributes="0"/>
+              <EmptySpace min="-2" max="-2" attributes="0"/>
+              <Component id="panelBienvenida" max="32767" attributes="0"/>
+              <EmptySpace type="unrelated" min="-2" max="-2" attributes="0"/>
+              <Component id="panelOpciones" max="32767" attributes="0"/>
+              <EmptySpace min="-2" max="-2" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -60,21 +57,21 @@
         <DimensionLayout dim="0">
           <Group type="103" groupAlignment="0" attributes="0">
               <Group type="102" alignment="0" attributes="0">
-                  <EmptySpace max="-2" attributes="0"/>
+                  <EmptySpace min="-2" max="-2" attributes="0"/>
                   <Component id="labelLogoSF" min="-2" max="-2" attributes="0"/>
-                  <EmptySpace pref="162" max="32767" attributes="0"/>
-                  <Component id="labelMenuPrincipal" min="-2" max="-2" attributes="0"/>
-                  <EmptySpace max="-2" attributes="0"/>
+                  <EmptySpace min="-2" pref="149" max="-2" attributes="0"/>
+                  <Component id="labelMenuPrincipal" max="32767" attributes="0"/>
+                  <EmptySpace min="-2" max="-2" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
         <DimensionLayout dim="1">
           <Group type="103" groupAlignment="0" attributes="0">
-              <Component id="labelLogoSF" alignment="1" max="32767" attributes="0"/>
+              <Component id="labelLogoSF" alignment="1" pref="78" max="32767" attributes="0"/>
               <Group type="102" alignment="1" attributes="0">
-                  <EmptySpace max="32767" attributes="0"/>
-                  <Component id="labelMenuPrincipal" min="-2" max="-2" attributes="0"/>
-                  <EmptySpace max="-2" attributes="0"/>
+                  <EmptySpace min="-2" pref="42" max="-2" attributes="0"/>
+                  <Component id="labelMenuPrincipal" pref="0" max="32767" attributes="0"/>
+                  <EmptySpace min="-2" max="-2" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -111,7 +108,7 @@
               <Group type="102" alignment="0" attributes="0">
                   <EmptySpace max="-2" attributes="0"/>
                   <Component id="labelBienvenidaNombre" min="-2" max="-2" attributes="0"/>
-                  <EmptySpace max="32767" attributes="0"/>
+                  <EmptySpace pref="20" max="32767" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -135,23 +132,23 @@
         <DimensionLayout dim="0">
           <Group type="103" groupAlignment="0" attributes="0">
               <Group type="102" alignment="1" attributes="0">
-                  <EmptySpace max="-2" attributes="0"/>
+                  <EmptySpace min="-2" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="1" attributes="0">
-                      <Component id="btnModificarDatosUsuario" pref="238" max="32767" attributes="0"/>
-                      <Component id="btnAltaTitular" alignment="0" max="32767" attributes="0"/>
-                      <Component id="btnRenovarLicencia" alignment="0" max="32767" attributes="0"/>
-                      <Component id="btnListarLicExpiradas" alignment="0" max="32767" attributes="0"/>
-                      <Component id="btnEmitirNuevaLicencia" alignment="0" max="32767" attributes="0"/>
+                      <Component id="btnModificarDatosUsuario" pref="279" max="32767" attributes="0"/>
+                      <Component id="btnAltaTitular" alignment="0" pref="279" max="32767" attributes="0"/>
+                      <Component id="btnRenovarLicencia" alignment="0" pref="279" max="32767" attributes="0"/>
+                      <Component id="btnListarLicExpiradas" alignment="0" pref="279" max="32767" attributes="0"/>
+                      <Component id="btnEmitirNuevaLicencia" alignment="0" pref="279" max="32767" attributes="0"/>
                   </Group>
                   <EmptySpace min="-2" pref="61" max="-2" attributes="0"/>
-                  <Group type="103" groupAlignment="1" max="-2" attributes="0">
-                      <Component id="btnAltaUsuario" max="32767" attributes="0"/>
-                      <Component id="btnEmitirCopiaLicencia" alignment="0" max="32767" attributes="0"/>
-                      <Component id="btnModificarDatosTitular" alignment="0" max="32767" attributes="0"/>
-                      <Component id="btnListarLicVigentes" alignment="0" pref="247" max="32767" attributes="0"/>
-                      <Component id="btnSALIR" max="32767" attributes="0"/>
+                  <Group type="103" groupAlignment="1" attributes="0">
+                      <Component id="btnAltaUsuario" pref="280" max="32767" attributes="0"/>
+                      <Component id="btnEmitirCopiaLicencia" alignment="0" pref="280" max="32767" attributes="0"/>
+                      <Component id="btnModificarDatosTitular" alignment="0" pref="280" max="32767" attributes="0"/>
+                      <Component id="btnListarLicVigentes" alignment="0" pref="280" max="32767" attributes="0"/>
+                      <Component id="btnSALIR" pref="280" max="32767" attributes="0"/>
                   </Group>
-                  <EmptySpace max="-2" attributes="0"/>
+                  <EmptySpace min="-2" max="-2" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -159,30 +156,30 @@
           <Group type="103" groupAlignment="0" attributes="0">
               <Group type="102" alignment="0" attributes="0">
                   <Group type="103" groupAlignment="3" attributes="0">
-                      <Component id="btnEmitirNuevaLicencia" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="btnEmitirCopiaLicencia" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="btnEmitirNuevaLicencia" alignment="3" max="32767" attributes="0"/>
+                      <Component id="btnEmitirCopiaLicencia" alignment="3" max="32767" attributes="0"/>
                   </Group>
                   <EmptySpace min="-2" pref="38" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
-                      <Component id="btnListarLicVigentes" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="btnAltaTitular" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="btnListarLicVigentes" alignment="3" max="32767" attributes="0"/>
+                      <Component id="btnAltaTitular" alignment="3" max="32767" attributes="0"/>
                   </Group>
                   <EmptySpace min="-2" pref="38" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
-                      <Component id="btnRenovarLicencia" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="btnModificarDatosTitular" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="btnRenovarLicencia" alignment="3" max="32767" attributes="0"/>
+                      <Component id="btnModificarDatosTitular" alignment="3" max="32767" attributes="0"/>
                   </Group>
                   <EmptySpace min="-2" pref="38" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
-                      <Component id="btnListarLicExpiradas" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="btnAltaUsuario" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="btnListarLicExpiradas" alignment="3" max="32767" attributes="0"/>
+                      <Component id="btnAltaUsuario" alignment="3" max="32767" attributes="0"/>
                   </Group>
-                  <EmptySpace pref="36" max="32767" attributes="0"/>
+                  <EmptySpace min="-2" pref="47" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
-                      <Component id="btnModificarDatosUsuario" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="btnSALIR" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="btnModificarDatosUsuario" alignment="3" max="32767" attributes="0"/>
+                      <Component id="btnSALIR" alignment="3" max="32767" attributes="0"/>
                   </Group>
-                  <EmptySpace max="-2" attributes="0"/>
+                  <EmptySpace min="-2" max="-2" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>

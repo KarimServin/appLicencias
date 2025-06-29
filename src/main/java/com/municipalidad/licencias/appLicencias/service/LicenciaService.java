@@ -11,6 +11,7 @@ import com.municipalidad.licencias.appLicencias.model.Titular;
 import com.municipalidad.licencias.appLicencias.model.Usuario;
 import com.municipalidad.licencias.appLicencias.repository.LicenciaRepository;
 import com.municipalidad.licencias.appLicencias.repository.TitularRepository;
+import java.util.List;
 
 @Service
 public class LicenciaService {
@@ -230,6 +231,10 @@ public class LicenciaService {
         renovacionLicencia.setVersionAnterior(licencia);
         
         return licenciaRepo.save(renovacionLicencia);
+    }
+    
+    public List<Licencia> obtenerLicenciasExpiradas(){
+        return licenciaRepo.findByFechaVencimiento(LocalDate.now());
     }
 
     public java.util.List<Licencia> obtenerLicenciasPorTitular(Long dni) {

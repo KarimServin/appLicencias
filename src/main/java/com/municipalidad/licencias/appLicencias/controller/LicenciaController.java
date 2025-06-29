@@ -46,5 +46,9 @@ public class LicenciaController {
     public List<Licencia> obtenerLicenciasPorTitular(Long dni) {
         return licenciaService.obtenerLicenciasPorTitular(dni);
     }
+    
+    public List<Licencia> obtenerLicenciasExpiradas(){
+        return licenciaService.obtenerLicenciasExpiradas();
+    }
 
 }
