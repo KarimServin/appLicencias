@@ -15,6 +15,6 @@ public interface LicenciaRepository extends JpaRepository<Licencia, Long> {
 
     boolean existsByClaseLicenciaAndTitularDni(ClaseLicencia claseLicencia, Long titularDni);
     
-    List<Licencia> findByFechaVencimiento(LocalDate now);
+    List<Licencia> findByFechaVencimientoLessThanEqual(LocalDate now);
 
 }
