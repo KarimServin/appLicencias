@@ -50,5 +50,8 @@ public class LicenciaController {
     public List<Licencia> obtenerLicenciasExpiradas(){
         return licenciaService.obtenerLicenciasExpiradas();
     }
+    public List<Licencia> obtenerLicenciasVigentesFiltradas(String nombreApellido, String grupoSanguineo, Boolean esDonante) {
+        return licenciaService.obtenerLicenciasVigentesFiltradas(nombreApellido, grupoSanguineo, esDonante);
+    }
 
 }

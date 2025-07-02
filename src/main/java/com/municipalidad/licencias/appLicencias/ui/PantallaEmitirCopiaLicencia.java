@@ -10,6 +10,11 @@ import com.municipalidad.licencias.appLicencias.service.PDFService;
 import com.municipalidad.licencias.appLicencias.singleton.SesionMenuPrincipal;
 import com.municipalidad.licencias.appLicencias.singleton.SesionUsuario;
 import java.awt.Toolkit;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.NoSuchElementException;
 import javax.swing.JOptionPane;
 
 public class PantallaEmitirCopiaLicencia extends javax.swing.JFrame {
@@ -27,60 +32,104 @@ public class PantallaEmitirCopiaLicencia extends javax.swing.JFrame {
         setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource("/img/SantaFeCapital_Logo.png")));
     }
 
+    private void setTable() {
+        String[] columnas = {
+            "Clase",
+            "Fecha de emisión",
+            "Fecha de vencimiento"
+        };
+        Object[][] datos = new Object[1][3];
+        licenciasTable.setModel(new javax.swing.table.DefaultTableModel(datos, columnas));
+        if (validarDni()) {
+            List<Licencia> licencias = new ArrayList();
+            licencias = licenciaController.obtenerLicenciasPorTitular(Long.valueOf(numDocField.getText()));
+            Object[][] data = new Object[licencias.size()][3];
+            for (int i = 0; i < licencias.size(); i++) {
+                Licencia l = licencias.get(i);
+                data[i][0] = l.getClaseLicencia().toString();
+                data[i][1] = l.getFechaEmision().format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+                data[i][2] = l.getFechaVencimiento().format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+            }
+            licenciasTable.setModel(new javax.swing.table.DefaultTableModel(data, columnas));
+        }
+    }
+
+    private boolean validarDni() {
+        boolean result = false;
+        try {
+            if (numDocField.getText().trim() == null || numDocField.getText().trim().isBlank()) {
+                JOptionPane.showMessageDialog(
+                        null,
+                        "El campo número de documento es obligatorio.",
+                        "Error",
+                        JOptionPane.ERROR_MESSAGE);
+            } else {
+                Long.valueOf(numDocField.getText());
+            }
+            result = true;
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(
+                    null,
+                    "El campo número de documento no es válido.",
+                    "Error",
+                    JOptionPane.ERROR_MESSAGE);
+            result = false;
+        }
+        return result;
+    }
+
+    private void validarTabla() {
+        if (licenciasTable.getSelectedRowCount() == -1) {
+            JOptionPane.showMessageDialog(
+                    null,
+                    "Debe seleccionar una fila de la tabla de licencias para renovar.",
+                    "Error",
+                    JOptionPane.ERROR_MESSAGE);
+        }
+    }
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
         panelEncabezado = new javax.swing.JPanel();
         labelMenuPrincipal = new javax.swing.JLabel();
-        labelLogoSF = new javax.swing.JLabel();
-        jLabel5 = new javax.swing.JLabel();
-        clasesDD = new javax.swing.JComboBox<>();
-        aceptarButton = new javax.swing.JButton();
         cancelarButton = new javax.swing.JButton();
         numDocField = new javax.swing.JFormattedTextField();
         jLabel1 = new javax.swing.JLabel();
         tipoDocDD = new javax.swing.JComboBox<>();
         jLabel2 = new javax.swing.JLabel();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        licenciasTable = new javax.swing.JTable();
+        emitirButton = new javax.swing.JButton();
+        jLabel4 = new javax.swing.JLabel();
+        observacionesField = new javax.swing.JTextField();
+        labelLogoSF = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setLocationByPlatform(true);
         setSize(new java.awt.Dimension(590, 254));
+        getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         labelMenuPrincipal.setText("Emitir Copia Licencia - Sistema de gestión de licencias");
-
-        labelLogoSF.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/Santa_Fe_Capital (1).png"))); // NOI18N
 
         javax.swing.GroupLayout panelEncabezadoLayout = new javax.swing.GroupLayout(panelEncabezado);
         panelEncabezado.setLayout(panelEncabezadoLayout);
         panelEncabezadoLayout.setHorizontalGroup(
             panelEncabezadoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(panelEncabezadoLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(labelLogoSF)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 162, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelEncabezadoLayout.createSequentialGroup()
+                .addContainerGap(173, Short.MAX_VALUE)
                 .addComponent(labelMenuPrincipal)
-                .addContainerGap())
+                .addGap(129, 129, 129))
         );
         panelEncabezadoLayout.setVerticalGroup(
             panelEncabezadoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(labelLogoSF, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelEncabezadoLayout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap(39, Short.MAX_VALUE)
                 .addComponent(labelMenuPrincipal)
                 .addContainerGap())
         );
 
-        jLabel5.setText("Clase");
-
-        clasesDD.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Clase A: Ciclomotores motocicletas y triciclos motorizados", "Clase B: Automóviles y camionetas con acoplado", "Clase C: Camiones sin acoplado y los comprendidos en la clase B", "Clase D: Servicio de transporte de pasajeros, emergencia, seguridad y los comprendidos en la clase B o C, según el caso", "Clase E: Camiones articulados o con acoplado, maquinaria especial no agrícola y los comprendidos en la clase B y C", "Clase F: Automotores especialmente adaptados para discapacitados", "Clase G: Tractores agrícolas y maquinaria especial agrícola", " " }));
-
-        aceptarButton.setText("Buscar Licencia");
-        aceptarButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                aceptarButtonActionPerformed(evt);
-            }
-        });
+        getContentPane().add(panelEncabezado, new org.netbeans.lib.awtextra.AbsoluteConstraints(134, 0, -1, -1));
 
         cancelarButton.setText("Cancelar");
         cancelarButton.addActionListener(new java.awt.event.ActionListener() {
@@ -88,6 +137,7 @@ public class PantallaEmitirCopiaLicencia extends javax.swing.JFrame {
                 cancelarButtonActionPerformed(evt);
             }
         });
+        getContentPane().add(cancelarButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 290, -1, -1));
 
         try {
             numDocField.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.MaskFormatter("########")));
@@ -99,125 +149,60 @@ public class PantallaEmitirCopiaLicencia extends javax.swing.JFrame {
                 numDocFieldFocusLost(evt);
             }
         });
+        numDocField.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                numDocFieldActionPerformed(evt);
+            }
+        });
+        getContentPane().add(numDocField, new org.netbeans.lib.awtextra.AbsoluteConstraints(404, 83, 154, -1));
 
         jLabel1.setText("Tipo de documento");
+        getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(31, 86, -1, -1));
 
         tipoDocDD.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "DNI", "CI", "ERRO", "LC", "LE", "LEM", "PAS" }));
+        getContentPane().add(tipoDocDD, new org.netbeans.lib.awtextra.AbsoluteConstraints(158, 83, 83, -1));
 
         jLabel2.setText("N° de documento");
+        getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(291, 86, -1, -1));
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(panelEncabezado, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
-            .addGroup(layout.createSequentialGroup()
-                .addGap(15, 15, 15)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel1)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel5)
-                        .addGap(99, 99, 99)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(clasesDD, 0, 1, Short.MAX_VALUE)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(tipoDocDD, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addGap(18, 18, 18)
-                                .addComponent(jLabel2)
-                                .addGap(18, 18, 18)
-                                .addComponent(numDocField)))))
-                .addGap(9, 9, 9))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(cancelarButton)
-                .addGap(18, 18, 18)
-                .addComponent(aceptarButton)
-                .addContainerGap())
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(panelEncabezado, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel1)
-                    .addComponent(jLabel2)
-                    .addComponent(tipoDocDD, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(numDocField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel5)
-                    .addComponent(clasesDD, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(aceptarButton)
-                    .addComponent(cancelarButton))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
+        licenciasTable.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null},
+                {null, null, null},
+                {null, null, null},
+                {null, null, null}
+            },
+            new String [] {
+                "Clase", "Fecha de emison", "Fecha de vencimiento"
+            }
+        ));
+        jScrollPane2.setViewportView(licenciasTable);
+
+        getContentPane().add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 117, 600, 119));
+
+        emitirButton.setText("Emitir copia");
+        emitirButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                emitirButtonActionPerformed(evt);
+            }
+        });
+        getContentPane().add(emitirButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(470, 290, -1, -1));
+
+        jLabel4.setText("Observaciones");
+        getContentPane().add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(16, 257, -1, -1));
+
+        observacionesField.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                observacionesFieldActionPerformed(evt);
+            }
+        });
+        getContentPane().add(observacionesField, new org.netbeans.lib.awtextra.AbsoluteConstraints(99, 254, 460, -1));
+
+        labelLogoSF.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/Santa_Fe_Capital (1).png"))); // NOI18N
+        getContentPane().add(labelLogoSF, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, 77));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
-    private void aceptarButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_aceptarButtonActionPerformed
-        try{
-            ClaseLicencia claseSelec;
-            String selec = clasesDD.getSelectedItem().toString().toUpperCase();
-            claseSelec = ClaseLicencia.valueOf(String.valueOf(selec.charAt(6)));
-            long dniTitular = Long.parseLong(numDocField.getText().replaceAll("[^\\d]", ""));
-            Licencia licencia;
-            try {
-                if(Titular.class.isInstance(titularController.buscarTitular(dniTitular))){
-                    if(licenciaController.poseeLicencia(claseSelec, titularController.buscarTitular(dniTitular))){
-                        
-                        //licenciaController.emitirCopia(claseSelec,titularController.buscarTitular(dniTitular));
-                        //FALTA HACER EL BACK DE EMITIR COPIA O PREGUNTAR
-                       
-                        //Titular titular = titularController.buscarTitular(dniTitular);
-                        //licencia = licenciaController.emitirLicencia(dniTitular, claseSelec, " ", SesionUsuario.getUsuarioActual());
-                        
-                        JOptionPane.showMessageDialog(
-                                null,
-                                    "Tiene licencia,falta back jeje",
-                                "Aceptar",
-                                JOptionPane.INFORMATION_MESSAGE);
-                        
-                    }
-                    else {
-                        JOptionPane.showMessageDialog(
-                                null,
-                                "No se encontraron licencias de este tipo para este titular.",
-                                "Aceptar",
-                                JOptionPane.INFORMATION_MESSAGE);
-                    }
-                }
-            } catch (RuntimeException e){
-                int opcion =  JOptionPane.showOptionDialog(
-                            null,
-                            "El titular no está registrado. ¿Desea registrarlo?",
-                            "Titular no encontrado",
-                            JOptionPane.YES_NO_OPTION,
-                            JOptionPane.QUESTION_MESSAGE,
-                            null,
-                            new Object[]{"Aceptar", "Cancelar"},
-                            "Aceptar");
-                if(opcion == JOptionPane.YES_OPTION){
-                    new PantallaCargarTitular(titularController, clasesDD.getSelectedItem().toString().toUpperCase(), numDocField.getText().trim()).setVisible(true);
-                    this.dispose();
-                } else {
-                    numDocField.setText("");
-                    //numDocField.requestFocus();
-                }
-            }
-        } catch(NumberFormatException e){
-            JOptionPane.showMessageDialog(
-                null,
-                "El número de documento no es válido",
-                "Error",
-                JOptionPane.ERROR_MESSAGE);
-        }
-    }//GEN-LAST:event_aceptarButtonActionPerformed
 
     private void cancelarButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelarButtonActionPerformed
         SesionMenuPrincipal.setVisible(true);
@@ -225,44 +210,54 @@ public class PantallaEmitirCopiaLicencia extends javax.swing.JFrame {
     }//GEN-LAST:event_cancelarButtonActionPerformed
 
     private void numDocFieldFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_numDocFieldFocusLost
-        if(numDocField.getText().trim() == null || numDocField.getText().trim().isBlank()){
-            JOptionPane.showMessageDialog(numDocField, 
-                    "El campo es obligatorio", 
-                    "Error de validación", 
-                    JOptionPane.ERROR_MESSAGE);
-            //numDocField.requestFocus();
-        }else{
-            try{
-                Long dni = Long.valueOf(numDocField.getText());
-                try{
-                    titularController.buscarTitular(dni);
-                } catch (RuntimeException e){
-                    int opcion =  JOptionPane.showOptionDialog(
-                                null,
-                                "El titular no está registrado. ¿Desea registrarlo?",
-                                "Titular no encontrado",
-                                JOptionPane.YES_NO_OPTION,
-                                JOptionPane.QUESTION_MESSAGE,
-                                null,
-                                new Object[]{"Aceptar", "Cancelar"},
-                                "Aceptar");
-                    if(opcion == JOptionPane.YES_OPTION){
-                        new PantallaCargarTitular(titularController, clasesDD.getSelectedItem().toString().toUpperCase(), numDocField.getText().trim()).setVisible(true);
-                        this.dispose();
-                    } else {
-                        numDocField.setText("");
-                        //numDocField.requestFocus();
-                    }
-                }
-            } catch (NumberFormatException e){
-                JOptionPane.showMessageDialog(
-                    null,
-                    "El número de documento completado no es válido",
-                    "Error",
-                    JOptionPane.ERROR_MESSAGE);
-            }
+        if(validarDni()){
+            setTable();
         }
     }//GEN-LAST:event_numDocFieldFocusLost
+
+    private void emitirButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_emitirButtonActionPerformed
+        validarDni();
+        validarTabla();
+        String clase = licenciasTable.getValueAt(licenciasTable.getSelectedRow(), 0).toString();
+        LocalDate fechae = LocalDate.parse(licenciasTable.getValueAt(licenciasTable.getSelectedRow(), 1).toString(), DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+        LocalDate fechav = LocalDate.parse(licenciasTable.getValueAt(licenciasTable.getSelectedRow(), 2).toString(), DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+        Licencia licencia;
+        List<Licencia> licencias = new ArrayList();
+        licencias = licenciaController.obtenerLicenciasPorTitular(Long.valueOf(numDocField.getText()));
+        try{
+            licencia = licencias.stream()
+            .filter(l -> l.getClaseLicencia().equals(ClaseLicencia.valueOf(clase))
+                && l.getFechaEmision().isEqual(fechae)
+                && l.getFechaVencimiento().isEqual(fechav))
+            .findFirst().get();
+            System.out.println("licencia encontrada: \n clase: " + licencia.getClaseLicencia() + "\nfechae: " + licencia.getFechaEmision()
+                + "\nfechav: " + licencia.getFechaVencimiento()
+                + "\nid:" + licencia.getId());
+            if(licencia.getClass().isInstance(licenciaController.emitirLicencia(licencia, observacionesField.getText(), SesionUsuario.getUsuarioActual()))){
+                JOptionPane.showMessageDialog(
+                    null,
+                    "Se emiti copia de la licencia con éxito.",
+                    "Éxito",
+                    JOptionPane.INFORMATION_MESSAGE);
+                this.dispose();
+                SesionMenuPrincipal.setVisible(true);
+            }
+        } catch(NoSuchElementException e){
+            JOptionPane.showMessageDialog(
+                null,
+                "Hubo un error encontrando la licencia a copiar",
+                "Error",
+                JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_emitirButtonActionPerformed
+
+    private void numDocFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_numDocFieldActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_numDocFieldActionPerformed
+
+    private void observacionesFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_observacionesFieldActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_observacionesFieldActionPerformed
 
     /**
      * @param args the command line arguments
@@ -273,15 +268,17 @@ public class PantallaEmitirCopiaLicencia extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton aceptarButton;
     private javax.swing.JButton cancelarButton;
-    private javax.swing.JComboBox<String> clasesDD;
+    private javax.swing.JButton emitirButton;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JLabel labelLogoSF;
     private javax.swing.JLabel labelMenuPrincipal;
+    private javax.swing.JTable licenciasTable;
     private javax.swing.JFormattedTextField numDocField;
+    private javax.swing.JTextField observacionesField;
     private javax.swing.JPanel panelEncabezado;
     private javax.swing.JComboBox<String> tipoDocDD;
     // End of variables declaration//GEN-END:variables

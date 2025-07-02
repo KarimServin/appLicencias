@@ -240,5 +240,13 @@ public class LicenciaService {
     public java.util.List<Licencia> obtenerLicenciasPorTitular(Long dni) {
         return licenciaRepo.findByTitularDni(dni);
     }
+    public List<Licencia> obtenerLicenciasVigentesFiltradas(String nombreApellido, String grupoSanguineo, Boolean esDonante) {
+    List<Licencia> licencias = licenciaRepo.findLicenciasVigentesFiltradas(
+        nombreApellido != null && !nombreApellido.isBlank() ? nombreApellido : null,
+        grupoSanguineo != null && !grupoSanguineo.isBlank() ? grupoSanguineo : null,
+        esDonante
+    );
+    return licencias;
+}
     
 }

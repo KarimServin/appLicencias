@@ -271,7 +271,7 @@ public class PantallaMenuPrincipal extends javax.swing.JFrame {
 
     private void btnListarLicVigentesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnListarLicVigentesActionPerformed
 
-        PantallaListarLicencias pl = new PantallaListarLicencias();
+        PantallaListarLicencias pl = new PantallaListarLicencias(licenciaController);
         pl.setVisible(true);   
         this.dispose();
                 

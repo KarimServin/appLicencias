@@ -171,6 +171,11 @@ public class PantallaRenovarLicencia extends javax.swing.JFrame {
                 numDocFieldFocusLost(evt);
             }
         });
+        numDocField.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                numDocFieldActionPerformed(evt);
+            }
+        });
 
         licenciasTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -295,6 +300,10 @@ public class PantallaRenovarLicencia extends javax.swing.JFrame {
             setTable();
         }
     }//GEN-LAST:event_numDocFieldFocusLost
+
+    private void numDocFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_numDocFieldActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_numDocFieldActionPerformed
 
     /**
      * @param args the command line arguments
