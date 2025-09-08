@@ -1,8 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
-
 package com.municipalidad.licencias.appLicencias.service;
 
 import com.municipalidad.licencias.appLicencias.model.Licencia;
@@ -30,8 +25,8 @@ public class PDFService {
         JFrame frame = new JFrame();
         frame.add(licenciaPanel);
         frame.pack();
-        frame.setVisible(true);  // Necesario para que se renderice
-        frame.setLocationRelativeTo(null);  // Opcional: centra la ventana
+        frame.setVisible(true);  //renderizar
+        frame.setLocationRelativeTo(null);  // centra la ventana
         
 
 // Ahora sí, se puede imprimir

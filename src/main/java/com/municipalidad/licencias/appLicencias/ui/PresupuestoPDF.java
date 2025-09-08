@@ -33,7 +33,7 @@ public class PresupuestoPDF extends javax.swing.JPanel implements Printable{
         txtFechaVencimiento.setText(licencia.getFechaVencimiento().toString());
         txtApellido.setText(titular.getNombre());
         txtFechaNacimiento.setText(titular.getFechaNacimiento().toString());
-        txtDireccion.setText(titular.getDireccion());
+        txtDireccion.setText(titular.getDomicilio());
         txtLicencia.setText(titular.getDni().toString());
         txtGrupoSanguineo.setText(Character.toString(titular.getGrupoSanguineo()));
         
@@ -125,17 +125,16 @@ public class PresupuestoPDF extends javax.swing.JPanel implements Printable{
 
         jLabel3.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
         jLabel3.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel3.setText("LICENCIA NACIONAL DE CONDUCIR");
         add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 30, -1, 30));
 
         jLabel6.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/argentina (2).png"))); // NOI18N
         add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 10, 60, -1));
 
         jLabel7.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/escudo-de-armas (3).png"))); // NOI18N
-        add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(540, 10, 70, -1));
+        add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(510, 10, 70, -1));
 
         jLabel5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/escudo-de-armas (4).png"))); // NOI18N
-        add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(430, 720, 40, -1));
+        add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 720, 40, -1));
 
         jSeparator3.setForeground(new java.awt.Color(255, 255, 255));
         jSeparator3.setOrientation(javax.swing.SwingConstants.VERTICAL);
@@ -151,11 +150,11 @@ public class PresupuestoPDF extends javax.swing.JPanel implements Printable{
 
         jLabel8.setForeground(new java.awt.Color(255, 255, 255));
         jLabel8.setText("Ministerio de Transporte");
-        add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(470, 720, -1, -1));
+        add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(460, 720, -1, -1));
 
         jLabel20.setForeground(new java.awt.Color(255, 255, 255));
         jLabel20.setText("República Argentina");
-        add(jLabel20, new org.netbeans.lib.awtextra.AbsoluteConstraints(470, 740, -1, -1));
+        add(jLabel20, new org.netbeans.lib.awtextra.AbsoluteConstraints(460, 740, -1, -1));
 
         jLabel4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/argentina (1).png"))); // NOI18N
         add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 720, 60, -1));
@@ -172,7 +171,7 @@ public class PresupuestoPDF extends javax.swing.JPanel implements Printable{
         add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 100, -1, -1));
 
         jLabel11.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        jLabel11.setText("Municipalidad de Santa fe");
+        jLabel11.setText("Municipalidad de Santa Fe");
         add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 130, -1, -1));
 
         jLabel12.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N

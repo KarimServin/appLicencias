@@ -11,6 +11,7 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface LicenciaRepository extends JpaRepository<Licencia, Long> {
+    
     List<Licencia> findByTitularDni(Long titularDni);
 
     List<Licencia> findByTitularDniAndClaseLicencia(Long titularDni, ClaseLicencia claseLicencia);
@@ -21,16 +22,19 @@ public interface LicenciaRepository extends JpaRepository<Licencia, Long> {
     
     @Query("""
     SELECT l FROM Licencia l
-    WHERE l.fechaVencimiento > CURRENT_DATE
+    WHERE l.fechaVencimiento > CURRENT_DATE   
     AND (:nombre IS NULL OR LOWER(l.titular.nombre) LIKE LOWER(CONCAT('%', :nombre, '%')))
-    AND (:grupoCompleto IS NULL OR CONCAT(l.titular.grupoSanguineo, l.titular.factorSanguineo) = :grupoCompleto)
+    AND (:apellido IS NULL OR LOWER(l.titular.apellido) LIKE LOWER(CONCAT('%', :apellido, '%')))
+    AND (:grupoSanguineo IS NULL OR l.titular.grupoSanguineo = :grupoSanguineo)
+    AND (:factorSanguineo IS NULL OR l.titular.factorSanguineo = :factorSanguineo)
     AND (:esDonante IS NULL OR l.titular.esDonante = :esDonante)
-""")
+    """)
 List<Licencia> findLicenciasVigentesFiltradas(
     @Param("nombre") String nombre,
-    @Param("grupoCompleto") String grupoCompleto,
+    @Param("apellido") String apellido,
+    @Param("grupoSanguineo") String grupoSanguineo,
+    @Param("factorSanguineo") String factorSanguineo,
     @Param("esDonante") Boolean esDonante
 );
-
 
 }

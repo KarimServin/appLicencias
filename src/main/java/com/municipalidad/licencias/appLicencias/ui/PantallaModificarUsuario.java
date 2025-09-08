@@ -4,21 +4,31 @@ package com.municipalidad.licencias.appLicencias.ui;
 import java.util.List;
 import javax.swing.DefaultListModel;
 import com.municipalidad.licencias.appLicencias.controller.UsuarioController;
-import com.municipalidad.licencias.appLicencias.singleton.SesionMenuPrincipal;
 import java.awt.Toolkit;
-import java.util.Arrays;
 import javax.swing.JOptionPane;
+import com.municipalidad.licencias.appLicencias.navigation.BackToMenuListener;
+import java.util.Arrays;
 
 
 
 public class PantallaModificarUsuario extends javax.swing.JFrame {
 
-    private UsuarioController usuarioController;
+    private final UsuarioController usuarioController;
+    private final BackToMenuListener backToMenuListener;
     String usuarioSeleccionadoNombre;
     
-    public PantallaModificarUsuario(UsuarioController usuarioController) {
-        usuarioSeleccionadoNombre = null;
+    
+    public PantallaModificarUsuario(UsuarioController usuarioController,BackToMenuListener navigationListener) {
+        
+        
         this.usuarioController = usuarioController;
+        this.backToMenuListener = navigationListener;
+        
+        usuarioSeleccionadoNombre = null;
+        
+        
+        
+        
         initComponents();
         setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource("/img/SantaFeCapital_Logo.png")));
         cargarUsuariosVentana();
@@ -323,7 +333,7 @@ public class PantallaModificarUsuario extends javax.swing.JFrame {
     }//GEN-LAST:event_fieldNuevoNombreActionPerformed
 
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
-        SesionMenuPrincipal.setVisible(true);
+        backToMenuListener.mostrarMenuPrincipal();
         this.dispose();        
     }//GEN-LAST:event_btnCancelarActionPerformed
 
@@ -351,10 +361,10 @@ public class PantallaModificarUsuario extends javax.swing.JFrame {
         }
     }
     // Obtener contraseña (validación más adelante)
-    String nuevoPassword = new String(fieldNuevoPassword.getPassword());
+    char[] nuevoPassword = fieldNuevoPassword.getPassword();
     
-    if (!contraseniaEsValida(nuevoPassword)) return;
-    // Realizar la actualización
+    
+   
     try {
         usuarioController.actualizarUsuario(
             usuarioSeleccionadoNombre,
@@ -367,9 +377,10 @@ public class PantallaModificarUsuario extends javax.swing.JFrame {
             null, 
             "Se han modificado los datos del usuario seleccionado con éxito"
         );
+        Arrays.fill(nuevoPassword, ' ');
+        backToMenuListener.mostrarMenuPrincipal();
         
-        SesionMenuPrincipal.setVisible(true);
-        this.dispose(); // Cierra la ventana actual
+        this.dispose(); 
 
     } catch (Exception e) {
         JOptionPane.showMessageDialog(
@@ -378,6 +389,7 @@ public class PantallaModificarUsuario extends javax.swing.JFrame {
             "Error", 
             JOptionPane.ERROR_MESSAGE
         );
+        
     }  
         
     }//GEN-LAST:event_btnConfirmarModificacionActionPerformed
@@ -413,29 +425,7 @@ public class PantallaModificarUsuario extends javax.swing.JFrame {
     return true;
     }
     
-    private boolean contraseniaEsValida(String contrasenia) {
-    if (contrasenia == null || contrasenia.isBlank()) {
-        JOptionPane.showMessageDialog(
-            null,
-            "La contraseña no puede estar vacía.",
-            "Error de validación",
-            JOptionPane.ERROR_MESSAGE
-        );
-        return false;
-    }
-
-    if (contrasenia.length() < 8 || contrasenia.length() > 16) {
-        JOptionPane.showMessageDialog(
-            null,
-            "La contraseña debe tener entre 8 y 16 caracteres.",
-            "Error de validación",
-            JOptionPane.ERROR_MESSAGE
-        );
-        return false;
-    }
-
-    return true;
-}
+    
   
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCancelar;

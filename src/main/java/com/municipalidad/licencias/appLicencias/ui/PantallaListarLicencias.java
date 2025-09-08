@@ -1,80 +1,78 @@
 package com.municipalidad.licencias.appLicencias.ui;
 
-
-
-
-
-
-
 import com.municipalidad.licencias.appLicencias.controller.LicenciaController;
 import com.municipalidad.licencias.appLicencias.model.Licencia;
 import com.municipalidad.licencias.appLicencias.model.Titular;
-import com.municipalidad.licencias.appLicencias.singleton.SesionMenuPrincipal;
 import java.awt.Toolkit;
 import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
+import com.municipalidad.licencias.appLicencias.navigation.BackToMenuListener;
 
-/**
- *
- * @author pabli
- */
+
 public class PantallaListarLicencias extends javax.swing.JFrame {
     
-    private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(PantallaListarLicencias.class.getName());
+    private final LicenciaController licenciaController;
+    private final BackToMenuListener backToMenuListener;
 
-    /**
-     * Creates new form PantallaListarLicencias
-     */
-    LicenciaController licenciaController;
     
-    public PantallaListarLicencias() {
+    public PantallaListarLicencias(LicenciaController licenciaController, BackToMenuListener backToMenuListener) {
+        
+        this.licenciaController = licenciaController;
+        this.backToMenuListener = backToMenuListener;
+
         initComponents();
         setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource("/img/SantaFeCapital_Logo.png")));
+       
+       
     }
-    
-    public PantallaListarLicencias(LicenciaController licenciaControl) {
-        licenciaController = licenciaControl;
-        initComponents();
-        setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource("/img/SantaFeCapital_Logo.png")));
-        inicializarPantalla();
-    }
-    public void inicializarPantalla() {
-    List<Licencia> licencias = licenciaController.obtenerLicenciasVigentesFiltradas(null, null, null);
-    cargarTabla(licencias);
-}
+
     
 
      public void cargarTabla(List<Licencia> licencias) {
-    if (licencias.isEmpty()) {
-        inicializarPantalla();
+         
+            if (licencias == null || licencias.isEmpty()) {
         JOptionPane.showMessageDialog(null, "No hay licencias vigentes para mostrar.", "Aviso", JOptionPane.INFORMATION_MESSAGE);
-    } else {
-        String[] columnas = {"Nombre", "Apellido", "Clase Licencia", "Fecha de Vencimiento", "Grupo Sanguíneo", "Donante"};
-        DefaultTableModel modelo = new DefaultTableModel(null, columnas) {
-            @Override
-            public boolean isCellEditable(int row, int column) {
-                return false;
-            }
-        };
-
-        for (Licencia licencia : licencias) {
-            Titular titular = licencia.getTitular();
-            String nombre = titular != null ? titular.getNombre() : "Sin titular";
-            String clase = licencia.getClaseLicencia().toString();
-            String fechaVenc = licencia.getFechaVencimiento() != null ? licencia.getFechaVencimiento().toString() : "-";
-            String grupo = titular != null ? 
-    String.valueOf(titular.getGrupoSanguineo()) + String.valueOf(titular.getFactorSanguineo()) 
-    : "-";
-            String donante = titular != null && titular.isEsDonante() ? "Sí" : "No";
-
-            modelo.addRow(new Object[]{nombre, clase, fechaVenc, grupo, donante});
-        }
-
-        tablaLicencias.setModel(modelo);
-        scroll3.setViewportView(tablaLicencias);
+        return;
     }
-}
+
+    String[] columnas = {"Nombre", "Apellido", "Clase Licencia", "Fecha de Vencimiento", "Grupo Sanguíneo", "Donante"};
+
+    DefaultTableModel modelo = new DefaultTableModel(null, columnas) {
+                @Override
+                public boolean isCellEditable(int row, int column) {
+                    return false;
+                }
+            };
+
+            for (Licencia licencia : licencias) {
+                Titular titular = licencia.getTitular();
+
+                String nombre = "-";
+                String apellido = "-";
+                String clase = "-";
+                String fechaVenc = "-";
+                String grupoSanguineo = "-";
+                String donante = "No";
+
+                if (titular != null) {
+                    nombre = titular.getNombre() != null ? titular.getNombre() : "-";
+                    apellido = titular.getApellido() != null ? titular.getApellido() : "-";
+                    grupoSanguineo = "1";
+                    donante = titular.isEsDonante() ? "Sí" : "No";
+                }
+
+                clase = licencia.getClaseLicencia() != null ? licencia.getClaseLicencia().toString() : "-";
+                fechaVenc = licencia.getFechaVencimiento() != null ? licencia.getFechaVencimiento().toString() : "-";
+
+                modelo.addRow(new Object[]{nombre, apellido, clase, fechaVenc, grupoSanguineo, donante});
+            }
+
+            tablaLicencias.setModel(modelo);
+            scroll3.setViewportView(tablaLicencias);
+        
+     }
+
 
 
              
@@ -90,17 +88,17 @@ public class PantallaListarLicencias extends javax.swing.JFrame {
         jLabel11 = new javax.swing.JLabel();
         jLabel10 = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
-        grupoDD = new javax.swing.JComboBox<>();
-        factorDD = new javax.swing.JComboBox<>();
+        donanteCBox = new javax.swing.JComboBox<>();
+        grupoSanguineoCBox = new javax.swing.JComboBox<>();
         jLabel6 = new javax.swing.JLabel();
-        grupoDD1 = new javax.swing.JComboBox<>();
+        factorSanguineoCBox = new javax.swing.JComboBox<>();
         jLabel7 = new javax.swing.JLabel();
-        jButton1 = new javax.swing.JButton();
+        filtrarButton = new javax.swing.JButton();
         scroll3 = new javax.swing.JScrollPane();
         tablaLicencias = new javax.swing.JTable();
         cancelarButton = new javax.swing.JButton();
-        jTextField1 = new javax.swing.JTextField();
-        jTextField2 = new javax.swing.JTextField();
+        apellidoField = new javax.swing.JTextField();
+        nombreField = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -108,7 +106,8 @@ public class PantallaListarLicencias extends javax.swing.JFrame {
 
         labelMenuPrincipal.setText("Listar Licencias - Sistema de gestión de licencias");
 
-        jLabel9.setText("Filtrar por:");
+        jLabel9.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        jLabel9.setText("Aplicar criterios de filtrado");
 
         jLabel11.setText("Apellido");
 
@@ -116,20 +115,20 @@ public class PantallaListarLicencias extends javax.swing.JFrame {
 
         jLabel8.setText("Donante");
 
-        grupoDD.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "TODOS", "SI", "NO" }));
+        donanteCBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "TODOS", "SI", "NO" }));
 
-        factorDD.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "TODOS", "+", "-" }));
+        grupoSanguineoCBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "TODOS", "+", "-" }));
 
         jLabel6.setText("Grupo Sanguíneo");
 
-        grupoDD1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "TODOS", "O", "A", "B" }));
+        factorSanguineoCBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "TODOS", "O", "A", "B" }));
 
         jLabel7.setText("Factor Sanguíneo");
 
-        jButton1.setText("Filtrar");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        filtrarButton.setText("Filtrar");
+        filtrarButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                filtrarButtonActionPerformed(evt);
             }
         });
 
@@ -166,20 +165,36 @@ public class PantallaListarLicencias extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(93, 93, 93)
-                .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 101, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(80, 80, 80)
-                .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 107, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(202, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(filtrarButton)
+                        .addGap(27, 27, 27))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(labelMenuPrincipal)
+                        .addContainerGap())))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(93, 93, 93)
+                        .addComponent(apellidoField, javax.swing.GroupLayout.PREFERRED_SIZE, 101, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(80, 80, 80)
+                        .addComponent(nombreField, javax.swing.GroupLayout.PREFERRED_SIZE, 107, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 73, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jLabel6)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(grupoSanguineoCBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(donanteCBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(52, 52, 52))
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(layout.createSequentialGroup()
                     .addGap(0, 0, Short.MAX_VALUE)
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGroup(layout.createSequentialGroup()
-                            .addComponent(labelLogoSF)
-                            .addGap(202, 202, 202)
-                            .addComponent(labelMenuPrincipal))
+                        .addComponent(labelLogoSF)
                         .addGroup(layout.createSequentialGroup()
                             .addGap(40, 40, 40)
                             .addComponent(jLabel9))
@@ -189,62 +204,53 @@ public class PantallaListarLicencias extends javax.swing.JFrame {
                             .addGap(136, 136, 136)
                             .addComponent(jLabel10)
                             .addGap(136, 136, 136)
-                            .addComponent(jLabel8)
-                            .addGap(35, 35, 35)
-                            .addComponent(grupoDD, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(jLabel8))
                         .addGroup(layout.createSequentialGroup()
                             .addGap(80, 80, 80)
                             .addComponent(jLabel7)
                             .addGap(18, 18, 18)
-                            .addComponent(grupoDD1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGap(38, 38, 38)
-                            .addComponent(jLabel6)
-                            .addGap(28, 28, 28)
-                            .addComponent(factorDD, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGroup(layout.createSequentialGroup()
-                            .addGap(270, 270, 270)
-                            .addComponent(jButton1))
+                            .addComponent(factorSanguineoCBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGroup(layout.createSequentialGroup()
                             .addGap(40, 40, 40)
                             .addComponent(scroll3, javax.swing.GroupLayout.PREFERRED_SIZE, 520, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGroup(layout.createSequentialGroup()
                             .addGap(260, 260, 260)
                             .addComponent(cancelarButton)))
-                    .addGap(0, 0, Short.MAX_VALUE)))
+                    .addGap(0, 18, Short.MAX_VALUE)))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(130, 130, 130)
+                .addGap(41, 41, 41)
+                .addComponent(labelMenuPrincipal)
+                .addGap(73, 73, 73)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(405, Short.MAX_VALUE))
+                    .addComponent(apellidoField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(nombreField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(donanteCBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(grupoSanguineoCBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel6))
+                .addGap(14, 14, 14)
+                .addComponent(filtrarButton)
+                .addContainerGap(328, Short.MAX_VALUE))
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(layout.createSequentialGroup()
                     .addGap(0, 12, Short.MAX_VALUE)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addComponent(labelLogoSF)
-                        .addGroup(layout.createSequentialGroup()
-                            .addGap(40, 40, 40)
-                            .addComponent(labelMenuPrincipal)))
+                    .addComponent(labelLogoSF)
                     .addGap(29, 29, 29)
                     .addComponent(jLabel9)
                     .addGap(14, 14, 14)
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                         .addComponent(jLabel11)
                         .addComponent(jLabel10)
-                        .addComponent(jLabel8)
-                        .addComponent(grupoDD, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGap(18, 18, 18)
+                        .addComponent(jLabel8))
+                    .addGap(24, 24, 24)
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                         .addComponent(jLabel7)
-                        .addComponent(grupoDD1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(jLabel6)
-                        .addComponent(factorDD, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGap(18, 18, 18)
-                    .addComponent(jButton1)
-                    .addGap(7, 7, 7)
+                        .addComponent(factorSanguineoCBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGap(48, 48, 48)
                     .addComponent(scroll3, javax.swing.GroupLayout.PREFERRED_SIZE, 267, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGap(13, 13, 13)
                     .addComponent(cancelarButton)
@@ -254,59 +260,65 @@ public class PantallaListarLicencias extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-    String nombre = jTextField2.getText().trim();
-    String apellido = jTextField1.getText().trim();
-    String nombreApellido = (nombre + " " + apellido).trim();
-    if (nombreApellido.isBlank()) nombreApellido = null;
+    private void filtrarButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_filtrarButtonActionPerformed
+    
+                //Nombre y Apellido
+                String nombre = nombreField.getText().trim();
+                if (nombre.isBlank()) nombre = null;
 
-    // Grupo + Factor
-    String grupo = grupoDD1.getSelectedItem().toString();
-    String factor = factorDD.getSelectedItem().toString();
-    String grupoCompleto = null;
+                String apellido = apellidoField.getText().trim();
+                if (apellido.isBlank()) apellido = null;
 
-    if (!grupo.equalsIgnoreCase("TODOS") && !factor.equalsIgnoreCase("TODOS")) {
-        grupoCompleto = grupo + factor; // Ej: "A+"
-    }
+                //Grupo Sanguineo
+                String grupo = grupoSanguineoCBox.getSelectedItem().toString();
+                if (grupo.equalsIgnoreCase("TODOS")) grupo = null;
 
-    // Donante
-    String donanteStr = grupoDD.getSelectedItem().toString();
-    Boolean esDonante = null;
-    if (donanteStr.equalsIgnoreCase("SI")) esDonante = true;
-    else if (donanteStr.equalsIgnoreCase("NO")) esDonante = false;
+                //Factor Sanguíneo
+                String factor = factorSanguineoCBox.getSelectedItem().toString();
+                if (factor.equalsIgnoreCase("TODOS")) factor = null;
 
-    List<Licencia> licencias = licenciaController.obtenerLicenciasVigentesFiltradas(
-        nombreApellido,
-        grupoCompleto,
-        esDonante
-    );
+                //Donante
+                String donanteStr = donanteCBox.getSelectedItem().toString();
+                Boolean esDonante = null;
+                if (donanteStr.equalsIgnoreCase("SI")) esDonante = true;
+                else if (donanteStr.equalsIgnoreCase("NO")) esDonante = false;
 
-    cargarTabla(licencias);
-    }//GEN-LAST:event_jButton1ActionPerformed
+                // 5. Llamada al controlador
+                List<Licencia> licencias = licenciaController.obtenerLicenciasVigentesFiltradas(
+                    nombre,
+                    apellido,
+                    grupo,
+                    factor,
+                    esDonante
+                );
+
+                // 6. Cargar tabla
+                cargarTabla(licencias);
+    }//GEN-LAST:event_filtrarButtonActionPerformed
 
     private void cancelarButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelarButtonActionPerformed
-        SesionMenuPrincipal.setVisible(true);
+        backToMenuListener.mostrarMenuPrincipal();
         this.dispose();
     }//GEN-LAST:event_cancelarButtonActionPerformed
 
     
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JTextField apellidoField;
     private javax.swing.JButton cancelarButton;
-    private javax.swing.JComboBox<String> factorDD;
-    private javax.swing.JComboBox<String> grupoDD;
-    private javax.swing.JComboBox<String> grupoDD1;
-    private javax.swing.JButton jButton1;
+    private javax.swing.JComboBox<String> donanteCBox;
+    private javax.swing.JComboBox<String> factorSanguineoCBox;
+    private javax.swing.JButton filtrarButton;
+    private javax.swing.JComboBox<String> grupoSanguineoCBox;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
-    private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextField jTextField2;
     private javax.swing.JLabel labelLogoSF;
     private javax.swing.JLabel labelMenuPrincipal;
+    private javax.swing.JTextField nombreField;
     private javax.swing.JScrollPane scroll3;
     private javax.swing.JTable tablaLicencias;
     // End of variables declaration//GEN-END:variables

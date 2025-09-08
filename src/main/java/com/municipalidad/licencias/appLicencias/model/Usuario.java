@@ -1,32 +1,50 @@
-
 package com.municipalidad.licencias.appLicencias.model;
 
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
-import java.util.ArrayList;
-import java.util.List;
-import lombok.Data;
+import jakarta.persistence.*;
+import java.util.EnumSet;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
+import lombok.EqualsAndHashCode;
+import java.util.Set;
 
-@Data
-@Entity
-public class Usuario {
+   @Getter
+   @Setter
+   @ToString(exclude = "passwordHash") //Métodos ToString automáticos, salvo la contrasena
+   @EqualsAndHashCode(onlyExplicitlyIncluded = true)
+   @Entity //JPA
+   @Table(name = "usuario", 
+       indexes = @Index(name = "idx_usuario_nombre", columnList = "nombre_usuario")) 
+    public class Usuario {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+       @Id
+       @GeneratedValue(strategy = GenerationType.IDENTITY) //AUTOINCREMENTO
+       @EqualsAndHashCode.Include  //Solo incluir id
+       private Long id;
 
-    @Column(unique = true)
-    private String nombreUsuario;
+    
+       @Column(name = "nombre_usuario", unique = true, nullable = false, length = 50)
+       private String nombreUsuario;
 
-    private String contrasenia;
+    
+       @Column(name = "password_hash",  nullable = false, length = 100)    
+       private String passwordHash;
+    
+       
+       /*================ROL====================*/
+       @ElementCollection(fetch = FetchType.EAGER) 
+       @CollectionTable(name = "usuario_roles",
+        joinColumns = @JoinColumn(name = "usuario_id"))
+       @Enumerated(EnumType.STRING)  
+       @Column(name = "rol", nullable = false, length = 20)
+       private Set<Role> roles = EnumSet.noneOf(Role.class);  
 
-    private boolean esSuperusuario;
+       
+       @Column(name = "activo", nullable = false)
+       private boolean activo = true;
 
-    @OneToMany(cascade= CascadeType.ALL, mappedBy ="usuario",orphanRemoval=true)
-    private List<Titular> titulares = new ArrayList<>();
-}
+       public boolean esAdmin() {
+       return roles.contains(Role.ADMIN);
+    }
+
+   }

@@ -1,10 +1,12 @@
 
 package com.municipalidad.licencias.appLicencias.model;
 
+import jakarta.persistence.Column;
 import java.time.LocalDate;
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import lombok.Data;
 import lombok.Getter;
@@ -16,7 +18,9 @@ import lombok.Setter;
 @Setter
 @Entity
 public class Titular {
-    @Id 
+    
+    @Id
+    @Column(name = "titular_dni")
     private Long dni;
     
     private boolean esDonante;
@@ -26,8 +30,10 @@ public class Titular {
     private char factorSanguineo;
     
     private String nombre;
-
-    private String direccion;
+    
+    private String apellido; 
+    
+    private String domicilio;
 
     private LocalDate fechaNacimiento;
 
@@ -39,7 +45,7 @@ public class Titular {
 
     private String email;
     
-    @ManyToOne
-    @JoinColumn(name="usuario_id")
+    @ManyToOne      //asociado al usuario que generó el titular
     private Usuario usuario;
+    
 }

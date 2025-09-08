@@ -4,8 +4,6 @@ import com.municipalidad.licencias.appLicencias.controller.LicenciaController;
 import com.municipalidad.licencias.appLicencias.controller.TitularController;
 import com.municipalidad.licencias.appLicencias.model.ClaseLicencia;
 import com.municipalidad.licencias.appLicencias.model.Licencia;
-import com.municipalidad.licencias.appLicencias.singleton.SesionMenuPrincipal;
-import com.municipalidad.licencias.appLicencias.singleton.SesionUsuario;
 import java.awt.Toolkit;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -14,85 +12,144 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import javax.swing.JOptionPane;
 import javax.swing.ListSelectionModel;
+import com.municipalidad.licencias.appLicencias.navigation.BackToMenuListener;
+import com.municipalidad.licencias.appLicencias.session.SessionInfo;
+import javax.swing.table.DefaultTableModel;
 
 public class PantallaRenovarLicencia extends javax.swing.JFrame {
     
-    private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(PantallaRenovarLicencia.class.getName());
+    
     LicenciaController licenciaController;
     TitularController titularController;
-    
-    public PantallaRenovarLicencia() {
-    }
-    public PantallaRenovarLicencia(LicenciaController licenciaControl, TitularController titularControl) {
-        licenciaController = licenciaControl;
-        titularController = titularControl;
+    SessionInfo SessionInfo;
+    BackToMenuListener backToMenuListener;
+    private static final DateTimeFormatter DTF = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+  
+    public PantallaRenovarLicencia(LicenciaController licenciaController, 
+                                   TitularController titularController, 
+                                   SessionInfo userSession, 
+                                   BackToMenuListener backToMenuListener) {
+        this.licenciaController = licenciaController;
+        this.titularController = titularController;
+        this.SessionInfo = userSession;
+        this.backToMenuListener = backToMenuListener;
+        
         initComponents();
+        
         setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource("/img/SantaFeCapital_Logo.png")));
         licenciasTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
     }
-    public PantallaRenovarLicencia(LicenciaController licenciaControl, TitularController titularControl, String dni) {
-        licenciaController = licenciaControl;
-        titularController = titularControl;
+    
+    
+    public PantallaRenovarLicencia(LicenciaController licenciaController, 
+                                   TitularController titularController, 
+                                   String dni) {
+        this.licenciaController = licenciaController;
+        this.titularController = titularController;
         initComponents();
         setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource("/img/SantaFeCapital_Logo.png")));
-        numDocField.setText(dni);
+        numDniField.setText(dni);
         licenciasTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         setTable();
     }
     
-    private void setTable(){
-        String[] columnas = {
-            "Clase",
-            "Fecha de emisión",
-            "Fecha de vencimiento"
-        };
-        Object[][] datos = new Object[1][3];
-        licenciasTable.setModel(new javax.swing.table.DefaultTableModel(datos, columnas));
-        if(validarDni()){
-            List<Licencia> licencias = new ArrayList();
-            licencias = licenciaController.obtenerLicenciasPorTitular(Long.valueOf(numDocField.getText()));
-            Object[][] data = new Object[licencias.size()][3];
-            for(int i=0; i<licencias.size(); i++){
-                Licencia l = licencias.get(i);
-                data[i][0] = l.getClaseLicencia().toString();
-                data[i][1] = l.getFechaEmision().format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
-                data[i][2] = l.getFechaVencimiento().format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+    private void setTable() {
+        
+        if (!dniEsValido()) return;
+        
+        numDniField.setEnabled(false);
+        buscarLicenciasButton.setEnabled(false);
+        
+        try {
+
+            //Nombres de columnas que tendrá la tabla
+            final String[] columnas = {
+                "Clase",
+                "Fecha de emisión",
+                "Fecha de vencimiento"
+            };
+
+
+            /* Crea un modelo de tabla con 0 filas y luego sobreescribe 
+            isCellEditable usando clase anónima para que no se pueda editar 
+            ninguna celda*/
+            DefaultTableModel model = new DefaultTableModel(columnas, 0) {
+            @Override public boolean isCellEditable(int row, int column) { return false; }
+            };
+
+            licenciasTable.setModel(model);
+
+
+            Long dni = Long.valueOf(numDniField.getText().trim());
+            
+            //Esto esta mal. Se estan trayendo entidades JPA a la vista.
+            List<Licencia> licencias = licenciaController.obtenerLicenciasPorTitular(dni);
+            
+
+            /* Añadir las licencias a la tabla si hay*/
+            if (licencias != null) {
+                for (Licencia l : licencias) {
+                    model.addRow(new Object[] {
+                    String.valueOf(l.getClaseLicencia()),
+                    l.getFechaEmision() != null ? l.getFechaEmision().format(DTF) : "",
+                    l.getFechaVencimiento() != null ? l.getFechaVencimiento().format(DTF) : ""
+                    });
+                }
             }
-            licenciasTable.setModel(new javax.swing.table.DefaultTableModel(data, columnas));
+          
+        } catch (Exception ex) {
+            
+            JOptionPane.showMessageDialog(this,
+                "Error al cargar licencias: " + ex.getMessage(),
+                "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
     
-    private boolean validarDni(){
-        boolean result=false;
-        try{
-            if(numDocField.getText().trim()==null || numDocField.getText().trim().isBlank()) 
-            JOptionPane.showMessageDialog(
-                null,
+    private boolean dniEsValido() {
+            String dni = numDniField.getText().trim();
+
+            if (dni.isBlank()) {
+                JOptionPane.showMessageDialog(null,
                 "El campo número de documento es obligatorio.",
                 "Error",
                 JOptionPane.ERROR_MESSAGE);
-            else Long.valueOf(numDocField.getText());
-            result = true;
-        } catch (NumberFormatException e){
-            JOptionPane.showMessageDialog(
-                null,
-                "El campo número de documento no es válido.",
+            
+                return false;
+            }
+
+            if (!dni.matches("\\d+")) { //ya es formatted pero no está de más
+                JOptionPane.showMessageDialog(null,
+                "El DNI solo puede contener números.",
                 "Error",
                 JOptionPane.ERROR_MESSAGE);
-            result = false;
-        }
-        return result;
-    }
+            
+                return false;
+            }
+
+            if (dni.length() > 8) {
+                JOptionPane.showMessageDialog(null,
+                "El DNI no puede tener más de 8 dígitos.",
+                "Error",
+                JOptionPane.ERROR_MESSAGE);
+            
+                return false;
+            }
+
+            return true;
     
-    private void validarTabla(){
+        }
+    
+    
+    private void validarSeleccionTabla(){
         if(licenciasTable.getSelectedRowCount()==-1){
-            JOptionPane.showMessageDialog(
+                JOptionPane.showMessageDialog(
                 null,
                 "Debe seleccionar una fila de la tabla de licencias para renovar.",
                 "Error",
                 JOptionPane.ERROR_MESSAGE);
         }
     }
+    
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -100,17 +157,17 @@ public class PantallaRenovarLicencia extends javax.swing.JFrame {
         renovarButton = new javax.swing.JButton();
         cancelarButton = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
-        jLabel3 = new javax.swing.JLabel();
         tipoDocDD = new javax.swing.JComboBox<>();
         jLabel2 = new javax.swing.JLabel();
         panelEncabezado = new javax.swing.JPanel();
         labelMenuPrincipal = new javax.swing.JLabel();
         labelLogoSF = new javax.swing.JLabel();
-        numDocField = new javax.swing.JFormattedTextField();
+        numDniField = new javax.swing.JFormattedTextField();
         jScrollPane1 = new javax.swing.JScrollPane();
         licenciasTable = new javax.swing.JTable();
         jLabel4 = new javax.swing.JLabel();
         observacionesField = new javax.swing.JTextField();
+        buscarLicenciasButton = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setPreferredSize(new java.awt.Dimension(593, 388));
@@ -130,8 +187,6 @@ public class PantallaRenovarLicencia extends javax.swing.JFrame {
         });
 
         jLabel1.setText("Tipo de documento");
-
-        jLabel3.setText("Licencias del titular");
 
         tipoDocDD.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "DNI", "CI", "ERRO", "LC", "LE", "LEM", "PAS" }));
 
@@ -162,20 +217,10 @@ public class PantallaRenovarLicencia extends javax.swing.JFrame {
         );
 
         try {
-            numDocField.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.MaskFormatter("########")));
+            numDniField.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.MaskFormatter("########")));
         } catch (java.text.ParseException ex) {
             ex.printStackTrace();
         }
-        numDocField.addFocusListener(new java.awt.event.FocusAdapter() {
-            public void focusLost(java.awt.event.FocusEvent evt) {
-                numDocFieldFocusLost(evt);
-            }
-        });
-        numDocField.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                numDocFieldActionPerformed(evt);
-            }
-        });
 
         licenciasTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -192,17 +237,19 @@ public class PantallaRenovarLicencia extends javax.swing.JFrame {
 
         jLabel4.setText("Observaciones");
 
+        buscarLicenciasButton.setText("Buscar licencias");
+        buscarLicenciasButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                buscarLicenciasButtonActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(cancelarButton)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(renovarButton))
                     .addComponent(panelEncabezado, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
                         .addGap(15, 15, 15)
@@ -213,17 +260,24 @@ public class PantallaRenovarLicencia extends javax.swing.JFrame {
                                 .addGap(18, 18, 18)
                                 .addComponent(jLabel2)
                                 .addGap(18, 18, 18)
-                                .addComponent(numDocField))
+                                .addComponent(numDniField))
                             .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 553, Short.MAX_VALUE)
                             .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel3)
-                                    .addComponent(jLabel1))
-                                .addGap(0, 0, Short.MAX_VALUE))
-                            .addGroup(layout.createSequentialGroup()
+                                .addGap(0, 0, Short.MAX_VALUE)
                                 .addComponent(jLabel4)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(observacionesField, javax.swing.GroupLayout.PREFERRED_SIZE, 427, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                                .addGap(18, 18, 18)
+                                .addComponent(observacionesField, javax.swing.GroupLayout.PREFERRED_SIZE, 427, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabel1)
+                                .addGap(0, 0, Short.MAX_VALUE))))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addComponent(cancelarButton)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(renovarButton))
+                            .addComponent(buscarLicenciasButton, javax.swing.GroupLayout.Alignment.TRAILING))))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -235,16 +289,16 @@ public class PantallaRenovarLicencia extends javax.swing.JFrame {
                     .addComponent(jLabel1)
                     .addComponent(jLabel2)
                     .addComponent(tipoDocDD, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(numDocField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(13, 13, 13)
-                .addComponent(jLabel3)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 119, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(numDniField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(buscarLicenciasButton)
+                .addGap(28, 28, 28)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 119, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 23, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel4)
-                    .addComponent(observacionesField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 14, Short.MAX_VALUE)
+                    .addComponent(observacionesField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel4))
+                .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(renovarButton)
                     .addComponent(cancelarButton))
@@ -255,14 +309,14 @@ public class PantallaRenovarLicencia extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void renovarButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_renovarButtonActionPerformed
-        validarDni();
-        validarTabla();
+        
+        validarSeleccionTabla();
         String clase = licenciasTable.getValueAt(licenciasTable.getSelectedRow(), 0).toString();
         LocalDate fechae = LocalDate.parse(licenciasTable.getValueAt(licenciasTable.getSelectedRow(), 1).toString(), DateTimeFormatter.ofPattern("dd/MM/yyyy"));
         LocalDate fechav = LocalDate.parse(licenciasTable.getValueAt(licenciasTable.getSelectedRow(), 2).toString(), DateTimeFormatter.ofPattern("dd/MM/yyyy"));
         Licencia licencia;
         List<Licencia> licencias = new ArrayList();
-        licencias = licenciaController.obtenerLicenciasPorTitular(Long.valueOf(numDocField.getText()));
+        licencias = licenciaController.obtenerLicenciasPorTitular(Long.valueOf(numDniField.getText()));
         try{
             licencia = licencias.stream()
                 .filter(l -> l.getClaseLicencia().equals(ClaseLicencia.valueOf(clase))
@@ -272,15 +326,15 @@ public class PantallaRenovarLicencia extends javax.swing.JFrame {
             System.out.println("licencia encontrada: \n clase: " + licencia.getClaseLicencia() + "\nfechae: " + licencia.getFechaEmision()
             + "\nfechav: " + licencia.getFechaVencimiento()
             + "\nid:" + licencia.getId());
-            if(licencia.getClass().isInstance(licenciaController.renovarLicencia(licencia, observacionesField.getText(), SesionUsuario.getUsuarioActual()))){
+            licenciaController.renovarLicencia(licencia, observacionesField.getText());
                 JOptionPane.showMessageDialog(
                     null,
                     "La licencia se renovo con éxito.",
                     "Éxito",
                     JOptionPane.INFORMATION_MESSAGE);
                 this.dispose();
-                SesionMenuPrincipal.setVisible(true);
-            }
+                backToMenuListener.mostrarMenuPrincipal();
+            
         } catch(NoSuchElementException e){
             JOptionPane.showMessageDialog(
                 null,
@@ -291,38 +345,31 @@ public class PantallaRenovarLicencia extends javax.swing.JFrame {
     }//GEN-LAST:event_renovarButtonActionPerformed
 
     private void cancelarButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelarButtonActionPerformed
-        SesionMenuPrincipal.setVisible(true);
+        backToMenuListener.mostrarMenuPrincipal();
         this.dispose();
     }//GEN-LAST:event_cancelarButtonActionPerformed
 
-    private void numDocFieldFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_numDocFieldFocusLost
-        if(validarDni()){
+    private void buscarLicenciasButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buscarLicenciasButtonActionPerformed
+      
+        if (dniEsValido()) {
+            
             setTable();
-        }
-    }//GEN-LAST:event_numDocFieldFocusLost
+        }      
+    }//GEN-LAST:event_buscarLicenciasButtonActionPerformed
 
-    private void numDocFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_numDocFieldActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_numDocFieldActionPerformed
-
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        java.awt.EventQueue.invokeLater(() -> new PantallaRenovarLicencia().setVisible(true));
-    }
+   
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton buscarLicenciasButton;
     private javax.swing.JButton cancelarButton;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel labelLogoSF;
     private javax.swing.JLabel labelMenuPrincipal;
     private javax.swing.JTable licenciasTable;
-    private javax.swing.JFormattedTextField numDocField;
+    private javax.swing.JFormattedTextField numDniField;
     private javax.swing.JTextField observacionesField;
     private javax.swing.JPanel panelEncabezado;
     private javax.swing.JButton renovarButton;

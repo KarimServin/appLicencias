@@ -35,7 +35,7 @@ public class LicenciaPDF extends javax.swing.JPanel implements Printable{
         txtFechaVencimiento.setText(licencia.getFechaVencimiento().toString());
         txtApellido.setText(titular.getNombre());
         txtFechaNacimiento.setText(titular.getFechaNacimiento().toString());
-        txtDireccion.setText(titular.getDireccion());
+        txtDireccion.setText(titular.getDomicilio());
         txtLicencia.setText(titular.getDni().toString());
         txtGrupoSanguineo.setText(Character.toString(titular.getGrupoSanguineo()));
         
@@ -135,8 +135,8 @@ public class LicenciaPDF extends javax.swing.JPanel implements Printable{
 
         jLabel6.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         jLabel6.setForeground(new java.awt.Color(51, 153, 255));
-        jLabel6.setText("SANTA FE - CORONDA");
-        add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 40, -1, -1));
+        jLabel6.setText("SANTA FE");
+        add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 40, -1, -1));
 
         txtDonante.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         txtDonante.setText("SI");
@@ -217,10 +217,10 @@ public class LicenciaPDF extends javax.swing.JPanel implements Printable{
         jLabel9.setText("Donante");
         add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 260, -1, -1));
 
-        jLabel3.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        jLabel3.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         jLabel3.setForeground(new java.awt.Color(51, 51, 255));
         jLabel3.setText("LICENCIA NACIONAL DE CONDUCIR");
-        add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 10, -1, -1));
+        add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 10, -1, -1));
 
         jLabel16.setText("Fecha de Nacimiento");
         add(jLabel16, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 160, -1, -1));

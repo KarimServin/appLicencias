@@ -14,10 +14,7 @@ import jakarta.persistence.ManyToOne;
 import lombok.Getter;
 import lombok.Setter;
 
-/**
- *
- * @author Miguel
- */
+
 @Getter
 @Setter
 @Entity
@@ -39,11 +36,10 @@ public class Licencia {
     private String observaciones;
 
     @ManyToOne
-     @JoinColumn(name = "titular_dni")
+    @JoinColumn(name = "titular_dni")
     private Titular titular;
     
     @ManyToOne
-    
     private Licencia versionAnterior;
     
     public void setFechaVencimiento(int vigencia, LocalDate fechaNac) {
