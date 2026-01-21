@@ -1,69 +1,185 @@
 package com.municipalidad.licencias.appLicencias.service;
 
-import java.time.LocalDate;
+import com.municipalidad.licencias.appLicencias.dto.TitularDTO;
+import com.municipalidad.licencias.appLicencias.entities.TipoSangre;
+import com.municipalidad.licencias.appLicencias.exception.ServiceException;
+import com.municipalidad.licencias.appLicencias.exception.ValidationException;
+import com.municipalidad.licencias.appLicencias.mapper.TitularMapper;
 import java.util.Optional;
-
 import org.springframework.stereotype.Service;
-
-import com.municipalidad.licencias.appLicencias.model.Titular;
-import com.municipalidad.licencias.appLicencias.model.Usuario;
+import com.municipalidad.licencias.appLicencias.entities.Titular;
+import com.municipalidad.licencias.appLicencias.repository.TipoSangreRepository;
 import com.municipalidad.licencias.appLicencias.repository.TitularRepository;
+import com.municipalidad.licencias.appLicencias.session.CurrentUserProvider;
+import java.time.LocalDate;
+import java.time.Period;
+import java.util.Set;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
+
+
 
 @Service
 public class TitularServiceImpl implements TitularService {
-    @Autowired
+    
+    private static final Logger logger = LoggerFactory.getLogger(TitularServiceImpl.class);
     private final TitularRepository titularRepository;
-
-    public TitularServiceImpl(TitularRepository titularRepo) {
-        this.titularRepository = titularRepo;
+    private final TipoSangreRepository tipoSangreRepository;
+    private final TitularMapper titularMapper;
+    private final CurrentUserProvider currentUserProvider;
+     
+    @Autowired
+    public TitularServiceImpl(TitularRepository titularRepository, 
+                              TipoSangreRepository tipoSangreRepository,
+                              TitularMapper titularMapper,
+                              CurrentUserProvider currentUserProvider) {
+        this.titularRepository = titularRepository;
+        this.tipoSangreRepository = tipoSangreRepository;
+        this.titularMapper = titularMapper;
+        this.currentUserProvider = currentUserProvider;
     }
+     
+        
+    @Override
+    public TitularDTO guardarTitular(TitularDTO titularDTO) throws ServiceException, ValidationException {
     
+        //Validar Input (Redundancia - Seguridad/Integridad)
+        validarDatosTitular(titularDTO);
+        
+        
+        //Regla de negocio: Edad titular > 17
+        validarEdad(titularDTO.getFechaNacimiento());
+        
+        //Regla de negocio + integridad: único DNI por titular   
+        validarDniUnico(titularDTO.getDni());
+            
+
+            try {
+                //Mapeo y persistencia
+                Titular titular = titularMapper.toEntity(titularDTO);
+
+                String grupo = titularDTO.getGrupoSanguineo().trim().toUpperCase();
+                String factor = titularDTO.getFactorSanguineo().trim();
+
+                TipoSangre ts = tipoSangreRepository.findByGrupoAndFactor(grupo, factor)
+                .orElseThrow(() -> new ValidationException("Tipo de sangre inválido"));
+
+                titular.setTipoSangre(ts);
+                
+                
+                titular.setUsuario(currentUserProvider.getOrThrow());
+                titular.setFechaLicenciaClaseB(null);
+                titular.setTuvoLicenciaProfesional(false);
+
+                //Guardar con manejo de errores
+                Titular titularGuardado = titularRepository.save(titular);
+
+                return titularMapper.toDTO(titularGuardado);
+
+            } catch (DataIntegrityViolationException e) {
+                throw new ServiceException("Error de integridad: DNI duplicado");
+            } catch (ValidationException e) {
+                throw e;
+            } catch (Exception e) {
+                logger.error("Error al guardar titular", e);
+                throw new ServiceException("Error al guardar titular");
+            }
+            
+    }
+
     
     @Override
-    public Titular guardarTitular(Long dni, String nombre, LocalDate fechaNacimiento,
-                                 char grupoSanguineo, char factorSanguineo,
-                                 boolean esDonante, boolean tuvoLicenciaProfesional,
-                                 LocalDate fechaLicenciaClaseB, Long telefono, String email, String direccion, Usuario usuario) {
-        if (titularRepository.existsById(dni)) {
-            throw new RuntimeException("Ya existe un titular con ese DNI.");
-        }
+    public Optional<TitularDTO> buscarPorDni(Long dni) {
+          return titularRepository.findByDni(dni)
+                  .map(titularMapper::toDTO);
+    }
 
-        Titular titular = new Titular();
-        titular.setDni(dni);
+    @Override
+    public void actualizarTitular(Long dni, String nombre, String apellido, 
+                                  Boolean esDonante, Long telefono, String email, 
+                                  String domicilio) throws ServiceException {
+
+        Titular titular = titularRepository.findByDni(dni)
+        .orElseThrow(() -> new ServiceException("Titular no encontrado"));
+
         titular.setNombre(nombre);
-        titular.setFechaNacimiento(fechaNacimiento);
-        titular.setGrupoSanguineo(grupoSanguineo);
-        titular.setFactorSanguineo(factorSanguineo);
+        titular.setApellido(apellido);
         titular.setEsDonante(esDonante);
-        titular.setTuvoLicenciaProfesional(tuvoLicenciaProfesional);
-        titular.setFechaLicenciaClaseB(fechaLicenciaClaseB);
         titular.setTelefono(telefono);
         titular.setEmail(email);
-        titular.setDireccion(direccion);
-        titular.setUsuario(usuario); 
-
-        return titularRepository.save(titular);
-    }
-
-    @Override
-    public Optional<Titular> buscarPorDni(Long dni) {
-        return titularRepository.findById(dni);
-    }
-
-    @Override
-    public void actualizarTitular(Long dni, String nombre, boolean esDonante, Long telefono, String email, String direccion, Usuario usuario) {
-
-        Titular titular = titularRepository.findById(dni)
-                .orElseThrow(() -> new RuntimeException("Titular no encontrado"));
-
-        titular.setNombre(nombre);
-        titular.setEsDonante(esDonante);
-        titular.setTelefono(telefono);
-        titular.setEmail(email);
-        titular.setDireccion(direccion);
-        titular.setUsuario(usuario);
+        titular.setDomicilio(domicilio);
+        titular.setUsuario(currentUserProvider.getOrThrow());
 
         titularRepository.save(titular);
+        
     }
+    
+  
+    private void validarDatosTitular(TitularDTO titularDTO) throws ValidationException {
+
+        
+        if (titularDTO == null || titularDTO.getDni() == null) {
+                throw new ValidationException("Datos del titular requeridos");
+            }
+        
+        if (titularDTO.getNombre() == null || titularDTO.getNombre().trim().isEmpty()) {
+            throw new ValidationException("Nombre es requerido");
+        }
+
+        if (titularDTO.getApellido() == null || titularDTO.getApellido().trim().isEmpty()) {
+            throw new ValidationException("Apellido es requerido");
+        }
+
+        if (titularDTO.getFechaNacimiento() == null) {
+            throw new ValidationException("Fecha de nacimiento es requerida");
+        }
+
+        if (titularDTO.getTelefono() == null) {
+            throw new ValidationException("Teléfono es requerido");
+        }
+
+        if (titularDTO.getEmail() == null || titularDTO.getEmail().trim().isEmpty()) {
+            throw new ValidationException("Correo es requerido");
+        }
+
+        if (titularDTO.getDomicilio() == null || titularDTO.getDomicilio().trim().isEmpty()) {
+            throw new ValidationException("Domicilio es requerido");
+        }
+
+        
+        String grupo = titularDTO.getGrupoSanguineo();
+        Set<String> validos = Set.of("A", "B", "O", "AB");
+        
+        if (grupo == null || !validos.contains(grupo.trim().toUpperCase())) {
+            throw new ValidationException("Grupo sanguíneo debe ser A, B, O o AB");
+        }
+        
+        String factor = titularDTO.getFactorSanguineo();
+        
+        if (!factor.equals("+") && !factor.equals("-")) {
+            throw new ValidationException("Factor sanguíneo debe ser + o -.");
+        }
+        
+        
+        
+    }
+    
+    private void validarEdad(LocalDate fechaNacimiento) throws ServiceException {
+
+        if (!(Period.between(fechaNacimiento, LocalDate.now()).getYears() > 17)) {
+            throw new ServiceException("La persona debe ser mayor a 17 años para ser titular.");
+        }
+            
+    }
+        
+    private void  validarDniUnico(Long dni) throws ServiceException {
+    
+     if (titularRepository.existsByDni(dni)) {
+                throw new ServiceException("Ya existe un titular con DNI: " + dni);
+            }
+        
+    }
+    
 }

@@ -1,18 +1,21 @@
 
 package com.municipalidad.licencias.appLicencias.service;
 
-import com.municipalidad.licencias.appLicencias.model.Titular;
-import com.municipalidad.licencias.appLicencias.model.Usuario;
+import com.municipalidad.licencias.appLicencias.dto.TitularDTO;
+import com.municipalidad.licencias.appLicencias.exception.ServiceException;
+import com.municipalidad.licencias.appLicencias.exception.ValidationException;
+import com.municipalidad.licencias.appLicencias.entities.Titular;
+import com.municipalidad.licencias.appLicencias.entities.Usuario;
 
 import java.time.LocalDate;
 import java.util.Optional;
 
 public interface TitularService {
-    Titular guardarTitular(Long dni, String nombre, LocalDate fechaNacimiento,
-                                 char grupoSanguineo, char factorSanguineo,
-                                 boolean esDonante, boolean tuvoLicenciaProfesional,
-                                 LocalDate fechaLicenciaClaseB, Long telefono, String email, String direccion, Usuario usuario);
-    Optional<Titular> buscarPorDni(Long dni);
+        
+        TitularDTO guardarTitular(TitularDTO titularDTO) throws ServiceException, ValidationException;
+    
+        Optional<TitularDTO> buscarPorDni(Long dni);
 
-    void actualizarTitular(Long dni, String nombre,boolean esDonante, Long telefono, String email, String direccion, Usuario usuario);
+        void actualizarTitular(Long dni, String nombre, String apellido, Boolean esDonante, Long telefono, String email, String direccion) throws ServiceException;
+      
 }
