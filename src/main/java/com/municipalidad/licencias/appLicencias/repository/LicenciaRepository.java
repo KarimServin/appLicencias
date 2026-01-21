@@ -1,8 +1,8 @@
 package com.municipalidad.licencias.appLicencias.repository;
 
 import java.util.List;
-import com.municipalidad.licencias.appLicencias.model.ClaseLicencia;
-import com.municipalidad.licencias.appLicencias.model.Licencia;
+import com.municipalidad.licencias.appLicencias.entities.ClaseLicencia;
+import com.municipalidad.licencias.appLicencias.entities.Licencia;
 import java.time.LocalDate;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -22,11 +22,11 @@ public interface LicenciaRepository extends JpaRepository<Licencia, Long> {
     
     @Query("""
     SELECT l FROM Licencia l
-    WHERE l.fechaVencimiento > CURRENT_DATE   
+    WHERE l.fechaVencimiento > CURRENT_DATE
     AND (:nombre IS NULL OR LOWER(l.titular.nombre) LIKE LOWER(CONCAT('%', :nombre, '%')))
     AND (:apellido IS NULL OR LOWER(l.titular.apellido) LIKE LOWER(CONCAT('%', :apellido, '%')))
-    AND (:grupoSanguineo IS NULL OR l.titular.grupoSanguineo = :grupoSanguineo)
-    AND (:factorSanguineo IS NULL OR l.titular.factorSanguineo = :factorSanguineo)
+    AND (:grupoSanguineo IS NULL OR l.titular.tipoSangre.grupo = :grupoSanguineo)
+    AND (:factorSanguineo IS NULL OR l.titular.tipoSangre.factor = :factorSanguineo)
     AND (:esDonante IS NULL OR l.titular.esDonante = :esDonante)
     """)
 List<Licencia> findLicenciasVigentesFiltradas(

@@ -1,6 +1,6 @@
 package com.municipalidad.licencias.appLicencias.dto;
 
-import com.municipalidad.licencias.appLicencias.model.ClaseLicencia;
+import com.municipalidad.licencias.appLicencias.entities.ClaseLicencia;
 import java.time.LocalDate;
 import lombok.Getter;
 import lombok.Setter;
@@ -14,6 +14,5 @@ public class LicenciaDTO {
     private LocalDate fechaVencimiento;
     private String observaciones;
     // Campos del titular 
-    private Long titularDni;
-    private String titularNombre;   
+    private Long titularDni; 
 }

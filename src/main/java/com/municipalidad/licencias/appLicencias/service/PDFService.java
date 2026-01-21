@@ -1,9 +1,9 @@
 package com.municipalidad.licencias.appLicencias.service;
 
-import com.municipalidad.licencias.appLicencias.model.Licencia;
-import com.municipalidad.licencias.appLicencias.model.Titular;
-import com.municipalidad.licencias.appLicencias.ui.LicenciaPDF;
-import com.municipalidad.licencias.appLicencias.ui.PresupuestoPDF;
+import com.municipalidad.licencias.appLicencias.entities.Licencia;
+import com.municipalidad.licencias.appLicencias.entities.Titular;
+import com.municipalidad.licencias.appLicencias.view.LicenciaPDF;
+import com.municipalidad.licencias.appLicencias.view.PresupuestoPDF;
 import java.awt.print.Printable;
 import java.awt.print.PrinterException;
 import java.awt.print.PrinterJob;

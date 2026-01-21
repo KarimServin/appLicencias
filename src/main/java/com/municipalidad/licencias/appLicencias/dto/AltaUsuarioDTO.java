@@ -9,6 +9,7 @@ import lombok.ToString;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString(exclude = "password") //Evitar que se imprima la contraseña en logs
+
 public class AltaUsuarioDTO {
         private String nombreUsuario;
         private char[] password;

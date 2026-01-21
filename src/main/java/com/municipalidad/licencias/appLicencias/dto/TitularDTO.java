@@ -7,39 +7,25 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor
-@Getter
+
+@Getter 
 @Setter
+@NoArgsConstructor 
+@AllArgsConstructor
+@Builder
 public class TitularDTO {
 
     private Long dni;
     private String nombre;
     private String apellido;
+    private String domicilio;
     private LocalDate fechaNacimiento;
-    private char grupoSanguineo;
-    private char factorSanguineo;
-    private boolean esDonante;
     private Long telefono;
     private String email;
-    private String domicilio;
-    
-    public TitularDTO(Long dni, String nombre, String apellido,    
-                      LocalDate fechaNacimiento, char grupoSanguineo, 
-                      char factorSanguineo, boolean esDonante, long telefono, 
-                      String correo, String domicilio) {
-        
-            this.dni = dni;
-            this.nombre = nombre;
-            this.apellido = apellido;
-            this.fechaNacimiento = fechaNacimiento;
-            this.grupoSanguineo = grupoSanguineo;
-            this.telefono = telefono;
-            this.email = correo;
-            this.domicilio = domicilio;
-        
-        
-    }
+    private Boolean esDonante;
+    private Boolean tuvoLicenciaProfesional;
+    private LocalDate fechaLicenciaClaseB;
+    private String grupoSanguineo;   // "A", "B", "AB", "O"
+    private String factorSanguineo; 
 
 }

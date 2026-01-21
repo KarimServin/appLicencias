@@ -1,48 +1,43 @@
 package com.municipalidad.licencias.appLicencias.session;
 
+import com.municipalidad.licencias.appLicencias.dto.UsuarioDTO;
 import com.municipalidad.licencias.appLicencias.exception.ServiceException;
-import com.municipalidad.licencias.appLicencias.model.Usuario;
 import org.springframework.stereotype.Component;
-
 
 @Component
 public class UserSession implements SessionInfo {
-    
-    private Usuario usuarioAdministrativo;
 
-    public Usuario getUsuarioActual() {
-        return usuarioAdministrativo;
-    }
+    private UsuarioDTO usuario;
 
-    public void setUsuario(Usuario usuario) throws ServiceException {
-        
-        if (usuarioAdministrativo != null) {
+    public void setUser(UsuarioDTO usuarioDTO) throws ServiceException {
 
+        if (this.usuario != null) {
             throw new ServiceException("Ya existe una sesión abierta en este equipo");
-        }  
-        
-        usuarioAdministrativo = usuario;  
+        }
+        this.usuario = usuarioDTO;
+
     }
 
-    public void cerrarSesion() {
-        usuarioAdministrativo = null;
+    public void clearUser() {
+        usuario = null;
     }
 
     public boolean estaLogueado() {
-        return usuarioAdministrativo != null;
+        return usuario != null;
     }
-    
-   
+
+    public UsuarioDTO getUsuarioActual() {
+        return usuario;
+    }
+
     @Override
     public String getNombreUsuarioActual() {
-        return usuarioAdministrativo.getNombreUsuario();
+        return usuario.getUsuario();
     }
-    
-    @Override 
+
+    @Override
     public boolean esSuperusuario() {
-        return usuarioAdministrativo.esAdmin();
+        return usuario.esAdmin();
     }
-   
+
 }
-
-

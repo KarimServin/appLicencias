@@ -1,7 +1,7 @@
 package com.municipalidad.licencias.appLicencias.service;
 import com.municipalidad.licencias.appLicencias.dto.AltaUsuarioDTO;
 import com.municipalidad.licencias.appLicencias.exception.ServiceException;
-import com.municipalidad.licencias.appLicencias.model.Usuario;
+import com.municipalidad.licencias.appLicencias.entities.Usuario;
 import java.util.List;
 
 
