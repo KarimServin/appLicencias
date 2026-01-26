@@ -25,7 +25,7 @@ public class UsuarioDTO implements Serializable {
     @EqualsAndHashCode.Include // Solo incluir id en equals/hashCode
     private Long id;
 
-    private String usuario; // Equivalente a nombreUsuario en la entidad
+    private String nombreUsuario; 
 
     private String password; // Solo para transferencia, nunca almacenamiento
 
@@ -35,7 +35,7 @@ public class UsuarioDTO implements Serializable {
 
     public UsuarioDTO(Long id, String usuario) {
         this.id = id;
-        this.usuario = usuario;
+        this.nombreUsuario = usuario;
     }
 
     public boolean esAdmin() {

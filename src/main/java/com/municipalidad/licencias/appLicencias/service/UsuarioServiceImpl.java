@@ -1,5 +1,7 @@
 package com.municipalidad.licencias.appLicencias.service;
+import com.municipalidad.licencias.appLicencias.dto.ActualizarUsuarioRequestDTO;
 import com.municipalidad.licencias.appLicencias.dto.AltaUsuarioDTO;
+import com.municipalidad.licencias.appLicencias.dto.UsuarioDTO;
 import com.municipalidad.licencias.appLicencias.exception.ServiceException;
 import com.municipalidad.licencias.appLicencias.exception.usuarioException.CredencialesInvalidasException;
 import com.municipalidad.licencias.appLicencias.exception.usuarioException.UsuarioYaExisteException;
@@ -77,45 +79,50 @@ public class UsuarioServiceImpl implements UsuarioService {
     }
     
     @Override
-    public List<String> obtenerTodosLosNombresDeUsuario() {
-    return usuarioRepository.findAll()
-        .stream()
-        .map(Usuario::getNombreUsuario)
-        .collect(Collectors.toList());
+    public List<UsuarioDTO> obtenerTodosLosUsuarios() {
+        return usuarioRepository.findAll()
+            .stream()
+            .map(u -> new UsuarioDTO(
+                    u.getId(),
+                    u.getNombreUsuario()
+            ))
+            .collect(Collectors.toList());
     }
     
     @Override
-    public void actualizarUsuario(String nombreUsuarioActual, 
-                                  String nuevoNombre, 
-                                  char[] nuevaContrasenia, 
-                                  boolean esSuperusuario) {
-    
-        Usuario usuario = obtenerUsuarioExistente(nombreUsuarioActual);
-        
-
-        //Si el nombre va a cambiar
-        if(!nombreUsuarioActual.equals(nuevoNombre)) {
-            actualizarNombre(usuario, nuevoNombre);
+    public void actualizarUsuario(Long idUsuario, ActualizarUsuarioRequestDTO req) {
+        if (idUsuario == null) {
+            throw new IllegalArgumentException("El idUsuario no puede ser null.");
         }
-        
-        actualizarPasswordObligatoria(usuario, nuevaContrasenia);
-        
+        if (req == null) {
+            throw new IllegalArgumentException("El request no puede ser null.");
+        }
+
+        Usuario usuario = obtenerUsuarioExistentePorId(idUsuario);
+
+        // Nombre: si viene null / vacío, tu auxiliar ya no hace nada
+        actualizarNombre(usuario, req.getNuevoNombreUsuario());
+
+        // Password: tu política actual es obligatoria => se valida acá adentro
+        actualizarPasswordObligatoria(usuario, req.getNuevaContrasenia());
+
+        // Roles: si querés mantener tu comportamiento actual, req trae boolean (o Boolean)
+        Boolean esSuperusuario = Boolean.TRUE.equals(req.getSuperusuario());
         setRoles(usuario, esSuperusuario);
 
         usuarioRepository.save(usuario);
-    
     }
+
     
     
     /* ===================== MÉTODOS AUXILIARES ======================== */
 
-    private Usuario obtenerUsuarioExistente(String nombreUsuarioActual) {
-    
-        return usuarioRepository.findByNombreUsuario(nombreUsuarioActual)
-            .orElseThrow(() -> new RuntimeException("Usuario no encontrado."));
-
+    private Usuario obtenerUsuarioExistentePorId(Long idUsuario) {
+        return usuarioRepository.findById(idUsuario)
+                .orElseThrow(() -> new IllegalArgumentException("No existe el usuario (id=" + idUsuario + ")."));
     }
 
+    
     private void actualizarNombre(Usuario usuario, String nuevoNombre) {
     
         if (nuevoNombre == null) return;
@@ -155,7 +162,7 @@ public class UsuarioServiceImpl implements UsuarioService {
         }
     }
 
-    private void setRoles(Usuario usuario, boolean esSuperusuario) {
+    private void setRoles(Usuario usuario, Boolean esSuperusuario) {
          usuario.getRoles().clear();
          usuario.getRoles().add(Role.USER);
          if (esSuperusuario) {

@@ -4,8 +4,8 @@ import com.municipalidad.licencias.appLicencias.modules.altatitular.AltaTitularC
 import com.municipalidad.licencias.appLicencias.modules.altausuario.AltaUsuarioController;
 import com.municipalidad.licencias.appLicencias.modules.emitirlicencia.EmitirLicenciaController;
 import com.municipalidad.licencias.appLicencias.controller.ListarLicenciasExpiradasController;
-import com.municipalidad.licencias.appLicencias.controller.ModificarTitularController;
-import com.municipalidad.licencias.appLicencias.controller.ModificarUsuarioController;
+import com.municipalidad.licencias.appLicencias.modules.modificartitular.ModificarTitularController;
+import com.municipalidad.licencias.appLicencias.modules.modificarusuario.ModificarUsuarioController;
 import com.municipalidad.licencias.appLicencias.factory.ControllerFactory;
 import com.municipalidad.licencias.appLicencias.modules.emitircopialicencia.EmitirCopiaLicenciaController;
 import com.municipalidad.licencias.appLicencias.modules.listarlicenciasvigentes.ListarLicenciasVigentesController;

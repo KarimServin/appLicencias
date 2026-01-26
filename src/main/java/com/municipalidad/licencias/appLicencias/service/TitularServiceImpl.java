@@ -1,5 +1,6 @@
 package com.municipalidad.licencias.appLicencias.service;
 
+import com.municipalidad.licencias.appLicencias.dto.ActualizarTitularRequestDTO;
 import com.municipalidad.licencias.appLicencias.dto.TitularDTO;
 import com.municipalidad.licencias.appLicencias.entities.TipoSangre;
 import com.municipalidad.licencias.appLicencias.exception.ServiceException;
@@ -18,6 +19,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.transaction.annotation.Transactional;
 
 
 
@@ -94,6 +96,20 @@ public class TitularServiceImpl implements TitularService {
     public Optional<TitularDTO> buscarPorDni(Long dni) {
           return titularRepository.findByDni(dni)
                   .map(titularMapper::toDTO);
+    }
+    
+    
+    @Transactional
+    @Override
+    public TitularDTO actualizarDatosTitular(Long dni, ActualizarTitularRequestDTO req) {
+        Titular titular = titularRepository.findByDni(dni)
+                .orElseThrow(() -> new ServiceException("Titular no encontrado."));
+
+        titular.setDomicilio(req.getDomicilio());
+        titular.setEsDonante(req.getEsDonante());
+
+        Titular guardado = titularRepository.save(titular);
+        return titularMapper.toDTO(guardado);
     }
 
     @Override

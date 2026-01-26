@@ -17,9 +17,8 @@ public class ListarLicenciasVigentesController {
         }
     
     private void setListeners() {
-    
         view.setFiltrarAction(e -> aplicarFiltro());
-        view.setEmitirInformeAction (e -> emitirInforme());
+        view.setEmitirReporteAction (e -> emitirInforme());
         view.setCerrarAction(e -> cerrar()); 
     }
     

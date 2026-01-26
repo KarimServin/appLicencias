@@ -115,13 +115,13 @@ public class LoginController {
     
 
     private void onLoginExitoso(UsuarioDTO usuarioDTO) throws ServiceException {
-        logger.info("Login exitoso para usuario: {}. Iniciando sesión...", usuarioDTO.getUsuario());
+        logger.info("Login exitoso para usuario: {}. Iniciando sesión...", usuarioDTO.getNombreUsuario());
 
         Dialogs.exito(pantallaLogin, "Login exitoso");
         sessionController.login(usuarioDTO);
         pantallaLogin.dispose();
         menuProvider.getObject().display();
         
-    }
+    }  
 
 }

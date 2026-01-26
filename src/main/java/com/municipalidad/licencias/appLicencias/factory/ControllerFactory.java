@@ -1,18 +1,14 @@
 package com.municipalidad.licencias.appLicencias.factory;
 
-
-import com.municipalidad.licencias.appLicencias.auth.AuthService;
 import com.municipalidad.licencias.appLicencias.modules.altatitular.AltaTitularController;
 import com.municipalidad.licencias.appLicencias.modules.altausuario.AltaUsuarioController;
 import com.municipalidad.licencias.appLicencias.modules.emitirlicencia.EmitirLicenciaController;
 import com.municipalidad.licencias.appLicencias.controller.ListarLicenciasExpiradasController;
-import com.municipalidad.licencias.appLicencias.controller.ModificarTitularController;
-import com.municipalidad.licencias.appLicencias.controller.ModificarUsuarioController;
 import com.municipalidad.licencias.appLicencias.modules.emitircopialicencia.EmitirCopiaLicenciaController;
 import com.municipalidad.licencias.appLicencias.modules.listarlicenciasvigentes.ListarLicenciasVigentesController;
+import com.municipalidad.licencias.appLicencias.modules.modificartitular.ModificarTitularController;
 import com.municipalidad.licencias.appLicencias.session.SessionController;
-import com.municipalidad.licencias.appLicencias.modules.login.LoginController;
-import com.municipalidad.licencias.appLicencias.modules.menu.MenuController;
+import com.municipalidad.licencias.appLicencias.modules.modificarusuario.ModificarUsuarioController;
 import com.municipalidad.licencias.appLicencias.modules.renovarlicencia.RenovarLicenciaController;
 import com.municipalidad.licencias.appLicencias.service.*;
 import com.municipalidad.licencias.appLicencias.session.SessionInfo;
@@ -30,8 +26,6 @@ public class ControllerFactory {
     private final LicenciaService licenciaService;
     private final TitularService titularService;
     private final UsuarioService usuarioService;
-    private final AuthService authService;
-    private final SessionController sessionController;
     private final TitularValidator titularValidator;
     
     @Autowired
@@ -39,7 +33,6 @@ public class ControllerFactory {
             LicenciaService licenciaService,
             TitularService titularService,
             UsuarioService usuarioService,
-            AuthService authService,
             SessionController sessionController,
             SessionInfo sessionInfo,
             TitularValidator titularValidator) {
@@ -47,8 +40,6 @@ public class ControllerFactory {
         this.licenciaService = licenciaService;
         this.titularService = titularService;
         this.usuarioService = usuarioService;
-        this.authService = authService;
-        this.sessionController = sessionController;
         this.titularValidator = titularValidator;
     }
     
@@ -76,7 +67,7 @@ public class ControllerFactory {
     }
 
     public ModificarUsuarioController createModificarUsuarioController() {
-        return new ModificarUsuarioController();
+        return new ModificarUsuarioController(usuarioService);
     }
 
     public EmitirCopiaLicenciaController createEmitirCopiaLicenciaController() {
@@ -88,11 +79,7 @@ public class ControllerFactory {
     }
     
     public ModificarTitularController createModificarTitularController() {
-        return new ModificarTitularController();
+        return new ModificarTitularController(titularService);
     }
 
-
-
-    
-    
 }
