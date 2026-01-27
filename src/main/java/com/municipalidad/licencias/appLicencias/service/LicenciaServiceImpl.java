@@ -2,10 +2,13 @@ package com.municipalidad.licencias.appLicencias.service;
 
 import com.municipalidad.licencias.appLicencias.dto.EmisionLicenciaDTO;
 import com.municipalidad.licencias.appLicencias.dto.LicenciaDTO;
+import com.municipalidad.licencias.appLicencias.modules.renovarlicencia.LicenciaRenovableRowDTO;
 import com.municipalidad.licencias.appLicencias.entities.ClaseLicencia;
 import static com.municipalidad.licencias.appLicencias.entities.ClaseLicencia.*;
 import com.municipalidad.licencias.appLicencias.entities.Licencia;
 import com.municipalidad.licencias.appLicencias.entities.Titular;
+import com.municipalidad.licencias.appLicencias.entities.Usuario;
+import com.municipalidad.licencias.appLicencias.exception.ServiceException;
 import com.municipalidad.licencias.appLicencias.mapper.LicenciaMapper;
 import com.municipalidad.licencias.appLicencias.repository.LicenciaRepository;
 import com.municipalidad.licencias.appLicencias.repository.TitularRepository;
@@ -14,6 +17,7 @@ import com.municipalidad.licencias.appLicencias.session.CurrentUserProvider;
 import java.time.LocalDate;
 import java.time.Period;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -58,7 +62,7 @@ public class LicenciaServiceImpl implements LicenciaService {
         licencia.setObservaciones(observaciones);
         licencia.setUsuario(currentUserProvider.getOrThrow());
         Licencia guardada = licenciaRepository.save(licencia);
-        return licenciaMapper.licenciaToLicenciaDTO(guardada); 
+        return licenciaMapper.toDTO(guardada); 
     
     }
     
@@ -185,7 +189,7 @@ public class LicenciaServiceImpl implements LicenciaService {
     
         List<Licencia> licencias = licenciaRepository.findByFechaVencimientoLessThanEqual(LocalDate.now());
         return licencias.stream()
-                        .map(licenciaMapper::licenciaToLicenciaDTO)
+                        .map(licenciaMapper::toDTO)
                         .collect(Collectors.toList());
     
     }
@@ -193,7 +197,7 @@ public class LicenciaServiceImpl implements LicenciaService {
    
         List<Licencia> licencias = licenciaRepository.findByTitularDni(dni);
         return licencias.stream()
-                        .map(licenciaMapper::licenciaToLicenciaDTO)
+                        .map(licenciaMapper::toDTO)
                         .collect(Collectors.toList());
     
     }
@@ -210,12 +214,86 @@ public class LicenciaServiceImpl implements LicenciaService {
             esDonante
         );
         return licencias.stream()
-                        .map(licenciaMapper::licenciaToLicenciaDTO)
+                        .map(licenciaMapper::toDTO)
                         .collect(Collectors.toList());
     }
+    
+    @Transactional
+    @Override
+    public List<LicenciaDTO> renovarLicencias(Long dniTitular, List<ClaseLicencia> clasesARenovar) {
 
+        if (dniTitular == null) throw new ServiceException("DNI requerido.");
+        if (clasesARenovar == null || clasesARenovar.isEmpty())
+            throw new ServiceException("Seleccioná al menos una licencia para renovar.");
 
+        Titular titular = titularRepository.findByDni(dniTitular)
+            .orElseThrow(() -> new ServiceException("Titular no encontrado."));
+
+        Usuario usuario = currentUserProvider.getOrThrow();
+            
+
+        List<Licencia> ultimas = licenciaRepository.findUltimasPorClaseByTitularDni(dniTitular);
+        Map<ClaseLicencia, Licencia> ultimaPorClase = ultimas.stream()
+            .collect(java.util.stream.Collectors.toMap(Licencia::getClaseLicencia, l -> l, (a,b) -> a));
+
+        LocalDate hoy = LocalDate.now();
+        int vigenciaAnios = calcularVigencia(titular);
+        LocalDate vencimientoNuevo = hoy.plusYears(vigenciaAnios);
+
+        List<Licencia> nuevas = new java.util.ArrayList<>();
+
+        for (ClaseLicencia clase : clasesARenovar) {
+            Licencia anterior = ultimaPorClase.get(clase);
+            if (anterior == null) {
+                throw new ServiceException("No existe licencia previa para la clase " + clase + ".");
+            }
+
+            Licencia nueva = Licencia.builder()
+                .claseLicencia(clase)
+                .fechaEmision(hoy)
+                .fechaVencimiento(vencimientoNuevo)
+                .observaciones("Renovación")
+                .titular(titular)
+                .usuario(usuario)
+                .licenciaAnterior(anterior)
+                .build();
+
+            nuevas.add(nueva);
+        }
+
+        List<Licencia> guardadas = licenciaRepository.saveAll(nuevas);
+
+        return guardadas.stream()
+            .map(licenciaMapper::toDTO)
+            .toList();
+    }
+    
+    
+    @Transactional(readOnly = true)
+    @Override
+    public List<LicenciaRenovableRowDTO> buscarUltimasPorClaseParaRenovar(Long dni) {
+
+        if (dni == null) {
+            throw new ServiceException("DNI requerido.");
+        }
+
+        List<Licencia> ultimas = licenciaRepository.findUltimasPorClaseByTitularDni(dni);
+        LocalDate hoy = LocalDate.now();
+
+        return ultimas.stream()
+            .map(l -> LicenciaRenovableRowDTO.builder()
+                .licenciaId(l.getId())
+                .clase(l.getClaseLicencia())
+                // informativo: NO filtra, solo muestra
+                .vigente(l.getFechaVencimiento().isAfter(hoy))
+                .fechaVencimiento(l.getFechaVencimiento())
+                .renovar(false) // checkbox desmarcado por defecto
+                .build())
+            .collect(Collectors.toList());
+    }
 }
+
+
 
 
 

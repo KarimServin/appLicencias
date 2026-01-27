@@ -75,7 +75,7 @@ public class ControllerFactory {
     }
 
     public RenovarLicenciaController createRenovarLicenciaController() {
-        return new RenovarLicenciaController();
+        return new RenovarLicenciaController(licenciaService);
     }
     
     public ModificarTitularController createModificarTitularController() {

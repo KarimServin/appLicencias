@@ -12,8 +12,8 @@ public interface LicenciaMapper {
     @Mapping(target = "titular", ignore = true)
     @Mapping(target = "usuario", ignore = true)
     @Mapping(target = "licenciaAnterior", ignore = true)        
-    Licencia licenciaDTOToLicencia(LicenciaDTO licenciaDTO);
+    Licencia toEntity(LicenciaDTO dto);
 
     @Mapping(source = "titular.dni", target = "titularDni")
-    LicenciaDTO licenciaToLicenciaDTO(Licencia licencia);
+    LicenciaDTO toDTO(Licencia entity);
 }

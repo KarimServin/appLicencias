@@ -2,6 +2,7 @@ package com.municipalidad.licencias.appLicencias.service;
 
 import com.municipalidad.licencias.appLicencias.dto.EmisionLicenciaDTO;
 import com.municipalidad.licencias.appLicencias.dto.LicenciaDTO;
+import com.municipalidad.licencias.appLicencias.modules.renovarlicencia.LicenciaRenovableRowDTO;
 import java.util.List;
 import org.springframework.stereotype.Service;
 import com.municipalidad.licencias.appLicencias.entities.ClaseLicencia;
@@ -14,7 +15,6 @@ public interface LicenciaService {
   
     public boolean puedeEmitirLicencia(Titular titular, ClaseLicencia claseSolicitada, LocalDate hoy);
     public LicenciaDTO emitirLicencia(EmisionLicenciaDTO emisionLicenciaDTO);
-    public Licencia renovarLicencia(Licencia licencia, String observaciones);
     public boolean estaVigente(ClaseLicencia clase, Titular titular);
     public int calcularVigencia(Titular titular);
     public int calcularCosto(ClaseLicencia clase, boolean esCopia, int vigencia);
@@ -25,4 +25,9 @@ public interface LicenciaService {
                                                                String grupoSanguineo, 
                                                                String factorSanguineo, 
                                                                Boolean esDonante);
+    //27-01
+    List<LicenciaRenovableRowDTO> buscarUltimasPorClaseParaRenovar(Long dni);
+    List<LicenciaDTO> renovarLicencias(Long dniTitular, List<ClaseLicencia> clasesARenovar);
+
+    public Licencia renovarLicencia(Licencia licencia, String observaciones);
 }

@@ -29,12 +29,25 @@ public interface LicenciaRepository extends JpaRepository<Licencia, Long> {
     AND (:factorSanguineo IS NULL OR l.titular.tipoSangre.factor = :factorSanguineo)
     AND (:esDonante IS NULL OR l.titular.esDonante = :esDonante)
     """)
-List<Licencia> findLicenciasVigentesFiltradas(
-    @Param("nombre") String nombre,
-    @Param("apellido") String apellido,
-    @Param("grupoSanguineo") String grupoSanguineo,
-    @Param("factorSanguineo") String factorSanguineo,
-    @Param("esDonante") Boolean esDonante
-);
+    List<Licencia> findLicenciasVigentesFiltradas(
+        @Param("nombre") String nombre,
+        @Param("apellido") String apellido,
+        @Param("grupoSanguineo") String grupoSanguineo,
+        @Param("factorSanguineo") String factorSanguineo,
+        @Param("esDonante") Boolean esDonante
+    );
+
+    @Query("""
+        SELECT l
+        FROM Licencia l
+        WHERE l.titular.dni = :dni
+          AND l.fechaEmision = (
+              SELECT MAX(l2.fechaEmision)
+              FROM Licencia l2
+              WHERE l2.titular.dni = :dni
+                AND l2.claseLicencia = l.claseLicencia
+          )
+        """)
+    List<Licencia> findUltimasPorClaseByTitularDni(@Param("dni") Long dni);
 
 }
