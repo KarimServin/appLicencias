@@ -6,7 +6,7 @@ import javax.swing.SwingUtilities;
 
 public class EmitirCopiaLicenciaController {
     
-    
+     
    private final LicenciaService licenciaService;
    private final TitularService titularService;
    private EmitirCopiaLicenciaView view;

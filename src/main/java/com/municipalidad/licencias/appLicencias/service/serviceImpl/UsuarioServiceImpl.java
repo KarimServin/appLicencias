@@ -1,4 +1,4 @@
-package com.municipalidad.licencias.appLicencias.service;
+package com.municipalidad.licencias.appLicencias.service.serviceImpl;
 import com.municipalidad.licencias.appLicencias.dto.ActualizarUsuarioRequestDTO;
 import com.municipalidad.licencias.appLicencias.dto.AltaUsuarioDTO;
 import com.municipalidad.licencias.appLicencias.dto.UsuarioDTO;
@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import com.municipalidad.licencias.appLicencias.entities.Usuario;
 import com.municipalidad.licencias.appLicencias.repository.UsuarioRepository;
 import com.municipalidad.licencias.appLicencias.security.PasswordHasher;
+import com.municipalidad.licencias.appLicencias.service.UsuarioService;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;

@@ -29,7 +29,7 @@ public class PresupuestoPDF extends javax.swing.JPanel implements Printable{
 
     public PresupuestoPDF(Titular titular,Licencia licencia, int Monto) {
         initComponents();
-        txtTipoLicencia.setText(licencia.getClaseLicencia().name());
+        //txtTipoLicencia.setText(licencia.getClaseLicencia().name());
         txtFechaVencimiento.setText(licencia.getFechaVencimiento().toString());
         txtApellido.setText(titular.getNombre());
         txtFechaNacimiento.setText(titular.getFechaNacimiento().toString());

@@ -3,13 +3,11 @@ package com.municipalidad.licencias.appLicencias.factory;
 import com.municipalidad.licencias.appLicencias.modules.altatitular.AltaTitularController;
 import com.municipalidad.licencias.appLicencias.modules.altausuario.AltaUsuarioController;
 import com.municipalidad.licencias.appLicencias.modules.emitirlicencia.EmitirLicenciaController;
-import com.municipalidad.licencias.appLicencias.controller.ListarLicenciasExpiradasController;
+import com.municipalidad.licencias.appLicencias.modules.consultarlicencias.ConsultarLicenciasController;
 import com.municipalidad.licencias.appLicencias.modules.emitircopialicencia.EmitirCopiaLicenciaController;
-import com.municipalidad.licencias.appLicencias.modules.listarlicenciasvigentes.ListarLicenciasVigentesController;
 import com.municipalidad.licencias.appLicencias.modules.modificartitular.ModificarTitularController;
 import com.municipalidad.licencias.appLicencias.session.SessionController;
 import com.municipalidad.licencias.appLicencias.modules.modificarusuario.ModificarUsuarioController;
-import com.municipalidad.licencias.appLicencias.modules.renovarlicencia.RenovarLicenciaController;
 import com.municipalidad.licencias.appLicencias.service.*;
 import com.municipalidad.licencias.appLicencias.session.SessionInfo;
 import com.municipalidad.licencias.appLicencias.validation.TitularValidator;
@@ -27,7 +25,7 @@ public class ControllerFactory {
     private final TitularService titularService;
     private final UsuarioService usuarioService;
     private final TitularValidator titularValidator;
-    
+    private final LicenciaConsultaService licenciaConsultaService;
     @Autowired
     public ControllerFactory (
             LicenciaService licenciaService,
@@ -35,12 +33,14 @@ public class ControllerFactory {
             UsuarioService usuarioService,
             SessionController sessionController,
             SessionInfo sessionInfo,
-            TitularValidator titularValidator) {
+            TitularValidator titularValidator,
+            LicenciaConsultaService licenciaConsultaService) {
         
         this.licenciaService = licenciaService;
         this.titularService = titularService;
         this.usuarioService = usuarioService;
         this.titularValidator = titularValidator;
+        this.licenciaConsultaService = licenciaConsultaService;
     }
     
    
@@ -58,13 +58,11 @@ public class ControllerFactory {
     } 
 
 
-    public ListarLicenciasExpiradasController createListarLicenciasExpiradasController() {
-        return new ListarLicenciasExpiradasController();
+    public ConsultarLicenciasController createConsultarLicenciasController() {
+        return new ConsultarLicenciasController(licenciaConsultaService);
     }
 
-    public ListarLicenciasVigentesController createListarLicenciasVigentesController() {
-        return new ListarLicenciasVigentesController();
-    }
+
 
     public ModificarUsuarioController createModificarUsuarioController() {
         return new ModificarUsuarioController(usuarioService);
@@ -74,9 +72,6 @@ public class ControllerFactory {
         return new EmitirCopiaLicenciaController(licenciaService, titularService);
     }
 
-    public RenovarLicenciaController createRenovarLicenciaController() {
-        return new RenovarLicenciaController(licenciaService);
-    }
     
     public ModificarTitularController createModificarTitularController() {
         return new ModificarTitularController(titularService);

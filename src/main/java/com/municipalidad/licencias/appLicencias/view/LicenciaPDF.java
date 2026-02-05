@@ -31,7 +31,7 @@ public class LicenciaPDF extends javax.swing.JPanel implements Printable{
 
     public LicenciaPDF(Titular titular,Licencia licencia) {
         initComponents();
-        txtTipoLicencia.setText(licencia.getClaseLicencia().name());
+        //txtTipoLicencia.setText(licencia.getClases().name());
         txtFechaVencimiento.setText(licencia.getFechaVencimiento().toString());
         txtApellido.setText(titular.getNombre());
         txtFechaNacimiento.setText(titular.getFechaNacimiento().toString());

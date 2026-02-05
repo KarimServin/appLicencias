@@ -21,4 +21,12 @@ public final class Dialogs {
             javax.swing.JOptionPane.INFORMATION_MESSAGE
         );
     }
+    public static void info(java.awt.Component view, String message) {
+        javax.swing.JOptionPane.showMessageDialog(
+                view,
+                message,
+                "Información",
+                javax.swing.JOptionPane.INFORMATION_MESSAGE
+        );
+    }
 }

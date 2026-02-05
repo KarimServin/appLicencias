@@ -1,4 +1,4 @@
-package com.municipalidad.licencias.appLicencias.service;
+package com.municipalidad.licencias.appLicencias.service.serviceImpl;
 
 import com.municipalidad.licencias.appLicencias.dto.ActualizarTitularRequestDTO;
 import com.municipalidad.licencias.appLicencias.dto.TitularDTO;
@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import com.municipalidad.licencias.appLicencias.entities.Titular;
 import com.municipalidad.licencias.appLicencias.repository.TipoSangreRepository;
 import com.municipalidad.licencias.appLicencias.repository.TitularRepository;
+import com.municipalidad.licencias.appLicencias.service.TitularService;
 import com.municipalidad.licencias.appLicencias.session.CurrentUserProvider;
 import java.time.LocalDate;
 import java.time.Period;

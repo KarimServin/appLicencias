@@ -38,7 +38,6 @@ public class LoginController {
     public void display() {
 
         System.out.println("LoginController.display() instance=" + System.identityHashCode(this));
-        new Exception("stacktrace display()").printStackTrace();
         logger.info("Iniciando aplicación de Licencias Municipales");
         
         SwingUtilities.invokeLater(() -> {

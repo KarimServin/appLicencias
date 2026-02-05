@@ -27,16 +27,16 @@
     <DimensionLayout dim="0">
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" attributes="0">
-              <EmptySpace min="-2" max="-2" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
                   <Component id="panelBienvenida" max="32767" attributes="0"/>
-                  <Component id="panelOpciones" max="32767" attributes="0"/>
+                  <Group type="102" attributes="0">
+                      <Component id="panelOpciones" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace min="0" pref="21" max="32767" attributes="0"/>
+                  </Group>
+                  <Component id="panelEncabezado" max="32767" attributes="0"/>
               </Group>
-              <EmptySpace min="-2" max="-2" attributes="0"/>
-          </Group>
-          <Group type="102" alignment="0" attributes="0">
-              <Component id="panelEncabezado" max="32767" attributes="0"/>
-              <EmptySpace min="-2" pref="14" max="-2" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -60,11 +60,11 @@
         <DimensionLayout dim="0">
           <Group type="103" groupAlignment="0" attributes="0">
               <Group type="102" alignment="0" attributes="0">
-                  <EmptySpace min="-2" max="-2" attributes="0"/>
-                  <Component id="labelLogoSF" min="-2" max="-2" attributes="0"/>
-                  <EmptySpace min="-2" pref="149" max="-2" attributes="0"/>
+                  <EmptySpace max="-2" attributes="0"/>
                   <Component id="labelMenuPrincipal" max="32767" attributes="0"/>
-                  <EmptySpace min="-2" max="-2" attributes="0"/>
+                  <EmptySpace min="-2" pref="66" max="-2" attributes="0"/>
+                  <Component id="labelLogoSF" min="-2" max="-2" attributes="0"/>
+                  <EmptySpace max="-2" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -82,7 +82,10 @@
       <SubComponents>
         <Component class="javax.swing.JLabel" name="labelMenuPrincipal">
           <Properties>
-            <Property name="text" type="java.lang.String" value="Men&#xfa; Principal - Sistema de gesti&#xf3;n de licencias"/>
+            <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+              <Font name="Segoe UI" size="18" style="1"/>
+            </Property>
+            <Property name="text" type="java.lang.String" value="MENU PRINCIPAL - Gesti&#xf3;n de Licencias"/>
           </Properties>
         </Component>
         <Component class="javax.swing.JLabel" name="labelLogoSF">
@@ -132,24 +135,41 @@
       <Layout>
         <DimensionLayout dim="0">
           <Group type="103" groupAlignment="0" attributes="0">
-              <Group type="102" alignment="1" attributes="0">
-                  <EmptySpace min="-2" max="-2" attributes="0"/>
-                  <Group type="103" groupAlignment="1" attributes="0">
-                      <Component id="btnModificarDatosUsuario" pref="279" max="32767" attributes="0"/>
-                      <Component id="btnAltaTitular" alignment="0" pref="279" max="32767" attributes="0"/>
-                      <Component id="btnRenovarLicencia" alignment="0" pref="279" max="32767" attributes="0"/>
-                      <Component id="btnListarLicExpiradas" alignment="0" pref="279" max="32767" attributes="0"/>
-                      <Component id="btnEmitirNuevaLicencia" alignment="0" pref="279" max="32767" attributes="0"/>
+              <Group type="102" attributes="0">
+                  <EmptySpace max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="0" attributes="0">
+                      <Group type="102" attributes="0">
+                          <Group type="103" groupAlignment="1" attributes="0">
+                              <Component id="btnAltaUsuario" max="32767" attributes="0"/>
+                              <Component id="btnRenovarLicencia" alignment="0" max="32767" attributes="0"/>
+                              <Component id="btnEmitirNuevaLicencia" alignment="0" max="32767" attributes="0"/>
+                              <Component id="btnAltaTitular" alignment="0" min="-2" pref="264" max="-2" attributes="0"/>
+                          </Group>
+                          <Group type="103" groupAlignment="0" attributes="0">
+                              <Group type="102" alignment="0" attributes="0">
+                                  <EmptySpace min="-2" pref="42" max="-2" attributes="0"/>
+                                  <Group type="103" groupAlignment="0" attributes="0">
+                                      <Component id="btnModificarDatosTitular" alignment="0" max="32767" attributes="0"/>
+                                      <Group type="102" attributes="0">
+                                          <Component id="btnConsultarLicencias" min="-2" pref="283" max="-2" attributes="0"/>
+                                          <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                                      </Group>
+                                  </Group>
+                              </Group>
+                              <Group type="102" alignment="1" attributes="0">
+                                  <EmptySpace max="32767" attributes="0"/>
+                                  <Group type="103" groupAlignment="0" attributes="0">
+                                      <Component id="btnEmitirCopiaLicencia" alignment="1" min="-2" pref="283" max="-2" attributes="0"/>
+                                      <Component id="btnModificarDatosUsuario" alignment="1" min="-2" pref="283" max="-2" attributes="0"/>
+                                  </Group>
+                              </Group>
+                          </Group>
+                      </Group>
+                      <Group type="102" alignment="1" attributes="0">
+                          <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                          <Component id="btnSALIR" min="-2" pref="283" max="-2" attributes="0"/>
+                      </Group>
                   </Group>
-                  <EmptySpace min="-2" pref="61" max="-2" attributes="0"/>
-                  <Group type="103" groupAlignment="1" attributes="0">
-                      <Component id="btnAltaUsuario" pref="280" max="32767" attributes="0"/>
-                      <Component id="btnEmitirCopiaLicencia" alignment="0" pref="280" max="32767" attributes="0"/>
-                      <Component id="btnModificarDatosTitular" alignment="0" pref="280" max="32767" attributes="0"/>
-                      <Component id="btnListarLicVigentes" alignment="0" pref="280" max="32767" attributes="0"/>
-                      <Component id="btnSALIR" pref="280" max="32767" attributes="0"/>
-                  </Group>
-                  <EmptySpace min="-2" max="-2" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -162,25 +182,22 @@
                   </Group>
                   <EmptySpace min="-2" pref="38" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
-                      <Component id="btnListarLicVigentes" alignment="3" max="32767" attributes="0"/>
                       <Component id="btnAltaTitular" alignment="3" max="32767" attributes="0"/>
+                      <Component id="btnConsultarLicencias" alignment="3" max="32767" attributes="0"/>
                   </Group>
                   <EmptySpace min="-2" pref="38" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
                       <Component id="btnRenovarLicencia" alignment="3" max="32767" attributes="0"/>
                       <Component id="btnModificarDatosTitular" alignment="3" max="32767" attributes="0"/>
                   </Group>
-                  <EmptySpace min="-2" pref="38" max="-2" attributes="0"/>
+                  <EmptySpace min="-2" pref="34" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
-                      <Component id="btnListarLicExpiradas" alignment="3" max="32767" attributes="0"/>
                       <Component id="btnAltaUsuario" alignment="3" max="32767" attributes="0"/>
-                  </Group>
-                  <EmptySpace min="-2" pref="47" max="-2" attributes="0"/>
-                  <Group type="103" groupAlignment="3" attributes="0">
                       <Component id="btnModificarDatosUsuario" alignment="3" max="32767" attributes="0"/>
-                      <Component id="btnSALIR" alignment="3" max="32767" attributes="0"/>
                   </Group>
-                  <EmptySpace min="-2" max="-2" attributes="0"/>
+                  <EmptySpace min="-2" pref="31" max="-2" attributes="0"/>
+                  <Component id="btnSALIR" max="32767" attributes="0"/>
+                  <EmptySpace min="-2" pref="26" max="-2" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -188,7 +205,7 @@
       <SubComponents>
         <Component class="javax.swing.JButton" name="btnEmitirNuevaLicencia">
           <Properties>
-            <Property name="text" type="java.lang.String" value="Emitir Nueva Licencia"/>
+            <Property name="text" type="java.lang.String" value="Emisi&#xf3;n de Licencia"/>
           </Properties>
         </Component>
         <Component class="javax.swing.JButton" name="btnAltaTitular">
@@ -201,19 +218,14 @@
             <Property name="text" type="java.lang.String" value="Renovar Licencia"/>
           </Properties>
         </Component>
-        <Component class="javax.swing.JButton" name="btnListarLicExpiradas">
+        <Component class="javax.swing.JButton" name="btnConsultarLicencias">
           <Properties>
-            <Property name="text" type="java.lang.String" value="Listar licencias expiradas"/>
+            <Property name="text" type="java.lang.String" value="Consulta/Reporte de licencias"/>
           </Properties>
         </Component>
         <Component class="javax.swing.JButton" name="btnEmitirCopiaLicencia">
           <Properties>
-            <Property name="text" type="java.lang.String" value="Emitir Copia de Licencia"/>
-          </Properties>
-        </Component>
-        <Component class="javax.swing.JButton" name="btnListarLicVigentes">
-          <Properties>
-            <Property name="text" type="java.lang.String" value="Listar Licencias Vigentes por criterio"/>
+            <Property name="text" type="java.lang.String" value="Duplicado/Reimpresi&#xf3;n de Licencia"/>
           </Properties>
         </Component>
         <Component class="javax.swing.JButton" name="btnModificarDatosTitular">
