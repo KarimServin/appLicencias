@@ -16,7 +16,7 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class LicenciaClase {
+public class ClaseHabilitada {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

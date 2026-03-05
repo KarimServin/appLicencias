@@ -2,7 +2,7 @@ package com.municipalidad.licencias.appLicencias.service.serviceImpl;
 
 import com.municipalidad.licencias.appLicencias.modules.gestionarcostos.CostoLicenciaDTO;
 import com.municipalidad.licencias.appLicencias.entities.ClaseLicencia;
-import com.municipalidad.licencias.appLicencias.entities.CostoLicencia;
+import com.municipalidad.licencias.appLicencias.entities.CostoClaseLicencia;
 import com.municipalidad.licencias.appLicencias.repository.CostoLicenciaRepository;
 import com.municipalidad.licencias.appLicencias.service.CostoLicenciaService;
 
@@ -32,7 +32,7 @@ public class CostoLicenciaServiceImpl implements CostoLicenciaService {
             return costoRepository.findByEsCopiaTrue()
                 .stream()
                 .findFirst()
-                .map(CostoLicencia::getCosto)
+                .map(CostoClaseLicencia::getCosto)
                 .orElseThrow(() -> {
                     logger.error("No se encontró costo de copia configurado en la BD");
                     return new IllegalStateException("Costo de copia no configurado.");
@@ -41,7 +41,7 @@ public class CostoLicenciaServiceImpl implements CostoLicenciaService {
 
         return costoRepository
             .findByClaseLicenciaAndVigenciaAndEsCopia(clase, vigencia, false)
-            .map(CostoLicencia::getCosto)
+            .map(CostoClaseLicencia::getCosto)
             .orElseThrow(() -> {
                 logger.error("No se encontró costo para clase={}, vigencia={}", clase, vigencia);
                 return new IllegalStateException(
@@ -68,7 +68,7 @@ public class CostoLicenciaServiceImpl implements CostoLicenciaService {
             throw new IllegalArgumentException("El costo debe ser un valor mayor o igual a cero.");
         }
 
-        CostoLicencia entidad = costoRepository.findById(id)
+        CostoClaseLicencia entidad = costoRepository.findById(id)
             .orElseThrow(() -> {
                 logger.error("Costo con ID {} no encontrado", id);
                 return new IllegalArgumentException("Costo con ID " + id + " no encontrado.");
@@ -76,7 +76,7 @@ public class CostoLicenciaServiceImpl implements CostoLicenciaService {
 
         int costoAnterior = entidad.getCosto();
         entidad.setCosto(nuevoCosto);
-        CostoLicencia guardado = costoRepository.save(entidad);
+        CostoClaseLicencia guardado = costoRepository.save(entidad);
 
         logger.info("Costo actualizado: id={}, clase={}, vigencia={}, esCopia={}, anterior=${}, nuevo=${}",
             id,
@@ -89,7 +89,7 @@ public class CostoLicenciaServiceImpl implements CostoLicenciaService {
         return toDTO(guardado);
     }
 
-    private CostoLicenciaDTO toDTO(CostoLicencia entidad) {
+    private CostoLicenciaDTO toDTO(CostoClaseLicencia entidad) {
         return CostoLicenciaDTO.builder()
             .id(entidad.getId())
             .claseLicencia(entidad.getClaseLicencia())

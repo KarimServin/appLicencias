@@ -1,7 +1,7 @@
 package com.municipalidad.licencias.appLicencias.repository;
 
 import com.municipalidad.licencias.appLicencias.entities.ClaseLicencia;
-import com.municipalidad.licencias.appLicencias.entities.CostoLicencia;
+import com.municipalidad.licencias.appLicencias.entities.CostoClaseLicencia;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -9,12 +9,12 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface CostoLicenciaRepository extends JpaRepository<CostoLicencia, Long> {
+public interface CostoLicenciaRepository extends JpaRepository<CostoClaseLicencia, Long> {
 
-    Optional<CostoLicencia> findByClaseLicenciaAndVigenciaAndEsCopia(
+    Optional<CostoClaseLicencia> findByClaseLicenciaAndVigenciaAndEsCopia(
         ClaseLicencia clase, Integer vigencia, Boolean esCopia);
 
-    List<CostoLicencia> findByEsCopiaTrue();
+    List<CostoClaseLicencia> findByEsCopiaTrue();
 
-    List<CostoLicencia> findAllByOrderByClaseLicenciaAscVigenciaDesc();
+    List<CostoClaseLicencia> findAllByOrderByClaseLicenciaAscVigenciaDesc();
 }
