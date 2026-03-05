@@ -12,6 +12,7 @@ import com.municipalidad.licencias.appLicencias.auth.AuthService;
 import com.municipalidad.licencias.appLicencias.dto.CredencialesDTO;
 import com.municipalidad.licencias.appLicencias.modules.menu.MenuController;
 import com.municipalidad.licencias.appLicencias.viewforms.Dialogs;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import javax.swing.SwingWorker;
 import org.springframework.beans.factory.ObjectProvider;
@@ -116,11 +117,26 @@ public class LoginController {
     private void onLoginExitoso(UsuarioDTO usuarioDTO) throws ServiceException {
         logger.info("Login exitoso para usuario: {}. Iniciando sesión...", usuarioDTO.getNombreUsuario());
 
-        Dialogs.exito(pantallaLogin, "Login exitoso");
         sessionController.login(usuarioDTO);
+
+        // Pre-resolver el MenuController en background MIENTRAS el usuario ve el diálogo
+        CompletableFuture<MenuController> menuFuture = CompletableFuture.supplyAsync(
+            () -> menuProvider.getObject()
+        );
+
+        // El diálogo es modal: bloquea este hilo hasta que el usuario presione OK
+        Dialogs.exito(pantallaLogin, "Login exitoso");
+
+        // Cuando llega acá, el bean ya debería estar resuelto (o casi)
         pantallaLogin.dispose();
-        menuProvider.getObject().display();
-        
+
+        try {
+            MenuController menu = menuFuture.get(); // Si ya terminó, retorna inmediato
+            menu.display();
+        } catch (Exception e) {
+            logger.error("Error al preparar el menú", e);
+            Dialogs.error(null, "No se pudo abrir el menú.");
+        }
     }  
 
 }

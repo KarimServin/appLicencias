@@ -10,6 +10,7 @@ public class ModificarTitularView extends javax.swing.JFrame {
 
     public ModificarTitularView() {
         initComponents();
+        this.setLocationRelativeTo(null);  
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         deshabilitarEdicion();
     }

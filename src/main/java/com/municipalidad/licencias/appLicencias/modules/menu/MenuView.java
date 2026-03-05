@@ -1,6 +1,5 @@
 package com.municipalidad.licencias.appLicencias.modules.menu;
 
-import com.municipalidad.licencias.appLicencias.service.CostoLicenciaService;
 import java.awt.Toolkit;
 import java.awt.event.ActionListener;
 import javax.swing.JFrame;

@@ -10,6 +10,7 @@ public class EmitirCopiaLicenciaView extends javax.swing.JFrame {
 
     public EmitirCopiaLicenciaView() {
         initComponents();
+        this.setLocationRelativeTo(null);  
         // Por defecto deshabilitados
         emitirCopiaButton.setEnabled(false);
         emitirComprobanteCheckbox.setSelected(true);
