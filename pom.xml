@@ -31,6 +31,11 @@
 		<java.version>21</java.version>
 	</properties>
 	<dependencies>
+                <dependency>
+                        <groupId>com.toedter</groupId>
+                        <artifactId>jcalendar</artifactId>
+                        <version>1.4</version>
+                </dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-data-jpa</artifactId>
@@ -55,6 +60,12 @@
 			<artifactId>lombok</artifactId>
 			<optional>true</optional>
 		</dependency>
+                <!-- Apache POI para generar Excel -->
+                <dependency>
+                    <groupId>org.apache.poi</groupId>
+                    <artifactId>poi-ooxml</artifactId>
+                    <version>5.2.5</version>
+                </dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
@@ -65,6 +76,11 @@
 	  <artifactId>AbsoluteLayout</artifactId>
 	  <version>RELEASE260</version>
 	 </dependency>
+                <dependency>
+    <groupId>com.formdev</groupId>
+    <artifactId>flatlaf</artifactId>
+    <version>3.4</version>
+                </dependency>
                 <dependency>
                        <groupId>org.mapstruct</groupId>
                        <artifactId>mapstruct</artifactId>
@@ -102,13 +118,8 @@
                         <version>${org.mapstruct.version}</version>
                     </path>
 					</annotationProcessorPaths>
-		   <compilerArgs>
-		    <arg>--enable-preview</arg>
-		   </compilerArgs>
 		  </configuration>
 		 </plugin>
-                 
-                 
 		</plugins>
 	</build>
 

@@ -9,6 +9,7 @@ import java.awt.event.ActionListener;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import javax.swing.JFrame;
 
 
 public class AltaTitularView extends javax.swing.JFrame {
@@ -20,7 +21,7 @@ public class AltaTitularView extends javax.swing.JFrame {
         this.pack();
         this.setLocationRelativeTo(null);
         setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource("/img/SantaFeCapital_Logo.png"))); 
-        
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
     }
 
     @SuppressWarnings("unchecked")
@@ -48,10 +49,10 @@ public class AltaTitularView extends javax.swing.JFrame {
         cancelarButton = new javax.swing.JButton();
         telefonoLabel = new javax.swing.JLabel();
         correoLabel = new javax.swing.JLabel();
-        telefonoField = new javax.swing.JFormattedTextField();
         correoField = new javax.swing.JTextField();
         warningLabel = new javax.swing.JLabel();
         numDocField = new javax.swing.JTextField();
+        telefonoField = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setSize(new java.awt.Dimension(596, 350));
@@ -60,7 +61,7 @@ public class AltaTitularView extends javax.swing.JFrame {
 
         fechaNacLabel.setText("Fecha de nacimiento");
 
-        grupoSanguineoCBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "O", "A", "B" }));
+        grupoSanguineoCBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "O", "A", "B", "AB" }));
 
         factorSanguineoCBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "+", "-" }));
 
@@ -68,7 +69,8 @@ public class AltaTitularView extends javax.swing.JFrame {
 
         factorSanLabel.setText("Factor Sanguíneo");
 
-        labelMenuPrincipal.setText("Alta de titular - Sistema de gestión de licencias");
+        labelMenuPrincipal.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        labelMenuPrincipal.setText("ALTA DE TITULAR");
 
         labelLogoSF.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/Santa_Fe_Capital (1).png"))); // NOI18N
 
@@ -78,17 +80,20 @@ public class AltaTitularView extends javax.swing.JFrame {
             panelEncabezadoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panelEncabezadoLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(labelLogoSF)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 200, Short.MAX_VALUE)
                 .addComponent(labelMenuPrincipal)
-                .addGap(23, 23, 23))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 306, Short.MAX_VALUE)
+                .addComponent(labelLogoSF)
+                .addContainerGap())
         );
         panelEncabezadoLayout.setVerticalGroup(
             panelEncabezadoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(labelLogoSF, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelEncabezadoLayout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(labelMenuPrincipal, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addGroup(panelEncabezadoLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(panelEncabezadoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelEncabezadoLayout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(labelMenuPrincipal, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(labelLogoSF, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
 
@@ -118,55 +123,53 @@ public class AltaTitularView extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(panelEncabezado, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(warningLabel)
+                        .addGroup(layout.createSequentialGroup()
+                            .addGap(2, 2, 2)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addGroup(layout.createSequentialGroup()
+                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addComponent(apellidoLabel)
+                                        .addComponent(numDniLabel)
+                                        .addComponent(nombreLabel)
+                                        .addComponent(grupoSanLabel)
+                                        .addComponent(factorSanLabel)
+                                        .addComponent(donanteCheckBox))
+                                    .addGap(28, 28, 28)
+                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addComponent(grupoSanguineoCBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(factorSanguineoCBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGroup(layout.createSequentialGroup()
+                                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                                .addComponent(apellidoField, javax.swing.GroupLayout.DEFAULT_SIZE, 157, Short.MAX_VALUE)
+                                                .addComponent(nombreField)
+                                                .addComponent(numDocField))
+                                            .addGap(18, 18, 18)
+                                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                .addComponent(correoLabel)
+                                                .addComponent(telefonoLabel)
+                                                .addComponent(domicilioLabel)))))
+                                .addGroup(layout.createSequentialGroup()
+                                    .addComponent(fechaNacLabel)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                    .addComponent(fechaNacField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addGap(18, 18, 18)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addComponent(correoField, javax.swing.GroupLayout.DEFAULT_SIZE, 176, Short.MAX_VALUE)
+                                .addComponent(domicilioField)
+                                .addComponent(telefonoField)))))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addGap(0, 0, Short.MAX_VALUE)
                 .addComponent(cancelarButton)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(aceptarButton)
                 .addGap(8, 8, 8))
-            .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(panelEncabezado, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                        .addGap(17, 17, 17)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(warningLabel)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(2, 2, 2)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addComponent(apellidoLabel)
-                                            .addComponent(numDniLabel)
-                                            .addComponent(nombreLabel)
-                                            .addComponent(grupoSanLabel)
-                                            .addComponent(factorSanLabel)
-                                            .addComponent(donanteCheckBox))
-                                        .addGap(28, 28, 28)
-                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addComponent(grupoSanguineoCBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addComponent(factorSanguineoCBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addGroup(layout.createSequentialGroup()
-                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                                    .addComponent(apellidoField, javax.swing.GroupLayout.DEFAULT_SIZE, 157, Short.MAX_VALUE)
-                                                    .addComponent(nombreField)
-                                                    .addComponent(numDocField))
-                                                .addGap(18, 18, 18)
-                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                                    .addComponent(correoLabel)
-                                                    .addComponent(telefonoLabel)
-                                                    .addComponent(domicilioLabel)))))
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addComponent(fechaNacLabel)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(fechaNacField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                .addGap(18, 18, 18)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(telefonoField, javax.swing.GroupLayout.DEFAULT_SIZE, 176, Short.MAX_VALUE)
-                                    .addComponent(correoField, javax.swing.GroupLayout.DEFAULT_SIZE, 176, Short.MAX_VALUE)
-                                    .addComponent(domicilioField))))
-                        .addGap(8, 8, 8)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -176,8 +179,8 @@ public class AltaTitularView extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(numDniLabel)
                     .addComponent(telefonoLabel)
-                    .addComponent(telefonoField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(numDocField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(numDocField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(telefonoField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(apellidoField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -207,7 +210,7 @@ public class AltaTitularView extends javax.swing.JFrame {
                 .addComponent(donanteCheckBox)
                 .addGap(14, 14, 14)
                 .addComponent(warningLabel)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 18, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(cancelarButton)
                     .addComponent(aceptarButton))
@@ -253,11 +256,17 @@ public class AltaTitularView extends javax.swing.JFrame {
     }
     
     private Long extractNumericValue(String text) {
-        return Long.valueOf(text.replaceAll("[^\\d]", ""));
+        if (text == null) return null;
+        String cleaned = text.trim().replaceAll("[^\\d]", "");
+        if (cleaned.isEmpty()) return null; // ✅ campo vacío → null, el validator lo maneja
+        return Long.valueOf(cleaned);
     }
 
     private LocalDate parseDate(String dateText) {
-        return LocalDate.parse(dateText, DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+        if (dateText == null) return null;
+        String trimmed = dateText.trim();
+        if (trimmed.isEmpty() || trimmed.equalsIgnoreCase("dd/mm/aaaa")) return null; // ✅ placeholder → null
+        return LocalDate.parse(trimmed, DateTimeFormatter.ofPattern("dd/MM/yyyy"));
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -283,7 +292,7 @@ public class AltaTitularView extends javax.swing.JFrame {
     private javax.swing.JLabel numDniLabel;
     private javax.swing.JTextField numDocField;
     private javax.swing.JPanel panelEncabezado;
-    private javax.swing.JFormattedTextField telefonoField;
+    private javax.swing.JTextField telefonoField;
     private javax.swing.JLabel telefonoLabel;
     private javax.swing.JLabel warningLabel;
     // End of variables declaration//GEN-END:variables

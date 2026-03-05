@@ -32,7 +32,7 @@ public class UserSession implements SessionInfo {
 
     @Override
     public String getNombreUsuarioActual() {
-        return usuario.getUsuario();
+        return usuario.getNombreUsuario();
     }
 
     @Override

@@ -1,19 +1,15 @@
 package com.municipalidad.licencias.appLicencias.factory;
 
-
-import com.municipalidad.licencias.appLicencias.auth.AuthService;
 import com.municipalidad.licencias.appLicencias.modules.altatitular.AltaTitularController;
 import com.municipalidad.licencias.appLicencias.modules.altausuario.AltaUsuarioController;
 import com.municipalidad.licencias.appLicencias.modules.emitirlicencia.EmitirLicenciaController;
-import com.municipalidad.licencias.appLicencias.controller.ListarLicenciasExpiradasController;
-import com.municipalidad.licencias.appLicencias.controller.ModificarTitularController;
-import com.municipalidad.licencias.appLicencias.controller.ModificarUsuarioController;
+import com.municipalidad.licencias.appLicencias.modules.consultarlicencias.ConsultarLicenciasController;
 import com.municipalidad.licencias.appLicencias.modules.emitircopialicencia.EmitirCopiaLicenciaController;
-import com.municipalidad.licencias.appLicencias.modules.listarlicenciasvigentes.ListarLicenciasVigentesController;
+import com.municipalidad.licencias.appLicencias.modules.gestionarcostos.GestionarCostosController;
+import com.municipalidad.licencias.appLicencias.modules.gestionarusuarios.EditarUsuarioController;
+import com.municipalidad.licencias.appLicencias.modules.modificartitular.ModificarTitularController;
 import com.municipalidad.licencias.appLicencias.session.SessionController;
-import com.municipalidad.licencias.appLicencias.modules.login.LoginController;
-import com.municipalidad.licencias.appLicencias.modules.menu.MenuController;
-import com.municipalidad.licencias.appLicencias.modules.renovarlicencia.RenovarLicenciaController;
+import com.municipalidad.licencias.appLicencias.modules.gestionarusuarios.GestionarUsuariosController;
 import com.municipalidad.licencias.appLicencias.service.*;
 import com.municipalidad.licencias.appLicencias.session.SessionInfo;
 import com.municipalidad.licencias.appLicencias.validation.TitularValidator;
@@ -30,26 +26,35 @@ public class ControllerFactory {
     private final LicenciaService licenciaService;
     private final TitularService titularService;
     private final UsuarioService usuarioService;
-    private final AuthService authService;
-    private final SessionController sessionController;
     private final TitularValidator titularValidator;
-    
+    private final LicenciaConsultaService licenciaConsultaService;
+    private final ComprobanteService comprobanteService;
+    private final PrintService printService;
+    private final ExcelExportService excelExportService;
+    private final CostoLicenciaService costoLicenciaService;
     @Autowired
     public ControllerFactory (
             LicenciaService licenciaService,
             TitularService titularService,
             UsuarioService usuarioService,
-            AuthService authService,
             SessionController sessionController,
             SessionInfo sessionInfo,
-            TitularValidator titularValidator) {
+            TitularValidator titularValidator,
+            LicenciaConsultaService licenciaConsultaService,
+            ComprobanteService comprobanteService,
+            PrintService printService,
+            ExcelExportService excelExportService,
+            CostoLicenciaService costoLicenciaService) {
         
         this.licenciaService = licenciaService;
         this.titularService = titularService;
         this.usuarioService = usuarioService;
-        this.authService = authService;
-        this.sessionController = sessionController;
         this.titularValidator = titularValidator;
+        this.licenciaConsultaService = licenciaConsultaService;
+        this.comprobanteService = comprobanteService;
+        this.printService = printService;
+        this.excelExportService = excelExportService;
+        this.costoLicenciaService = costoLicenciaService;
     }
     
    
@@ -63,36 +68,31 @@ public class ControllerFactory {
     }
 
     public EmitirLicenciaController createEmitirLicenciaController() {
-        return new EmitirLicenciaController(titularService, licenciaService);
+        return new EmitirLicenciaController(titularService, licenciaService,comprobanteService,printService);
     } 
 
-
-    public ListarLicenciasExpiradasController createListarLicenciasExpiradasController() {
-        return new ListarLicenciasExpiradasController();
+    public ModificarTitularController createModificarTitularController() {
+        return new ModificarTitularController(titularService,licenciaService);
     }
 
-    public ListarLicenciasVigentesController createListarLicenciasVigentesController() {
-        return new ListarLicenciasVigentesController();
+    public ConsultarLicenciasController createConsultarLicenciasController() {
+        return new ConsultarLicenciasController(licenciaConsultaService,excelExportService);
     }
 
-    public ModificarUsuarioController createModificarUsuarioController() {
-        return new ModificarUsuarioController();
+
+    public GestionarUsuariosController createModificarUsuarioController() {
+        return new GestionarUsuariosController(usuarioService,createEditarUsuarioController());
+    }
+    
+    private EditarUsuarioController createEditarUsuarioController() {
+        return new EditarUsuarioController(usuarioService);
     }
 
     public EmitirCopiaLicenciaController createEmitirCopiaLicenciaController() {
-        return new EmitirCopiaLicenciaController(licenciaService, titularService);
+        return new EmitirCopiaLicenciaController(licenciaService, titularService,comprobanteService,printService);
     }
 
-    public RenovarLicenciaController createRenovarLicenciaController() {
-        return new RenovarLicenciaController();
+    public GestionarCostosController createGestionarCostosController() {
+        return new GestionarCostosController(costoLicenciaService);
     }
-    
-    public ModificarTitularController createModificarTitularController() {
-        return new ModificarTitularController();
-    }
-
-
-
-    
-    
 }

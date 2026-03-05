@@ -52,33 +52,20 @@ public class PantallaLogin extends javax.swing.JFrame {
         jPanel1.setBackground(new java.awt.Color(239, 239, 239));
         jPanel1.setForeground(new java.awt.Color(221, 221, 221));
 
-        txtUsuario.setFont(new java.awt.Font("Lucida Sans", 0, 12)); // NOI18N
-        txtUsuario.setForeground(new java.awt.Color(153, 153, 153));
         txtUsuario.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         txtUsuario.setText("Usuario");
 
-        txtContrasenia.setFont(new java.awt.Font("Lucida Sans", 0, 12)); // NOI18N
-        txtContrasenia.setForeground(new java.awt.Color(153, 153, 153));
         txtContrasenia.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         txtContrasenia.setText("Contraseña");
 
-        campoPassword.setBorder(javax.swing.BorderFactory.createMatteBorder(1, 1, 1, 1, new java.awt.Color(153, 153, 153)));
-
-        campoUsuario.setBorder(javax.swing.BorderFactory.createMatteBorder(1, 1, 1, 1, new java.awt.Color(153, 153, 153)));
-
         btnIngresar.setBackground(new java.awt.Color(71, 197, 155));
-        btnIngresar.setFont(new java.awt.Font("Lucida Sans", 1, 12)); // NOI18N
         btnIngresar.setText("Ingresar");
 
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/Santa_Fe_Capital (1).png"))); // NOI18N
 
-        txtTitulo.setFont(new java.awt.Font("Microsoft JhengHei", 0, 12)); // NOI18N
-        txtTitulo.setForeground(new java.awt.Color(102, 102, 102));
         txtTitulo.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         txtTitulo.setText("Sistema de Gestión de Licencias de Conducir");
 
-        txtTitulo1.setFont(new java.awt.Font("Microsoft JhengHei", 0, 12)); // NOI18N
-        txtTitulo1.setForeground(new java.awt.Color(102, 102, 102));
         txtTitulo1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         txtTitulo1.setText("Municipalidad de Santa Fe");
 

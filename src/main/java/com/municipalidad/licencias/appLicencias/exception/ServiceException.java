@@ -1,7 +1,7 @@
 package com.municipalidad.licencias.appLicencias.exception;
 
 
-public class ServiceException extends Exception {
+public class ServiceException extends RuntimeException {
 
 
     public ServiceException() {

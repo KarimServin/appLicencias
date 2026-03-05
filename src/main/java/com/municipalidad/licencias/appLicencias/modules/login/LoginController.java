@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
 import com.municipalidad.licencias.appLicencias.auth.AuthService;
 import com.municipalidad.licencias.appLicencias.dto.CredencialesDTO;
 import com.municipalidad.licencias.appLicencias.modules.menu.MenuController;
-import com.municipalidad.licencias.appLicencias.view.Dialogs;
+import com.municipalidad.licencias.appLicencias.viewforms.Dialogs;
 import java.util.concurrent.ExecutionException;
 import javax.swing.SwingWorker;
 import org.springframework.beans.factory.ObjectProvider;
@@ -38,7 +38,6 @@ public class LoginController {
     public void display() {
 
         System.out.println("LoginController.display() instance=" + System.identityHashCode(this));
-        new Exception("stacktrace display()").printStackTrace();
         logger.info("Iniciando aplicación de Licencias Municipales");
         
         SwingUtilities.invokeLater(() -> {
@@ -72,7 +71,7 @@ public class LoginController {
                 protected void done() {
                     // ✅ Esto corre EN el EDT
                     try {
-                        UsuarioDTO usuarioDTO = get(); // puede tirar ExecutionException o InterruptedException
+                        UsuarioDTO usuarioDTO = get(); 
                         onLoginExitoso(usuarioDTO);
 
                     } catch (InterruptedException e) {
@@ -115,13 +114,13 @@ public class LoginController {
     
 
     private void onLoginExitoso(UsuarioDTO usuarioDTO) throws ServiceException {
-        logger.info("Login exitoso para usuario: {}. Iniciando sesión...", usuarioDTO.getUsuario());
+        logger.info("Login exitoso para usuario: {}. Iniciando sesión...", usuarioDTO.getNombreUsuario());
 
         Dialogs.exito(pantallaLogin, "Login exitoso");
         sessionController.login(usuarioDTO);
         pantallaLogin.dispose();
         menuProvider.getObject().display();
         
-    }
+    }  
 
 }

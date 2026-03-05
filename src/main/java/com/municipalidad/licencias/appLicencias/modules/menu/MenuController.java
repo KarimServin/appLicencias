@@ -3,18 +3,16 @@ package com.municipalidad.licencias.appLicencias.modules.menu;
 import com.municipalidad.licencias.appLicencias.modules.altatitular.AltaTitularController;
 import com.municipalidad.licencias.appLicencias.modules.altausuario.AltaUsuarioController;
 import com.municipalidad.licencias.appLicencias.modules.emitirlicencia.EmitirLicenciaController;
-import com.municipalidad.licencias.appLicencias.controller.ListarLicenciasExpiradasController;
-import com.municipalidad.licencias.appLicencias.controller.ModificarTitularController;
-import com.municipalidad.licencias.appLicencias.controller.ModificarUsuarioController;
+import com.municipalidad.licencias.appLicencias.modules.gestionarusuarios.GestionarUsuariosController;
 import com.municipalidad.licencias.appLicencias.factory.ControllerFactory;
+import com.municipalidad.licencias.appLicencias.modules.consultarlicencias.ConsultarLicenciasController;
 import com.municipalidad.licencias.appLicencias.modules.emitircopialicencia.EmitirCopiaLicenciaController;
-import com.municipalidad.licencias.appLicencias.modules.listarlicenciasvigentes.ListarLicenciasVigentesController;
-import com.municipalidad.licencias.appLicencias.modules.renovarlicencia.RenovarLicenciaController;
+import com.municipalidad.licencias.appLicencias.modules.gestionarcostos.GestionarCostosController;
+import com.municipalidad.licencias.appLicencias.modules.modificartitular.ModificarTitularController;
 import com.municipalidad.licencias.appLicencias.session.SessionController;
 import javax.swing.SwingUtilities;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-
 
 @Component
 public class MenuController {
@@ -24,7 +22,6 @@ public class MenuController {
     private final ControllerFactory controllerFactory;
     
     private MenuView menuView;
-    
     
     @Autowired
     public MenuController(SessionController sessionController, ControllerFactory controllerFactory) {
@@ -36,7 +33,6 @@ public class MenuController {
     public void display() {
         SwingUtilities.invokeLater(() -> {
             this.menuView = new MenuView();
-        
             menuView.setLabelBienvenida(sessionController.getNombreUsuarioActual());
             verificarPermisos();
             setListeners();
@@ -46,7 +42,7 @@ public class MenuController {
     
     private void verificarPermisos() {
         if(!sessionController.esSuperusuario()) {
-            menuView.ocultarBotones();
+            menuView.desactivarBotones();
         } 
     }
     
@@ -55,13 +51,13 @@ public class MenuController {
             menuView.setEmitirNuevaLicenciaAction(e -> mostrarPantallaEmitirLicencia());
             menuView.setEmitirCopiaLicenciaAction(e -> mostrarPantallaEmitirCopiaLicencia());
             menuView.setAltaTitularAction(e -> mostrarPantallaAltaTitular());
-            menuView.setListarLicenciasVigentesAction(e -> mostrarPantallaLicenciasVigentes());
-            menuView.setRenovarLicenciaAction(e -> mostrarPantallaRenovarLicencia());
             menuView.setModificarDatosTitularAction(e -> mostrarPantallaModificarDatosTitular());
-            menuView.setLicExpiradasAction(e -> mostrarPantallaLicenciasExpiradas());
+            menuView.setConsultarLicenciasAction(e -> mostrarPantallaConsultarLicencias());
             menuView.setAltaUsuarioAction(e -> mostrarPantallaAltaUsuario());
             menuView.setModificarDatosUsuarioAction(e -> mostrarPantallaModificarUsuario());
+            menuView.setGestionarCostosAction(e -> mostrarPantallaGestionarCostos());
             menuView.setSalirAction(e -> salir());
+            
         
     }
     
@@ -74,21 +70,20 @@ public class MenuController {
         AltaTitularController controller = controllerFactory.createAltaTitularController();
         controller.display();
     }
-
-    private void mostrarPantallaLicenciasVigentes() {
-        ListarLicenciasVigentesController controller = controllerFactory.createListarLicenciasVigentesController();
-        controller.display();
-    }
-
-    private void mostrarPantallaLicenciasExpiradas() {
-        ListarLicenciasExpiradasController controller = controllerFactory.createListarLicenciasExpiradasController();
-        controller.display();
-    }
-
+    
     private void mostrarPantallaModificarDatosTitular() {
         ModificarTitularController controller = controllerFactory.createModificarTitularController();
         controller.display();
+    
     }
+
+
+
+    private void mostrarPantallaConsultarLicencias() {
+        ConsultarLicenciasController controller = controllerFactory.createConsultarLicenciasController();
+        controller.display();
+    }
+
 
     private void mostrarPantallaAltaUsuario() {
         AltaUsuarioController controller = controllerFactory.createAltaUsuarioController();
@@ -96,7 +91,7 @@ public class MenuController {
     }
 
     private void mostrarPantallaModificarUsuario() {
-        ModificarUsuarioController controller = controllerFactory.createModificarUsuarioController();
+        GestionarUsuariosController controller = controllerFactory.createModificarUsuarioController();
         controller.display();
     }
 
@@ -104,9 +99,9 @@ public class MenuController {
         EmitirCopiaLicenciaController controller = controllerFactory.createEmitirCopiaLicenciaController();
         controller.display();
     }
-
-    private void mostrarPantallaRenovarLicencia() {
-        RenovarLicenciaController controller = controllerFactory.createRenovarLicenciaController();
+    
+    private void mostrarPantallaGestionarCostos() {
+        GestionarCostosController controller = controllerFactory.createGestionarCostosController();
         controller.display();
     }
 
@@ -115,5 +110,4 @@ public class MenuController {
         System.exit(0);
     }
     
-
 }
