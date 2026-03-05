@@ -2,47 +2,62 @@ package com.municipalidad.licencias.appLicencias.modules.consultarlicencias;
 
 import com.municipalidad.licencias.appLicencias.dto.LicenciaDTO;
 import com.municipalidad.licencias.appLicencias.entities.ClaseLicencia;
+import com.municipalidad.licencias.appLicencias.service.ExcelExportService;
 import com.municipalidad.licencias.appLicencias.service.LicenciaConsultaService;
-import com.municipalidad.licencias.appLicencias.view.Dialogs;
+import com.municipalidad.licencias.appLicencias.viewforms.Dialogs;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Component;
+import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
+import javax.swing.SwingUtilities;
+import javax.swing.SwingWorker;
+import javax.swing.filechooser.FileNameExtensionFilter;
+import java.awt.Cursor;
+import java.awt.Desktop;
+import java.io.File;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Set;
-import javax.swing.SwingUtilities;
-import org.springframework.stereotype.Component;
-
-
 
 @Component
 public class ConsultarLicenciasController {
 
+    private static final Logger logger = LoggerFactory.getLogger(ConsultarLicenciasController.class);
+
     private final LicenciaConsultaService consultaService;
+    private final ExcelExportService excelExportService;
 
     private ConsultarLicenciasView view;
-
-    // cache simple para el botón “Emitir Reporte”
     private List<LicenciaDTO> ultimaBusqueda = List.of();
 
-    public ConsultarLicenciasController(LicenciaConsultaService consultaService) {
+    public ConsultarLicenciasController(LicenciaConsultaService consultaService,
+                                        ExcelExportService excelExportService) {
         this.consultaService = consultaService;
+        this.excelExportService = excelExportService;
     }
 
+    // ══════════════════════════════════════════════════════════════
+    //  INICIALIZACIÓN
+    // ══════════════════════════════════════════════════════════════
+
     public void display() {
+        logger.info("Abriendo vista de consulta de licencias");
         SwingUtilities.invokeLater(() -> {
             view = new ConsultarLicenciasView();
             configurarCombosIniciales();
             setListeners();
             view.setVisible(true);
+            logger.debug("Vista de consulta de licencias visible");
         });
     }
 
     private void configurarCombosIniciales() {
-        // Texto de UI (lo mapeamos a enum en parseEstado)
-        view.setEstados(new String[] { "Vigentes", "Expiradas", "Vencen pronto", "Todas" });
-        view.setVencenEnOpciones(new String[] { "7 días", "15 días", "30 días", "60 días" });
-
-        // Clases: simple. Si preferís “Todas” como opción, se agrega.
-        view.setClases(new String[] { "A", "B", "C", "D", "E", "F", "G" });
-
+        view.setEstados(new String[]{"Vigentes", "Expiradas", "Vencen pronto", "Todas"});
+        view.setVencenEnOpciones(new String[]{"7 días", "15 días", "30 días", "60 días"});
+        view.setClases(new String[]{"A", "B", "C", "D", "E", "F", "G"});
         view.setBotonReporteEnabled(false);
     }
 
@@ -53,13 +68,30 @@ public class ConsultarLicenciasController {
         view.onEmitirReporte(e -> emitirReporte());
     }
 
+    // ══════════════════════════════════════════════════════════════
+    //  BÚSQUEDA Y FILTROS
+    // ══════════════════════════════════════════════════════════════
+
     private void aplicarFiltros() {
+        logger.info("Aplicando filtros de consulta");
+
         try {
             ConsultarLicenciasFiltroDTO filtro = construirFiltroDesdeView();
             validarFiltro(filtro);
 
+            logger.debug("Filtro construido: estado={}, clase={}, dni={}, emisiónDesde={}, emisiónHasta={}, vencDesde={}, vencHasta={}",
+                filtro.getEstado(),
+                filtro.getClase(),
+                filtro.getDniTitular(),
+                filtro.getEmisionDesde(),
+                filtro.getEmisionHasta(),
+                filtro.getVencimientoDesde(),
+                filtro.getVencimientoHasta());
+
             List<LicenciaDTO> resultados = consultaService.buscar(filtro);
             ultimaBusqueda = resultados;
+
+            logger.info("Consulta finalizada: {} resultado(s) encontrado(s)", resultados.size());
 
             cargarTabla(resultados);
             view.setBotonReporteEnabled(!resultados.isEmpty());
@@ -69,8 +101,10 @@ public class ConsultarLicenciasController {
             }
 
         } catch (IllegalArgumentException ex) {
+            logger.warn("Filtro inválido: {}", ex.getMessage());
             Dialogs.error(view, ex.getMessage());
         } catch (Exception ex) {
+            logger.error("Error inesperado al consultar licencias", ex);
             Dialogs.error(view, "Ocurrió un error al consultar licencias.");
         }
     }
@@ -97,16 +131,13 @@ public class ConsultarLicenciasController {
         if (f.getEstado() == null) {
             throw new IllegalArgumentException("Debe seleccionar un estado.");
         }
-        if (f.getEstado() == ConsultarLicenciasFiltroDTO.Estado.VENCEN_PRONTO && f.getVencenEnDias() == null) {
+        if (f.getEstado() == ConsultarLicenciasFiltroDTO.Estado.VENCEN_PRONTO
+                && f.getVencenEnDias() == null) {
             throw new IllegalArgumentException("Seleccione en cuántos días vencen (7, 15, 30 o 60).");
         }
 
-        // Rangos: validación básica (desde <= hasta)
         validarRango("Emisión", f.getEmisionDesde(), f.getEmisionHasta());
         validarRango("Vencimiento", f.getVencimientoDesde(), f.getVencimientoHasta());
-
-        // Regla UX: si puso “Vencen pronto”, no tiene sentido además “vencimientoHasta” muy lejano
-        // (lo dejamos permitido, el service intersecta).
     }
 
     private void validarRango(String nombre, LocalDate desde, LocalDate hasta) {
@@ -115,25 +146,143 @@ public class ConsultarLicenciasController {
         }
     }
 
+    // ══════════════════════════════════════════════════════════════
+    //  TABLA
+    // ══════════════════════════════════════════════════════════════
+
     private void cargarTabla(List<LicenciaDTO> lista) {
         view.limpiarTabla();
 
         for (LicenciaDTO dto : lista) {
-            String titular = String.valueOf(dto.getTitularDni()); // si después tenés nombre+apellido, lo cambiás
+            String titular = String.valueOf(dto.getTitularDni());
             Long dni = dto.getTitularDni();
 
-            // ahora hay Set de clases en tu LicenciaDTO (refactor reciente)
-            Set<?> clases = (Set<?>) dto.getClases();
+            Set<?> clases = dto.getClases();
             String clasesTexto = (clases == null || clases.isEmpty())
                     ? "-"
                     : String.join(", ", dto.getClases().stream().map(Enum::name).toList());
 
-            // la tabla del diseño dice "Fecha Expiración" (equivale a vencimiento)
             view.agregarFilaTabla(titular, dni, clasesTexto, dto.getFechaVencimiento());
+        }
+
+        logger.debug("Tabla cargada con {} fila(s)", lista.size());
+    }
+
+    // ══════════════════════════════════════════════════════════════
+    //  REPORTE EXCEL
+    // ══════════════════════════════════════════════════════════════
+
+    private void emitirReporte() {
+        if (ultimaBusqueda == null || ultimaBusqueda.isEmpty()) {
+            logger.warn("Intento de emitir reporte sin datos");
+            Dialogs.info(view, "No hay datos para emitir reporte. Aplique filtros primero.");
+            return;
+        }
+
+        logger.info("Iniciando exportación a Excel ({} registros)", ultimaBusqueda.size());
+
+        // ── Elegir dónde guardar ──
+        File destino = elegirArchivoDestino();
+        if (destino == null) {
+            logger.debug("Exportación cancelada por el usuario");
+            return;
+        }
+
+        logger.info("Destino seleccionado: {}", destino.getAbsolutePath());
+
+        // ── Generar en background ──
+        final File archivoFinal = destino;
+
+        view.setBotonReporteEnabled(false);
+        view.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+
+        new SwingWorker<File, Void>() {
+            @Override
+            protected File doInBackground() throws Exception {
+                logger.debug("SwingWorker: generando Excel en hilo background");
+                return excelExportService.exportarLicencias(ultimaBusqueda, archivoFinal);
+            }
+
+            @Override
+            protected void done() {
+                view.setCursor(Cursor.getDefaultCursor());
+                view.setBotonReporteEnabled(true);
+
+                try {
+                    File archivo = get();
+                    logger.info("Reporte generado exitosamente: {} ({} bytes)",
+                        archivo.getAbsolutePath(), archivo.length());
+
+                    preguntarAbrirArchivo(archivo);
+
+                } catch (Exception e) {
+                    logger.error("Error al exportar a Excel", e);
+                    Dialogs.error(view, "Error al exportar: " + e.getMessage());
+                }
+            }
+        }.execute();
+    }
+
+    private File elegirArchivoDestino() {
+        JFileChooser chooser = new JFileChooser();
+        chooser.setDialogTitle("Guardar reporte de licencias");
+
+        String nombreSugerido = "Licencias_" + LocalDateTime.now()
+            .format(DateTimeFormatter.ofPattern("yyyyMMdd_HHmmss")) + ".xlsx";
+        chooser.setSelectedFile(new File(nombreSugerido));
+        chooser.setFileFilter(new FileNameExtensionFilter("Excel (*.xlsx)", "xlsx"));
+
+        int resultado = chooser.showSaveDialog(view);
+        if (resultado != JFileChooser.APPROVE_OPTION) return null;
+
+        File destino = chooser.getSelectedFile();
+
+        // Asegurar extensión .xlsx
+        if (!destino.getName().toLowerCase().endsWith(".xlsx")) {
+            destino = new File(destino.getAbsolutePath() + ".xlsx");
+        }
+
+        // Verificar si ya existe
+        if (destino.exists()) {
+            int confirmar = JOptionPane.showConfirmDialog(view,
+                "El archivo ya existe. ¿Desea reemplazarlo?",
+                "Archivo existente",
+                JOptionPane.YES_NO_OPTION,
+                JOptionPane.WARNING_MESSAGE);
+            if (confirmar != JOptionPane.YES_OPTION) return null;
+        }
+
+        return destino;
+    }
+
+    private void preguntarAbrirArchivo(File archivo) {
+        int opcion = JOptionPane.showConfirmDialog(view,
+            "Reporte generado exitosamente.\n\n"
+            + "Archivo: " + archivo.getName() + "\n"
+            + "Ubicación: " + archivo.getParent() + "\n\n"
+            + "¿Desea abrir el archivo?",
+            "Exportar a Excel",
+            JOptionPane.YES_NO_OPTION,
+            JOptionPane.INFORMATION_MESSAGE);
+
+        if (opcion == JOptionPane.YES_OPTION) {
+            try {
+                Desktop.getDesktop().open(archivo);
+                logger.debug("Archivo abierto por el usuario: {}", archivo.getName());
+            } catch (Exception e) {
+                logger.error("No se pudo abrir el archivo: {}", archivo.getAbsolutePath(), e);
+                Dialogs.error(view, "No se pudo abrir el archivo. Ábralo manualmente desde:\n"
+                    + archivo.getAbsolutePath());
+            }
         }
     }
 
+    // ══════════════════════════════════════════════════════════════
+    //  LIMPIAR Y CERRAR
+    // ══════════════════════════════════════════════════════════════
+
     private void limpiar() {
+        logger.debug("Limpiando filtros y resultados");
         view.limpiarFiltros();
         view.limpiarTabla();
         view.setBotonReporteEnabled(false);
@@ -141,21 +290,13 @@ public class ConsultarLicenciasController {
     }
 
     private void cerrar() {
+        logger.info("Cerrando vista de consulta de licencias");
         view.dispose();
     }
 
-    private void emitirReporte() {
-        if (ultimaBusqueda == null || ultimaBusqueda.isEmpty()) {
-            Dialogs.info(view, "No hay datos para emitir reporte. Aplique filtros primero.");
-            return;
-        }
-        // Stub: lo implementamos después (CSV o PDF)
-        Dialogs.info(view, "Reporte: pendiente de implementación (CSV/PDF).");
-    }
-
-    // =========================
-    // Parsers (robustos)
-    // =========================
+    // ══════════════════════════════════════════════════════════════
+    //  PARSERS
+    // ══════════════════════════════════════════════════════════════
 
     private ConsultarLicenciasFiltroDTO.Estado parseEstado(String s) {
         if (s == null) return null;
@@ -171,7 +312,6 @@ public class ConsultarLicenciasController {
 
     private Integer parseVencenEnDias(String s) {
         if (s == null || s.isBlank()) return null;
-        // formatos esperados: "7 días", "15 días"...
         String digits = s.replaceAll("[^0-9]", "");
         if (digits.isBlank()) return null;
         int n = Integer.parseInt(digits);

@@ -2,6 +2,7 @@ package com.municipalidad.licencias.appLicencias.modules.menu;
 
 import java.awt.Toolkit;
 import java.awt.event.ActionListener;
+import javax.swing.JFrame;
 
 
 public class MenuView extends javax.swing.JFrame {
@@ -11,9 +12,10 @@ public class MenuView extends javax.swing.JFrame {
     public MenuView() {
         
         initComponents();
-
+        this.pack();
         setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource("/img/SantaFeCapital_Logo.png")));
         this.setLocationRelativeTo(null);  
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
     }
     
     public void setLabelBienvenida(String texto) {
@@ -24,8 +26,8 @@ public class MenuView extends javax.swing.JFrame {
     
     public void ocultarBotones() {
     
-        btnAltaUsuario.setVisible(false);
-        btnModificarDatosUsuario.setVisible(false);
+        btnAltaUsuario.setEnabled(false);
+        btnModificarDatosUsuario.setEnabled(false);
     }
     
     
@@ -45,16 +47,13 @@ public class MenuView extends javax.swing.JFrame {
         btnConsultarLicencias.addActionListener(listener);
     }
 
-    public void setRenovarLicenciaAction(ActionListener listener) {
-        btnRenovarLicencia.addActionListener(listener);
-    }
-
-    public void setModificarDatosTitularAction(ActionListener listener) {
-        btnModificarDatosTitular.addActionListener(listener);
-    }
 
     public void setAltaUsuarioAction(ActionListener listener) {
         btnAltaUsuario.addActionListener(listener);
+    }
+    
+    public void setModificarDatosTitularAction(ActionListener listener) {
+        btnModificarDatosTitular.addActionListener(listener);
     }
 
     public void setModificarDatosUsuarioAction(ActionListener listener) {
@@ -72,90 +71,63 @@ public class MenuView extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        panelEncabezado = new javax.swing.JPanel();
-        labelMenuPrincipal = new javax.swing.JLabel();
-        labelLogoSF = new javax.swing.JLabel();
-        panelBienvenida = new javax.swing.JPanel();
-        labelBienvenidaNombre = new javax.swing.JLabel();
+        jPanel1 = new javax.swing.JPanel();
         panelOpciones = new javax.swing.JPanel();
-        btnEmitirNuevaLicencia = new javax.swing.JButton();
         btnAltaTitular = new javax.swing.JButton();
-        btnRenovarLicencia = new javax.swing.JButton();
         btnConsultarLicencias = new javax.swing.JButton();
         btnEmitirCopiaLicencia = new javax.swing.JButton();
-        btnModificarDatosTitular = new javax.swing.JButton();
         btnAltaUsuario = new javax.swing.JButton();
         btnModificarDatosUsuario = new javax.swing.JButton();
+        btnEmitirNuevaLicencia = new javax.swing.JButton();
+        btnModificarDatosTitular = new javax.swing.JButton();
         btnSALIR = new javax.swing.JButton();
+        panelBienvenida = new javax.swing.JPanel();
+        panelEncabezado = new javax.swing.JPanel();
+        labelLogoSF = new javax.swing.JLabel();
+        labelMenuPrincipal = new javax.swing.JLabel();
+        labelBienvenidaNombre = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setBackground(new java.awt.Color(255, 255, 255));
 
-        labelMenuPrincipal.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        labelMenuPrincipal.setText("MENU PRINCIPAL - Gestión de Licencias");
-
-        labelLogoSF.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/Santa_Fe_Capital (1).png"))); // NOI18N
-
-        javax.swing.GroupLayout panelEncabezadoLayout = new javax.swing.GroupLayout(panelEncabezado);
-        panelEncabezado.setLayout(panelEncabezadoLayout);
-        panelEncabezadoLayout.setHorizontalGroup(
-            panelEncabezadoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(panelEncabezadoLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(labelMenuPrincipal, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGap(66, 66, 66)
-                .addComponent(labelLogoSF)
-                .addContainerGap())
-        );
-        panelEncabezadoLayout.setVerticalGroup(
-            panelEncabezadoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(labelLogoSF, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 78, Short.MAX_VALUE)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelEncabezadoLayout.createSequentialGroup()
-                .addGap(42, 42, 42)
-                .addComponent(labelMenuPrincipal, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-                .addContainerGap())
-        );
-
-        labelBienvenidaNombre.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        labelBienvenidaNombre.setText("Bienvenido");
-
-        javax.swing.GroupLayout panelBienvenidaLayout = new javax.swing.GroupLayout(panelBienvenida);
-        panelBienvenida.setLayout(panelBienvenidaLayout);
-        panelBienvenidaLayout.setHorizontalGroup(
-            panelBienvenidaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(panelBienvenidaLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(labelBienvenidaNombre)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
-        panelBienvenidaLayout.setVerticalGroup(
-            panelBienvenidaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(panelBienvenidaLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(labelBienvenidaNombre)
-                .addContainerGap(20, Short.MAX_VALUE))
-        );
-
-        btnEmitirNuevaLicencia.setText("Emisión de Licencia");
-
+        btnAltaTitular.setBackground(new java.awt.Color(153, 255, 204));
+        btnAltaTitular.setFont(new java.awt.Font("Microsoft YaHei UI", 1, 18)); // NOI18N
         btnAltaTitular.setText("Alta de Titular");
+        btnAltaTitular.setMaximumSize(new java.awt.Dimension(153, 31));
 
-        btnRenovarLicencia.setText("Renovar Licencia");
+        btnConsultarLicencias.setBackground(new java.awt.Color(153, 255, 204));
+        btnConsultarLicencias.setFont(new java.awt.Font("Microsoft YaHei UI", 1, 18)); // NOI18N
+        btnConsultarLicencias.setText("Consultar licencias");
 
-        btnConsultarLicencias.setText("Consulta/Reporte de licencias");
+        btnEmitirCopiaLicencia.setBackground(new java.awt.Color(153, 255, 204));
+        btnEmitirCopiaLicencia.setFont(new java.awt.Font("Microsoft YaHei UI", 1, 18)); // NOI18N
+        btnEmitirCopiaLicencia.setText("Imprimir copia de licencia");
 
-        btnEmitirCopiaLicencia.setText("Duplicado/Reimpresión de Licencia");
+        btnAltaUsuario.setBackground(new java.awt.Color(153, 255, 204));
+        btnAltaUsuario.setFont(new java.awt.Font("Microsoft YaHei UI", 1, 18)); // NOI18N
+        btnAltaUsuario.setText("Alta de Usuario");
+        btnAltaUsuario.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAltaUsuarioActionPerformed(evt);
+            }
+        });
 
-        btnModificarDatosTitular.setText("Modificar datos de titular existente");
+        btnModificarDatosUsuario.setBackground(new java.awt.Color(153, 255, 204));
+        btnModificarDatosUsuario.setFont(new java.awt.Font("Microsoft YaHei UI", 1, 18)); // NOI18N
+        btnModificarDatosUsuario.setText("Gestionar usuarios existentes");
 
-        btnAltaUsuario.setBackground(new java.awt.Color(0, 204, 153));
-        btnAltaUsuario.setText("Alta Usuario");
+        btnEmitirNuevaLicencia.setBackground(new java.awt.Color(153, 255, 204));
+        btnEmitirNuevaLicencia.setFont(new java.awt.Font("Microsoft YaHei UI", 1, 18)); // NOI18N
+        btnEmitirNuevaLicencia.setText("Emitir licencia");
+        btnEmitirNuevaLicencia.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
 
-        btnModificarDatosUsuario.setBackground(new java.awt.Color(0, 204, 153));
-        btnModificarDatosUsuario.setText("Modificar datos de Usuario");
+        btnModificarDatosTitular.setBackground(new java.awt.Color(153, 255, 204));
+        btnModificarDatosTitular.setFont(new java.awt.Font("Microsoft YaHei UI", 1, 18)); // NOI18N
+        btnModificarDatosTitular.setText("Modificar datos de titular");
 
-        btnSALIR.setBackground(new java.awt.Color(255, 102, 102));
-        btnSALIR.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        btnSALIR.setBackground(new java.awt.Color(255, 204, 204));
+        btnSALIR.setFont(new java.awt.Font("Microsoft YaHei UI", 1, 18)); // NOI18N
+        btnSALIR.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/salida-de-emergencia.png"))); // NOI18N
         btnSALIR.setText("Salir");
 
         javax.swing.GroupLayout panelOpcionesLayout = new javax.swing.GroupLayout(panelOpciones);
@@ -165,79 +137,119 @@ public class MenuView extends javax.swing.JFrame {
             .addGroup(panelOpcionesLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(panelOpcionesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(panelOpcionesLayout.createSequentialGroup()
-                        .addGroup(panelOpcionesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(btnAltaUsuario, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(btnRenovarLicencia, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(btnEmitirNuevaLicencia, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(btnAltaTitular, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 264, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGroup(panelOpcionesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(panelOpcionesLayout.createSequentialGroup()
-                                .addGap(42, 42, 42)
-                                .addGroup(panelOpcionesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(btnModificarDatosTitular, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addGroup(panelOpcionesLayout.createSequentialGroup()
-                                        .addComponent(btnConsultarLicencias, javax.swing.GroupLayout.PREFERRED_SIZE, 283, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addGap(0, 0, Short.MAX_VALUE))))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelOpcionesLayout.createSequentialGroup()
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addGroup(panelOpcionesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(btnEmitirCopiaLicencia, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 283, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(btnModificarDatosUsuario, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 283, javax.swing.GroupLayout.PREFERRED_SIZE)))))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelOpcionesLayout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(btnSALIR, javax.swing.GroupLayout.PREFERRED_SIZE, 283, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                        .addGroup(panelOpcionesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(panelOpcionesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addComponent(btnEmitirCopiaLicencia, javax.swing.GroupLayout.DEFAULT_SIZE, 395, Short.MAX_VALUE)
+                                .addComponent(btnEmitirNuevaLicencia, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addComponent(btnConsultarLicencias, javax.swing.GroupLayout.PREFERRED_SIZE, 395, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(panelOpcionesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(btnAltaTitular, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 395, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnModificarDatosTitular, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 395, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnAltaUsuario, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 395, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(panelOpcionesLayout.createSequentialGroup()
+                        .addComponent(btnModificarDatosUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, 395, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 48, Short.MAX_VALUE)
+                        .addComponent(btnSALIR, javax.swing.GroupLayout.PREFERRED_SIZE, 396, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap())
         );
         panelOpcionesLayout.setVerticalGroup(
             panelOpcionesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panelOpcionesLayout.createSequentialGroup()
                 .addGroup(panelOpcionesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnEmitirNuevaLicencia, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btnEmitirCopiaLicencia, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addGap(38, 38, 38)
+                    .addComponent(btnEmitirNuevaLicencia, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnAltaTitular, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
                 .addGroup(panelOpcionesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnAltaTitular, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btnConsultarLicencias, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addGap(38, 38, 38)
-                .addGroup(panelOpcionesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnRenovarLicencia, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btnModificarDatosTitular, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addGap(34, 34, 34)
-                .addGroup(panelOpcionesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnAltaUsuario, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btnModificarDatosUsuario, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addGap(31, 31, 31)
-                .addComponent(btnSALIR, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGap(26, 26, 26))
+                    .addComponent(btnEmitirCopiaLicencia, javax.swing.GroupLayout.PREFERRED_SIZE, 64, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnModificarDatosTitular, javax.swing.GroupLayout.PREFERRED_SIZE, 64, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(panelOpcionesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(btnConsultarLicencias, javax.swing.GroupLayout.DEFAULT_SIZE, 60, Short.MAX_VALUE)
+                    .addComponent(btnAltaUsuario, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(18, 18, 18)
+                .addGroup(panelOpcionesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(btnModificarDatosUsuario, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnSALIR, javax.swing.GroupLayout.DEFAULT_SIZE, 57, Short.MAX_VALUE))
+                .addContainerGap(11, Short.MAX_VALUE))
         );
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(panelBienvenida, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(panelOpciones, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 21, Short.MAX_VALUE))
-                    .addComponent(panelEncabezado, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap())
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(panelEncabezado, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(panelBienvenida, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(panelOpciones, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
         );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(panelOpciones, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
+        getContentPane().add(jPanel1, java.awt.BorderLayout.CENTER);
+
+        labelLogoSF.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/Santa_Fe_Capital (1).png"))); // NOI18N
+
+        labelMenuPrincipal.setFont(new java.awt.Font("Microsoft YaHei UI", 1, 24)); // NOI18N
+        labelMenuPrincipal.setText("Menú Principal - Sistema de Gestión de Licencias");
+
+        javax.swing.GroupLayout panelEncabezadoLayout = new javax.swing.GroupLayout(panelEncabezado);
+        panelEncabezado.setLayout(panelEncabezadoLayout);
+        panelEncabezadoLayout.setHorizontalGroup(
+            panelEncabezadoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelEncabezadoLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(labelMenuPrincipal, javax.swing.GroupLayout.DEFAULT_SIZE, 711, Short.MAX_VALUE)
+                .addGap(18, 18, 18)
+                .addComponent(labelLogoSF))
+        );
+        panelEncabezadoLayout.setVerticalGroup(
+            panelEncabezadoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelEncabezadoLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(panelEncabezadoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(labelLogoSF)
+                    .addComponent(labelMenuPrincipal))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
+        labelBienvenidaNombre.setFont(new java.awt.Font("Microsoft JhengHei UI", 1, 14)); // NOI18N
+        labelBienvenidaNombre.setText("Ud. se autenticó como ");
+
+        javax.swing.GroupLayout panelBienvenidaLayout = new javax.swing.GroupLayout(panelBienvenida);
+        panelBienvenida.setLayout(panelBienvenidaLayout);
+        panelBienvenidaLayout.setHorizontalGroup(
+            panelBienvenidaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(panelEncabezado, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(panelBienvenidaLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(labelBienvenidaNombre, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+        panelBienvenidaLayout.setVerticalGroup(
+            panelBienvenidaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelBienvenidaLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(panelEncabezado, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(labelBienvenidaNombre)
+                .addContainerGap(12, Short.MAX_VALUE))
+        );
+
+        getContentPane().add(panelBienvenida, java.awt.BorderLayout.PAGE_START);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void btnAltaUsuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAltaUsuarioActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnAltaUsuarioActionPerformed
 
    
 
@@ -249,8 +261,8 @@ public class MenuView extends javax.swing.JFrame {
     private javax.swing.JButton btnEmitirNuevaLicencia;
     private javax.swing.JButton btnModificarDatosTitular;
     private javax.swing.JButton btnModificarDatosUsuario;
-    private javax.swing.JButton btnRenovarLicencia;
     private javax.swing.JButton btnSALIR;
+    private javax.swing.JPanel jPanel1;
     private javax.swing.JLabel labelBienvenidaNombre;
     private javax.swing.JLabel labelLogoSF;
     private javax.swing.JLabel labelMenuPrincipal;

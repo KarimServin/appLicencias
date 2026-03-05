@@ -262,10 +262,12 @@ public class ConsultarLicenciasView extends javax.swing.JFrame {
 
         cerrarButton.setText("Cerrar");
 
+        emitirReporteButton.setBackground(new java.awt.Color(204, 255, 204));
         emitirReporteButton.setText("Emitir Reporte");
 
         limpiarButton.setText("Limpiar");
 
+        aplicarFiltrosButton.setBackground(new java.awt.Color(204, 255, 204));
         aplicarFiltrosButton.setText("Aplicar Filtros");
 
         dniLabel.setText("DNI:");
@@ -446,11 +448,10 @@ public class ConsultarLicenciasView extends javax.swing.JFrame {
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(encabezadoPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(cuerpoCompletoPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(cuerpoCompletoPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
         pack();

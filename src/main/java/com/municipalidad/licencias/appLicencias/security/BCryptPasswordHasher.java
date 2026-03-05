@@ -13,7 +13,7 @@ public class BCryptPasswordHasher implements PasswordHasher {
 
    
     public BCryptPasswordHasher(
-            @Value("${security.password.bcrypt.strength:10}") int strength
+            @Value("${security.password.bcrypt.strength:12}") int strength
     ) {
         this.encoder = new BCryptPasswordEncoder(strength);
     }

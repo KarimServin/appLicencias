@@ -1,4 +1,4 @@
-package com.municipalidad.licencias.appLicencias.view;
+package com.municipalidad.licencias.appLicencias.viewforms;
 
 public final class Dialogs {
     
@@ -27,6 +27,15 @@ public final class Dialogs {
                 message,
                 "Información",
                 javax.swing.JOptionPane.INFORMATION_MESSAGE
+        );
+    }
+    
+    public static void advertencia(java.awt.Component parent, String mensaje) {
+        javax.swing.JOptionPane.showMessageDialog(
+            parent,
+            mensaje,
+            "Advertencia",
+            javax.swing.JOptionPane.WARNING_MESSAGE
         );
     }
 }

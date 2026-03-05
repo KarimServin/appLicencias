@@ -5,9 +5,10 @@ import com.municipalidad.licencias.appLicencias.modules.altausuario.AltaUsuarioC
 import com.municipalidad.licencias.appLicencias.modules.emitirlicencia.EmitirLicenciaController;
 import com.municipalidad.licencias.appLicencias.modules.consultarlicencias.ConsultarLicenciasController;
 import com.municipalidad.licencias.appLicencias.modules.emitircopialicencia.EmitirCopiaLicenciaController;
+import com.municipalidad.licencias.appLicencias.modules.gestionarusuarios.EditarUsuarioController;
 import com.municipalidad.licencias.appLicencias.modules.modificartitular.ModificarTitularController;
 import com.municipalidad.licencias.appLicencias.session.SessionController;
-import com.municipalidad.licencias.appLicencias.modules.modificarusuario.ModificarUsuarioController;
+import com.municipalidad.licencias.appLicencias.modules.gestionarusuarios.GestionarUsuariosController;
 import com.municipalidad.licencias.appLicencias.service.*;
 import com.municipalidad.licencias.appLicencias.session.SessionInfo;
 import com.municipalidad.licencias.appLicencias.validation.TitularValidator;
@@ -26,6 +27,9 @@ public class ControllerFactory {
     private final UsuarioService usuarioService;
     private final TitularValidator titularValidator;
     private final LicenciaConsultaService licenciaConsultaService;
+    private final ComprobanteService comprobanteService;
+    private final PrintService printService;
+    private final ExcelExportService excelExportService;
     @Autowired
     public ControllerFactory (
             LicenciaService licenciaService,
@@ -34,13 +38,19 @@ public class ControllerFactory {
             SessionController sessionController,
             SessionInfo sessionInfo,
             TitularValidator titularValidator,
-            LicenciaConsultaService licenciaConsultaService) {
+            LicenciaConsultaService licenciaConsultaService,
+            ComprobanteService comprobanteService,
+            PrintService printService,
+            ExcelExportService excelExportService) {
         
         this.licenciaService = licenciaService;
         this.titularService = titularService;
         this.usuarioService = usuarioService;
         this.titularValidator = titularValidator;
         this.licenciaConsultaService = licenciaConsultaService;
+        this.comprobanteService = comprobanteService;
+        this.printService = printService;
+        this.excelExportService = excelExportService;
     }
     
    
@@ -54,27 +64,27 @@ public class ControllerFactory {
     }
 
     public EmitirLicenciaController createEmitirLicenciaController() {
-        return new EmitirLicenciaController(titularService, licenciaService);
+        return new EmitirLicenciaController(titularService, licenciaService,comprobanteService,printService);
     } 
 
+    public ModificarTitularController createModificarTitularController() {
+        return new ModificarTitularController(titularService,licenciaService);
+    }
 
     public ConsultarLicenciasController createConsultarLicenciasController() {
-        return new ConsultarLicenciasController(licenciaConsultaService);
+        return new ConsultarLicenciasController(licenciaConsultaService,excelExportService);
     }
 
 
-
-    public ModificarUsuarioController createModificarUsuarioController() {
-        return new ModificarUsuarioController(usuarioService);
+    public GestionarUsuariosController createModificarUsuarioController() {
+        return new GestionarUsuariosController(usuarioService,createEditarUsuarioController());
+    }
+    
+    private EditarUsuarioController createEditarUsuarioController() {
+        return new EditarUsuarioController(usuarioService);
     }
 
     public EmitirCopiaLicenciaController createEmitirCopiaLicenciaController() {
-        return new EmitirCopiaLicenciaController(licenciaService, titularService);
+        return new EmitirCopiaLicenciaController(licenciaService, titularService,comprobanteService,printService);
     }
-
-    
-    public ModificarTitularController createModificarTitularController() {
-        return new ModificarTitularController(titularService);
-    }
-
 }

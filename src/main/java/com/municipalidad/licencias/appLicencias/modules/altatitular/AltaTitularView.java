@@ -9,6 +9,7 @@ import java.awt.event.ActionListener;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import javax.swing.JFrame;
 
 
 public class AltaTitularView extends javax.swing.JFrame {
@@ -20,7 +21,7 @@ public class AltaTitularView extends javax.swing.JFrame {
         this.pack();
         this.setLocationRelativeTo(null);
         setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource("/img/SantaFeCapital_Logo.png"))); 
-        
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
     }
 
     @SuppressWarnings("unchecked")
@@ -48,10 +49,10 @@ public class AltaTitularView extends javax.swing.JFrame {
         cancelarButton = new javax.swing.JButton();
         telefonoLabel = new javax.swing.JLabel();
         correoLabel = new javax.swing.JLabel();
-        telefonoField = new javax.swing.JFormattedTextField();
         correoField = new javax.swing.JTextField();
         warningLabel = new javax.swing.JLabel();
         numDocField = new javax.swing.JTextField();
+        telefonoField = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setSize(new java.awt.Dimension(596, 350));
@@ -60,7 +61,7 @@ public class AltaTitularView extends javax.swing.JFrame {
 
         fechaNacLabel.setText("Fecha de nacimiento");
 
-        grupoSanguineoCBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "O", "A", "B" }));
+        grupoSanguineoCBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "O", "A", "B", "AB" }));
 
         factorSanguineoCBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "+", "-" }));
 
@@ -122,12 +123,6 @@ public class AltaTitularView extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(0, 0, Short.MAX_VALUE)
-                .addComponent(cancelarButton)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(aceptarButton)
-                .addGap(8, 8, 8))
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
@@ -165,10 +160,16 @@ public class AltaTitularView extends javax.swing.JFrame {
                                     .addComponent(fechaNacField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                             .addGap(18, 18, 18)
                             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                .addComponent(telefonoField, javax.swing.GroupLayout.DEFAULT_SIZE, 176, Short.MAX_VALUE)
                                 .addComponent(correoField, javax.swing.GroupLayout.DEFAULT_SIZE, 176, Short.MAX_VALUE)
-                                .addComponent(domicilioField)))))
+                                .addComponent(domicilioField)
+                                .addComponent(telefonoField)))))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addComponent(cancelarButton)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(aceptarButton)
+                .addGap(8, 8, 8))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -178,8 +179,8 @@ public class AltaTitularView extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(numDniLabel)
                     .addComponent(telefonoLabel)
-                    .addComponent(telefonoField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(numDocField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(numDocField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(telefonoField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(apellidoField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -255,11 +256,17 @@ public class AltaTitularView extends javax.swing.JFrame {
     }
     
     private Long extractNumericValue(String text) {
-        return Long.valueOf(text.replaceAll("[^\\d]", ""));
+        if (text == null) return null;
+        String cleaned = text.trim().replaceAll("[^\\d]", "");
+        if (cleaned.isEmpty()) return null; // ✅ campo vacío → null, el validator lo maneja
+        return Long.valueOf(cleaned);
     }
 
     private LocalDate parseDate(String dateText) {
-        return LocalDate.parse(dateText, DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+        if (dateText == null) return null;
+        String trimmed = dateText.trim();
+        if (trimmed.isEmpty() || trimmed.equalsIgnoreCase("dd/mm/aaaa")) return null; // ✅ placeholder → null
+        return LocalDate.parse(trimmed, DateTimeFormatter.ofPattern("dd/MM/yyyy"));
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -285,7 +292,7 @@ public class AltaTitularView extends javax.swing.JFrame {
     private javax.swing.JLabel numDniLabel;
     private javax.swing.JTextField numDocField;
     private javax.swing.JPanel panelEncabezado;
-    private javax.swing.JFormattedTextField telefonoField;
+    private javax.swing.JTextField telefonoField;
     private javax.swing.JLabel telefonoLabel;
     private javax.swing.JLabel warningLabel;
     // End of variables declaration//GEN-END:variables

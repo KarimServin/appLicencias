@@ -5,6 +5,7 @@ import com.municipalidad.licencias.appLicencias.entities.ClaseLicencia;
 import com.municipalidad.licencias.appLicencias.entities.Licencia;
 import java.time.LocalDate;
 import java.util.Optional;
+import java.util.Set;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -13,9 +14,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface LicenciaRepository extends JpaRepository<Licencia, Long> {
 
-    /**
-     * Útil cuando vas a mapear a DTO incluyendo clases (evita N+1 / Lazy issues).
-     */
     @Query("""
         select distinct l
         from Licencia l
@@ -25,19 +23,23 @@ public interface LicenciaRepository extends JpaRepository<Licencia, Long> {
     """)
     List<Licencia> findByTitularDniFetchClases(@Param("dni") Long dni);
 
-    /**
-     * Versión simple (sin fetch). Usala solo si no vas a tocar l.getClases().
-     */
     List<Licencia> findByTitularDni(Long titularDni);
 
     List<Licencia> findByFechaVencimientoLessThanEqual(LocalDate now);
 
+    // Sin fetch — solo para referencia interna en emitirLicencia()
     Optional<Licencia> findTopByTitularDniOrderByFechaEmisionDesc(Long dni);
 
-    /**
-     * Traer licencias de un titular que incluyan una clase X.
-     * Nota: no hace fetch de clases; si vas a mapear clases, agregá una variante fetch.
-     */
+    // Con fetch — para mapear a DTO
+    @Query("""
+        SELECT l FROM Licencia l
+        LEFT JOIN FETCH l.clases
+        WHERE l.titular.dni = :dni
+        ORDER BY l.fechaEmision DESC
+        LIMIT 1
+    """)
+    Optional<Licencia> findTopByTitularDniFetchClasesOrderByFechaEmisionDesc(@Param("dni") Long dni);
+
     @Query("""
         select distinct l
         from Licencia l
@@ -47,11 +49,8 @@ public interface LicenciaRepository extends JpaRepository<Licencia, Long> {
         order by l.fechaEmision desc
     """)
     List<Licencia> findByTitularDniAndClase(@Param("dni") Long dni,
-                                           @Param("clase") ClaseLicencia clase);
+                                            @Param("clase") ClaseLicencia clase);
 
-    /**
-     * Variante con fetch para mapear a DTO con clases sin N+1.
-     */
     @Query("""
         select distinct l
         from Licencia l
@@ -61,11 +60,8 @@ public interface LicenciaRepository extends JpaRepository<Licencia, Long> {
         order by l.fechaEmision desc
     """)
     List<Licencia> findByTitularDniAndClaseFetchClases(@Param("dni") Long dni,
-                                                      @Param("clase") ClaseLicencia clase);
+                                                       @Param("clase") ClaseLicencia clase);
 
-    /**
-     * Verifica vigencia por clase (join con tabla puente).
-     */
     @Query("""
         select (count(l) > 0)
         from Licencia l
@@ -78,9 +74,6 @@ public interface LicenciaRepository extends JpaRepository<Licencia, Long> {
                                               @Param("clase") ClaseLicencia clase,
                                               @Param("hoy") LocalDate hoy);
 
-    /**
-     * Licencias vigentes filtradas (con fetch de clases para mapear a DTO sin N+1).
-     */
     @Query("""
         select distinct l
         from Licencia l
@@ -98,12 +91,8 @@ public interface LicenciaRepository extends JpaRepository<Licencia, Long> {
             @Param("apellido") String apellido,
             @Param("grupoSanguineo") String grupoSanguineo,
             @Param("factorSanguineo") String factorSanguineo,
-            @Param("esDonante") Boolean esDonante
-    );
+            @Param("esDonante") Boolean esDonante);
 
-    /**
-     * Licencias expiradas (si vas a mapear clases, conviene fetch).
-     */
     @Query("""
         select distinct l
         from Licencia l
@@ -112,4 +101,28 @@ public interface LicenciaRepository extends JpaRepository<Licencia, Long> {
         order by l.fechaVencimiento desc
     """)
     List<Licencia> findExpiradasFetchClases(@Param("hoy") LocalDate hoy);
+
+    @Query("""
+        SELECT MIN(l.fechaEmision) FROM Licencia l
+        JOIN l.clases lc
+        WHERE l.titular.dni = :dni
+          AND lc.claseLicencia = :clase
+    """)
+    Optional<LocalDate> findFechaEmisionMasAntiguaByTitularDniAndClase(
+            @Param("dni") Long dni,
+            @Param("clase") ClaseLicencia clase);
+    
+    List<Licencia> findByTitularDniAndVigenteTrue(Long dni);
+    
+    //obtener licencias con titular y usuario en UNA sola query
+    @Query("""
+        SELECT DISTINCT l
+        FROM Licencia l
+        LEFT JOIN FETCH l.clases
+        LEFT JOIN FETCH l.titular
+        LEFT JOIN FETCH l.usuario
+        WHERE l.id IN :ids
+    """)
+    List<Licencia> findByIdInFetchAll(@Param("ids") Set<Long> ids);
+    
 }

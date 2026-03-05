@@ -3,11 +3,11 @@ package com.municipalidad.licencias.appLicencias.modules.menu;
 import com.municipalidad.licencias.appLicencias.modules.altatitular.AltaTitularController;
 import com.municipalidad.licencias.appLicencias.modules.altausuario.AltaUsuarioController;
 import com.municipalidad.licencias.appLicencias.modules.emitirlicencia.EmitirLicenciaController;
-import com.municipalidad.licencias.appLicencias.modules.modificartitular.ModificarTitularController;
-import com.municipalidad.licencias.appLicencias.modules.modificarusuario.ModificarUsuarioController;
+import com.municipalidad.licencias.appLicencias.modules.gestionarusuarios.GestionarUsuariosController;
 import com.municipalidad.licencias.appLicencias.factory.ControllerFactory;
 import com.municipalidad.licencias.appLicencias.modules.consultarlicencias.ConsultarLicenciasController;
 import com.municipalidad.licencias.appLicencias.modules.emitircopialicencia.EmitirCopiaLicenciaController;
+import com.municipalidad.licencias.appLicencias.modules.modificartitular.ModificarTitularController;
 import com.municipalidad.licencias.appLicencias.session.SessionController;
 import javax.swing.SwingUtilities;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +22,6 @@ public class MenuController {
     
     private MenuView menuView;
     
-    
     @Autowired
     public MenuController(SessionController sessionController, ControllerFactory controllerFactory) {
         this.sessionController = sessionController;
@@ -33,7 +32,6 @@ public class MenuController {
     public void display() {
         SwingUtilities.invokeLater(() -> {
             this.menuView = new MenuView();
-        
             menuView.setLabelBienvenida(sessionController.getNombreUsuarioActual());
             verificarPermisos();
             setListeners();
@@ -52,8 +50,8 @@ public class MenuController {
             menuView.setEmitirNuevaLicenciaAction(e -> mostrarPantallaEmitirLicencia());
             menuView.setEmitirCopiaLicenciaAction(e -> mostrarPantallaEmitirCopiaLicencia());
             menuView.setAltaTitularAction(e -> mostrarPantallaAltaTitular());
-            menuView.setConsultarLicenciasAction(e -> mostrarPantallaConsultarLicencias());
             menuView.setModificarDatosTitularAction(e -> mostrarPantallaModificarDatosTitular());
+            menuView.setConsultarLicenciasAction(e -> mostrarPantallaConsultarLicencias());
             menuView.setAltaUsuarioAction(e -> mostrarPantallaAltaUsuario());
             menuView.setModificarDatosUsuarioAction(e -> mostrarPantallaModificarUsuario());
             menuView.setSalirAction(e -> salir());
@@ -69,6 +67,12 @@ public class MenuController {
         AltaTitularController controller = controllerFactory.createAltaTitularController();
         controller.display();
     }
+    
+    private void mostrarPantallaModificarDatosTitular() {
+        ModificarTitularController controller = controllerFactory.createModificarTitularController();
+        controller.display();
+    
+    }
 
 
 
@@ -77,10 +81,6 @@ public class MenuController {
         controller.display();
     }
 
-    private void mostrarPantallaModificarDatosTitular() {
-        ModificarTitularController controller = controllerFactory.createModificarTitularController();
-        controller.display();
-    }
 
     private void mostrarPantallaAltaUsuario() {
         AltaUsuarioController controller = controllerFactory.createAltaUsuarioController();
@@ -88,7 +88,7 @@ public class MenuController {
     }
 
     private void mostrarPantallaModificarUsuario() {
-        ModificarUsuarioController controller = controllerFactory.createModificarUsuarioController();
+        GestionarUsuariosController controller = controllerFactory.createModificarUsuarioController();
         controller.display();
     }
 

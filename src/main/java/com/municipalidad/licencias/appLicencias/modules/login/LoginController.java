@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
 import com.municipalidad.licencias.appLicencias.auth.AuthService;
 import com.municipalidad.licencias.appLicencias.dto.CredencialesDTO;
 import com.municipalidad.licencias.appLicencias.modules.menu.MenuController;
-import com.municipalidad.licencias.appLicencias.view.Dialogs;
+import com.municipalidad.licencias.appLicencias.viewforms.Dialogs;
 import java.util.concurrent.ExecutionException;
 import javax.swing.SwingWorker;
 import org.springframework.beans.factory.ObjectProvider;
@@ -71,7 +71,7 @@ public class LoginController {
                 protected void done() {
                     // ✅ Esto corre EN el EDT
                     try {
-                        UsuarioDTO usuarioDTO = get(); // puede tirar ExecutionException o InterruptedException
+                        UsuarioDTO usuarioDTO = get(); 
                         onLoginExitoso(usuarioDTO);
 
                     } catch (InterruptedException e) {

@@ -14,20 +14,24 @@ import java.util.Set;
 
 @Getter
 @Setter
-@ToString(exclude = "password") // No incluir password en toString por seguridad
+@ToString(exclude = "password")
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @NoArgsConstructor
 @AllArgsConstructor
+
 public class UsuarioDTO implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    @EqualsAndHashCode.Include // Solo incluir id en equals/hashCode
+    @EqualsAndHashCode.Include
     private Long id;
 
-    private String nombreUsuario; 
+    private String nombreUsuario;
+    private String nombre;
+    private String apellido;
+    private String email;
 
-    private String password; // Solo para transferencia, nunca almacenamiento
+    private String password;
 
     private Set<Role> roles = EnumSet.noneOf(Role.class);
 
@@ -50,4 +54,7 @@ public class UsuarioDTO implements Serializable {
         return roles.contains(rol);
     }
 
+    public String getNombreCompleto() {
+        return nombre + " " + apellido;
+    }
 }

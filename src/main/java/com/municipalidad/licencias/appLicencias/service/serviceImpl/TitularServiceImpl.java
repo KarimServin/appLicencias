@@ -1,6 +1,6 @@
 package com.municipalidad.licencias.appLicencias.service.serviceImpl;
 
-import com.municipalidad.licencias.appLicencias.dto.ActualizarTitularRequestDTO;
+import com.municipalidad.licencias.appLicencias.modules.emitirlicencia.ActualizarTitularRequestDTO;
 import com.municipalidad.licencias.appLicencias.dto.TitularDTO;
 import com.municipalidad.licencias.appLicencias.entities.TipoSangre;
 import com.municipalidad.licencias.appLicencias.exception.ServiceException;
@@ -50,11 +50,8 @@ public class TitularServiceImpl implements TitularService {
     
         //Validar Input (Redundancia - Seguridad/Integridad)
         validarDatosTitular(titularDTO);
-        
-        
         //Regla de negocio: Edad titular > 17
         validarEdad(titularDTO.getFechaNacimiento());
-        
         //Regla de negocio + integridad: único DNI por titular   
         validarDniUnico(titularDTO.getDni());
             
@@ -102,35 +99,18 @@ public class TitularServiceImpl implements TitularService {
     
     @Transactional
     @Override
-    public TitularDTO actualizarDatosTitular(Long dni, ActualizarTitularRequestDTO req) {
-        Titular titular = titularRepository.findByDni(dni)
+    public TitularDTO actualizarDatosTitular(ActualizarTitularRequestDTO req) {
+        Titular titular = titularRepository.findByDni(req.getDni())
                 .orElseThrow(() -> new ServiceException("Titular no encontrado."));
 
+        
+        titular.setTelefono(req.getTelefono());
+        titular.setEmail(req.getEmail());
         titular.setDomicilio(req.getDomicilio());
         titular.setEsDonante(req.getEsDonante());
 
         Titular guardado = titularRepository.save(titular);
         return titularMapper.toDTO(guardado);
-    }
-
-    @Override
-    public void actualizarTitular(Long dni, String nombre, String apellido, 
-                                  Boolean esDonante, Long telefono, String email, 
-                                  String domicilio) throws ServiceException {
-
-        Titular titular = titularRepository.findByDni(dni)
-        .orElseThrow(() -> new ServiceException("Titular no encontrado"));
-
-        titular.setNombre(nombre);
-        titular.setApellido(apellido);
-        titular.setEsDonante(esDonante);
-        titular.setTelefono(telefono);
-        titular.setEmail(email);
-        titular.setDomicilio(domicilio);
-        titular.setUsuario(currentUserProvider.getOrThrow());
-
-        titularRepository.save(titular);
-        
     }
     
   
@@ -178,25 +158,19 @@ public class TitularServiceImpl implements TitularService {
         if (!factor.equals("+") && !factor.equals("-")) {
             throw new ValidationException("Factor sanguíneo debe ser + o -.");
         }
-        
-        
-        
+  
     }
     
     private void validarEdad(LocalDate fechaNacimiento) throws ServiceException {
-
+        
         if (!(Period.between(fechaNacimiento, LocalDate.now()).getYears() > 17)) {
             throw new ServiceException("La persona debe ser mayor a 17 años para ser titular.");
         }
-            
     }
         
     private void  validarDniUnico(Long dni) throws ServiceException {
-    
-     if (titularRepository.existsByDni(dni)) {
+        if (titularRepository.existsByDni(dni)) {
                 throw new ServiceException("Ya existe un titular con DNI: " + dni);
-            }
-        
+        }       
     }
-    
 }

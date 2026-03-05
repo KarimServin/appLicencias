@@ -19,6 +19,9 @@ public class Licencia {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    
+    @Column(nullable = false)
+    private Boolean vigente = true;
 
     @Column(name = "fecha_emision", nullable = false)
     private LocalDate fechaEmision;

@@ -39,7 +39,7 @@ public class Titular {
 
     private boolean tuvoLicenciaProfesional;
     private LocalDate fechaLicenciaClaseB;
-    private long telefono;
+    private Long telefono;
     private String email;
     
     @ManyToOne(fetch = FetchType.LAZY)

@@ -1,11 +1,8 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JPanel.java to edit this template
- */
-package com.municipalidad.licencias.appLicencias.view;
+package com.municipalidad.licencias.appLicencias.viewforms;
 
-import com.municipalidad.licencias.appLicencias.entities.Licencia;
-import com.municipalidad.licencias.appLicencias.entities.Titular;
+import com.municipalidad.licencias.appLicencias.dto.ComprobanteDTO;
+import com.municipalidad.licencias.appLicencias.dto.LicenciaDTO;
+import com.municipalidad.licencias.appLicencias.dto.TitularDTO;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.print.PageFormat;
@@ -13,6 +10,8 @@ import java.awt.print.Printable;
 import static java.awt.print.Printable.NO_SUCH_PAGE;
 import static java.awt.print.Printable.PAGE_EXISTS;
 import java.awt.print.PrinterException;
+import java.time.format.DateTimeFormatter;
+import java.util.stream.Collectors;
 
 /**
  *
@@ -27,24 +26,26 @@ public class PresupuestoPDF extends javax.swing.JPanel implements Printable{
         initComponents();
     }
 
-    public PresupuestoPDF(Titular titular,Licencia licencia, int Monto) {
+    public PresupuestoPDF(TitularDTO titular, LicenciaDTO licencia, ComprobanteDTO comprobante) {
         initComponents();
-        //txtTipoLicencia.setText(licencia.getClaseLicencia().name());
-        txtFechaVencimiento.setText(licencia.getFechaVencimiento().toString());
-        txtApellido.setText(titular.getNombre());
-        txtFechaNacimiento.setText(titular.getFechaNacimiento().toString());
+
+        DateTimeFormatter fmt = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+
+        String clases = licencia.getClases().stream()
+                .map(Object::toString)
+                .collect(Collectors.joining(", "));
+
+        txtTipoLicencia.setText(clases);
+        txtFechaVencimiento.setText(licencia.getFechaVencimiento().format(fmt));
+        txtFecha.setText(comprobante.getFecha().format(fmt));
+        txtNumComprobante.setText(comprobante.getId().toString()); // ✅ número real
+        txtApellido.setText(titular.getApellido() + ", " + titular.getNombre());
+        txtFechaNacimiento.setText(titular.getFechaNacimiento().format(fmt));
         txtDireccion.setText(titular.getDomicilio());
         txtLicencia.setText(titular.getDni().toString());
-        //txtGrupoSanguineo.setText(Character.toString(titular.getGrupoSanguineo()));
-        
-        if(titular.isEsDonante()){
-           txtDonante.setText("SI"); 
-        }else{
-            txtDonante.setText("NO"); 
-        }
-        txtMonto.setText(String.valueOf(Monto));
-        txtNumComprobante.setText(licencia.getId().toString());
-        txtFecha.setText(licencia.getFechaEmision().toString());
+        txtGrupoSanguineo.setText(titular.getGrupoSanguineo() + " " + titular.getFactorSanguineo());
+        txtDonante.setText(titular.getEsDonante() ? "SI" : "NO");
+        txtMonto.setText("$" + comprobante.getMonto());
     }
     /**
      * This method is called from within the constructor to initialize the form.
@@ -68,16 +69,7 @@ public class PresupuestoPDF extends javax.swing.JPanel implements Printable{
     private void initComponents() {
 
         jLabel3 = new javax.swing.JLabel();
-        jLabel6 = new javax.swing.JLabel();
-        jLabel7 = new javax.swing.JLabel();
-        jLabel5 = new javax.swing.JLabel();
-        jSeparator3 = new javax.swing.JSeparator();
-        jLabel19 = new javax.swing.JLabel();
-        jLabel18 = new javax.swing.JLabel();
-        jLabel8 = new javax.swing.JLabel();
         jLabel20 = new javax.swing.JLabel();
-        jLabel4 = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
         txtNumComprobante = new javax.swing.JLabel();
         jLabel10 = new javax.swing.JLabel();
         jLabel11 = new javax.swing.JLabel();
@@ -112,7 +104,6 @@ public class PresupuestoPDF extends javax.swing.JPanel implements Printable{
         jLabel26 = new javax.swing.JLabel();
         jLabel34 = new javax.swing.JLabel();
         txtMonto = new javax.swing.JLabel();
-        jLabel1 = new javax.swing.JLabel();
         jSeparator5 = new javax.swing.JSeparator();
         jSeparator6 = new javax.swing.JSeparator();
 
@@ -127,52 +118,22 @@ public class PresupuestoPDF extends javax.swing.JPanel implements Printable{
         jLabel3.setForeground(new java.awt.Color(255, 255, 255));
         add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 30, -1, 30));
 
-        jLabel6.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/argentina (2).png"))); // NOI18N
-        add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 10, 60, -1));
-
-        jLabel7.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/escudo-de-armas (3).png"))); // NOI18N
-        add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(510, 10, 70, -1));
-
-        jLabel5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/escudo-de-armas (4).png"))); // NOI18N
-        add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 720, 40, -1));
-
-        jSeparator3.setForeground(new java.awt.Color(255, 255, 255));
-        jSeparator3.setOrientation(javax.swing.SwingConstants.VERTICAL);
-        add(jSeparator3, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 720, 10, 40));
-
-        jLabel19.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel19.setText("SEGURIDAD");
-        add(jLabel19, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 720, -1, -1));
-
-        jLabel18.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel18.setText("VIAL");
-        add(jLabel18, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 740, -1, -1));
-
-        jLabel8.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel8.setText("Ministerio de Transporte");
-        add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(460, 720, -1, -1));
-
         jLabel20.setForeground(new java.awt.Color(255, 255, 255));
         jLabel20.setText("República Argentina");
         add(jLabel20, new org.netbeans.lib.awtextra.AbsoluteConstraints(460, 740, -1, -1));
-
-        jLabel4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/argentina (1).png"))); // NOI18N
-        add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 720, 60, -1));
-
-        jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/FondoAzul.png"))); // NOI18N
-        add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 620, 80));
 
         txtNumComprobante.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         txtNumComprobante.setText("000001");
         add(txtNumComprobante, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 630, -1, -1));
 
-        jLabel10.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        jLabel10.setText("Comprobante de pago");
-        add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 100, -1, -1));
+        jLabel10.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        jLabel10.setText("COMPROBANTE");
+        add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 100, -1, -1));
 
         jLabel11.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        jLabel11.setForeground(new java.awt.Color(51, 51, 51));
         jLabel11.setText("Municipalidad de Santa Fe");
-        add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 130, -1, -1));
+        add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 130, -1, -1));
 
         jLabel12.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jLabel12.setText("Lugar:");
@@ -183,7 +144,7 @@ public class PresupuestoPDF extends javax.swing.JPanel implements Printable{
         add(jLabel13, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 630, -1, -1));
 
         txtLugar.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        txtLugar.setText("Santa fe");
+        txtLugar.setText("Distrito La Capital");
         add(txtLugar, new org.netbeans.lib.awtextra.AbsoluteConstraints(460, 200, -1, 20));
 
         txtFecha.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
@@ -195,7 +156,7 @@ public class PresupuestoPDF extends javax.swing.JPanel implements Printable{
         add(jLabel17, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 200, -1, -1));
 
         jLabel22.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        jLabel22.setText("Licencia clase:");
+        jLabel22.setText("Licencia clases:");
         add(jLabel22, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 430, -1, -1));
 
         txtTipoLicencia.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
@@ -219,7 +180,7 @@ public class PresupuestoPDF extends javax.swing.JPanel implements Printable{
         add(txtFechaVencimiento1, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 540, 150, -1));
 
         jLabel32.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        jLabel32.setText("Forma de pago:");
+        jLabel32.setText("Forma de Pago:");
         add(jLabel32, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 570, -1, 20));
 
         txtGrupoSanguineo1.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
@@ -235,7 +196,7 @@ public class PresupuestoPDF extends javax.swing.JPanel implements Printable{
         add(jLabel25, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 280, -1, -1));
 
         txtApellido.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        txtApellido.setText("BRAVO");
+        txtApellido.setText("Servin");
         add(txtApellido, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 280, -1, -1));
 
         jSeparator1.setForeground(new java.awt.Color(0, 0, 0));
@@ -286,8 +247,8 @@ public class PresupuestoPDF extends javax.swing.JPanel implements Printable{
         txtDireccion.setText("FALTA DIRECCION");
         add(txtDireccion, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 330, -1, 40));
 
-        jLabel26.setText("*Este comprobante es válido para ser presentado ante cualquier autoridad competente.");
-        add(jLabel26, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 680, -1, -1));
+        jLabel26.setText("Comprobante válido para ser presentado en cualquier autoridad competente.");
+        add(jLabel26, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 680, -1, -1));
 
         jLabel34.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jLabel34.setText("Monto:");
@@ -296,9 +257,6 @@ public class PresupuestoPDF extends javax.swing.JPanel implements Printable{
         txtMonto.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         txtMonto.setText("$4800");
         add(txtMonto, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 600, 70, -1));
-
-        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/FondoAzul.png"))); // NOI18N
-        add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 710, 620, 60));
 
         jSeparator5.setForeground(new java.awt.Color(0, 0, 0));
         jSeparator5.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
@@ -311,15 +269,11 @@ public class PresupuestoPDF extends javax.swing.JPanel implements Printable{
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel17;
-    private javax.swing.JLabel jLabel18;
-    private javax.swing.JLabel jLabel19;
-    private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel20;
     private javax.swing.JLabel jLabel22;
     private javax.swing.JLabel jLabel23;
@@ -334,14 +288,8 @@ public class PresupuestoPDF extends javax.swing.JPanel implements Printable{
     private javax.swing.JLabel jLabel31;
     private javax.swing.JLabel jLabel32;
     private javax.swing.JLabel jLabel34;
-    private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
-    private javax.swing.JLabel jLabel6;
-    private javax.swing.JLabel jLabel7;
-    private javax.swing.JLabel jLabel8;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JSeparator jSeparator2;
-    private javax.swing.JSeparator jSeparator3;
     private javax.swing.JSeparator jSeparator4;
     private javax.swing.JSeparator jSeparator5;
     private javax.swing.JSeparator jSeparator6;

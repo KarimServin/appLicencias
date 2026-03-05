@@ -37,7 +37,6 @@ public class LicenciaConsultaServiceImpl implements LicenciaConsultaService {
 
         LocalDate hoy = LocalDate.now();
 
-        // JPQL dinámico (senior: 1 query, fetch join, sin N+1)
         StringBuilder jpql = new StringBuilder("""
             select distinct l
             from Licencia l
@@ -57,20 +56,19 @@ public class LicenciaConsultaServiceImpl implements LicenciaConsultaService {
         if (f.getEstado() != null) {
             switch (f.getEstado()) {
                 case VIGENTES -> {
-                    jpql.append(" and l.fechaVencimiento > :hoy ");
+                    jpql.append(" and l.vigente = true and l.fechaVencimiento > :hoy ");
                     params.add(new Param("hoy", hoy));
                 }
                 case EXPIRADAS -> {
-                    jpql.append(" and l.fechaVencimiento <= :hoy ");
+                    jpql.append(" and (l.vigente = false or l.fechaVencimiento <= :hoy) ");
                     params.add(new Param("hoy", hoy));
                 }
                 case VENCEN_PRONTO -> {
-                    // hoy < vencimiento <= hoy + N
                     if (f.getVencenEnDias() == null) {
                         throw new IllegalArgumentException("vencenEnDias requerido para 'VENCEN_PRONTO'.");
                     }
                     LocalDate hasta = hoy.plusDays(f.getVencenEnDias());
-                    jpql.append(" and l.fechaVencimiento > :hoy and l.fechaVencimiento <= :hasta ");
+                    jpql.append(" and l.vigente = true and l.fechaVencimiento > :hoy and l.fechaVencimiento <= :hasta ");
                     params.add(new Param("hoy", hoy));
                     params.add(new Param("hasta", hasta));
                 }
@@ -80,9 +78,8 @@ public class LicenciaConsultaServiceImpl implements LicenciaConsultaService {
             }
         }
 
-        // Filtro por clase (si se eligió una)
+        // Filtro por clase
         if (f.getClase() != null) {
-            // Como ya tenemos join fetch l.clases lc, filtramos por lc
             jpql.append(" and lc.claseLicencia = :clase ");
             params.add(new Param("clase", f.getClase()));
         }

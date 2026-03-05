@@ -21,6 +21,7 @@ public interface LicenciaMapper {
     @Mapping(target = "clases", ignore = true) // <--- importante: se carga en service con addClase()
     Licencia toEntity(LicenciaDTO dto);
 
+    @Mapping(target = "id", source = "id")
     @Mapping(source = "titular.dni", target = "titularDni")
     @Mapping(target = "clases", expression = "java(mapClases(entity.getClases()))")
     LicenciaDTO toDTO(Licencia entity);

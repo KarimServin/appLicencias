@@ -1,143 +1,148 @@
 package com.municipalidad.licencias.appLicencias.modules.modificartitular;
 
-import com.municipalidad.licencias.appLicencias.dto.ActualizarTitularRequestDTO;
 import com.municipalidad.licencias.appLicencias.dto.TitularDTO;
+import com.municipalidad.licencias.appLicencias.exception.ServiceException;
+import com.municipalidad.licencias.appLicencias.modules.emitirlicencia.ActualizarTitularRequestDTO;
+import com.municipalidad.licencias.appLicencias.service.LicenciaService;
 import com.municipalidad.licencias.appLicencias.service.TitularService;
-import com.municipalidad.licencias.appLicencias.view.Dialogs;
+import com.municipalidad.licencias.appLicencias.viewforms.Dialogs;
+import java.time.LocalDate;
+import java.util.Objects;
 import java.util.Optional;
+import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
 public class ModificarTitularController {
 
+    private static final Logger logger = LoggerFactory.getLogger(ModificarTitularController.class);
+
     private final TitularService titularService;
+    private final LicenciaService licenciaService;
     private ModificarTitularView view;
+    private Long dniValidado;
+    private String domicilioOriginal;
 
-    private TitularDTO titularActual; // estado en pantalla
-
-    public ModificarTitularController(TitularService titularService) {
+    @Autowired
+    public ModificarTitularController(TitularService titularService,
+                                      LicenciaService licenciaService) {
         this.titularService = titularService;
+        this.licenciaService = licenciaService;
+        logger.debug("ModificarTitularController instanciado.");
     }
 
     public void display() {
         SwingUtilities.invokeLater(() -> {
             view = new ModificarTitularView();
-            view.setEdicionEnabled(false);
-            view.setLocationRelativeTo(null);
+            configurarListeners();
             view.setVisible(true);
-            setListeners();
-            limpiarPantalla(); // deja labels “vacíos” si querés
         });
     }
 
-    private void setListeners() {
-        view.setBuscarTitularAction(e -> buscarTitular());
-        view.setLimpiarAction(e -> limpiarPantalla());
-        view.setConfirmarAction(e -> confirmar());
+    private void configurarListeners() {
+        view.setBuscarAction(e -> buscarTitular());
+        view.setConfirmarAction(e -> confirmarModificacion());
+        view.setLimpiarAction(e -> limpiar());
         view.setCancelarAction(e -> cancelar());
     }
 
     private void buscarTitular() {
-        String dniStr = view.getDniIngresado();
+        String dniTexto = view.getDni();
+        logger.info("Buscando titular con DNI: {}", dniTexto);
 
-        if (dniStr.isBlank()) {
-            Dialogs.error(view, "Ingresá un DNI.");
-            return;
-        }
-
-        Long dni;
-        try {
-            dni = Long.valueOf(dniStr);
-        } catch (NumberFormatException ex) {
-            Dialogs.error(view, "El DNI debe ser numérico.");
-            return;
-        }
-
-        Optional<TitularDTO> opt = titularService.buscarPorDni(dni);
-
-        if (opt.isEmpty()) {
-            titularActual = null;
-            view.setEdicionEnabled(false);
-            // Si querés, limpiá labels:
-            view.setTitularInfo("-", "-", "-");
-            Dialogs.error(view, "No se encontró un titular con DNI " + dni + ".");
-            return;
-        }
-
-        titularActual = opt.get();
-
-        String nombreCompleto = titularActual.getApellido() + ", " + titularActual.getNombre();
-        String domicilio = titularActual.getDomicilio() != null ? titularActual.getDomicilio() : "-";
-        String esDonanteTxt = Boolean.TRUE.equals(titularActual.getEsDonante()) ? "Sí" : "No";
-
-        view.setTitularInfo(nombreCompleto, domicilio, esDonanteTxt);
-
-        // Pre-cargar campos editables con los valores actuales
-        view.setEdicionDefaults(titularActual.getDomicilio(), Boolean.TRUE.equals(titularActual.getEsDonante()));
-        view.setEdicionEnabled(true);
-    }
-
-    private void confirmar() {
-        if (titularActual == null) {
-            Dialogs.error(view, "Primero tenés que buscar un titular válido.");
-            return;
-        }
-
-        String domicilioNuevo = view.getDomicilioActualizado();
-        boolean esDonanteNuevo = view.getEsDonanteSeleccionado();
-
-        // Validación simple (ajustá reglas según tu sistema)
-        if (domicilioNuevo.isBlank()) {
-            Dialogs.error(view, "El domicilio no puede quedar vacío.");
-            return;
-        }
-
-        // Si no cambió nada, evitás pegarle a la DB al pedo
-        boolean mismoDomicilio = domicilioNuevo.equalsIgnoreCase(
-                titularActual.getDomicilio() == null ? "" : titularActual.getDomicilio().trim()
-        );
-        boolean mismoDonante = esDonanteNuevo == Boolean.TRUE.equals(titularActual.getEsDonante());
-
-        if (mismoDomicilio && mismoDonante) {
-            Dialogs.error(view, "No hay cambios para guardar.");
+        if (dniTexto.isEmpty()) {
+            Dialogs.error(view, "Debe ingresar un número de DNI.");
             return;
         }
 
         try {
-            ActualizarTitularRequestDTO req = ActualizarTitularRequestDTO.builder()
-                    .domicilio(domicilioNuevo)
-                    .esDonante(esDonanteNuevo)
-                    .build();
+            Long dni = Long.valueOf(dniTexto);
+            Optional<TitularDTO> resultado = titularService.buscarPorDni(dni);
 
-            TitularDTO actualizado = titularService.actualizarDatosTitular(titularActual.getDni(), req);
+            if (resultado.isPresent()) {
+                logger.info("Titular encontrado para DNI: {}", dni);
+                this.dniValidado = dni;
+                this.domicilioOriginal = resultado.get().getDomicilio();
+                view.cargarDatosTitular(resultado.get());
+                view.habilitarEdicion();
+            } else {
+                logger.warn("No se encontró titular con DNI: {}", dni);
+                Dialogs.error(view, "No se encontró un titular con ese DNI.");
+            }
 
-            titularActual = actualizado; // refrescás estado
-            // refrescar labels con los nuevos
-            String nombreCompleto = actualizado.getApellido() + ", " + actualizado.getNombre();
-            String esDonanteTxt = Boolean.TRUE.equals(actualizado.getEsDonante()) ? "Sí" : "No";
-            view.setTitularInfo(nombreCompleto, actualizado.getDomicilio(), esDonanteTxt);
-
-            Dialogs.exito(view, "Titular actualizado correctamente.");
-            view.setEdicionEnabled(false); // opcional: lo bloqueás luego de guardar
-        } catch (Exception ex) {
-            Dialogs.error(view, "No se pudo actualizar el titular: " + ex.getMessage());
+        } catch (NumberFormatException e) {
+            logger.warn("DNI con formato inválido: {}", dniTexto);
+            Dialogs.error(view, "El DNI ingresado no es válido.");
         }
     }
 
+    private void confirmarModificacion() {
+        logger.info("Confirmando modificación para DNI: {}", dniValidado);
 
-    private void limpiarPantalla() {
-        titularActual = null;
-        // limpiás inputs
-        // (si no tenés setters, crealos o hacelo directo con el designer)
-        view.setTitularInfo("-", "-", "-");
-        view.setEdicionDefaults("", false);
-        view.setEdicionEnabled(false);
-        // también podrías limpiar dniTitularField si agregás setDni("")
+        try {
+            ActualizarTitularRequestDTO datos = view.getDatosModificados(dniValidado);
+
+            if (cambioDomicilio(datos)) {
+                boolean tieneLicenciaVigente = licenciaService
+                        .obtenerUltimaLicencia(dniValidado)
+                        .map(lic -> !lic.getFechaVencimiento().isBefore(LocalDate.now()))
+                        .orElse(false);
+
+                if (tieneLicenciaVigente) {
+                    int opcion = JOptionPane.showConfirmDialog(
+                        view,
+                        "El titular tiene una licencia vigente.\n\n" +
+                        "Al modificar el domicilio, deberá emitir una copia\n" +
+                        "de la licencia con los datos actualizados.\n\n" +
+                        "¿Desea continuar?",
+                        "Advertencia — Cambio de domicilio",
+                        JOptionPane.YES_NO_OPTION,
+                        JOptionPane.WARNING_MESSAGE
+                    );
+
+                    if (opcion != JOptionPane.YES_OPTION) {
+                        logger.info("Modificación cancelada por el usuario.");
+                        return;
+                    }
+                }
+            }
+
+            titularService.actualizarDatosTitular(datos);
+
+            logger.info("Titular modificado correctamente. DNI: {}", dniValidado);
+            Dialogs.exito(view, "Los datos del titular fueron modificados correctamente.");
+            view.dispose();
+
+        } catch (IllegalArgumentException e) {
+            logger.warn("Datos inválidos: {}", e.getMessage());
+            Dialogs.error(view, e.getMessage());
+        } catch (ServiceException e) {
+            logger.warn("Error al modificar titular: {}", e.getMessage());
+            Dialogs.error(view, e.getMessage());
+        } catch (Exception e) {
+            logger.error("Error inesperado: {}", e.getMessage(), e);
+            Dialogs.error(view, "Ocurrió un error inesperado: " + e.getMessage());
+        }
+    }
+    
+
+    private boolean cambioDomicilio(ActualizarTitularRequestDTO datos) {
+        return !Objects.equals(domicilioOriginal, datos.getDomicilio());
+    }
+
+    private void limpiar() {
+        logger.info("Limpiando formulario.");
+        dniValidado = null;
+        domicilioOriginal = null;
+        view.limpiar();
     }
 
     private void cancelar() {
+        logger.info("Operación cancelada. Cerrando vista.");
         view.dispose();
     }
 }
-
