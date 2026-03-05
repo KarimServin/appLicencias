@@ -11,8 +11,7 @@ import javax.swing.table.DefaultTableModel;
 
 public class ConsultarLicenciasView extends javax.swing.JFrame {
 
-    // Estado UI (no generado)
-    private boolean filtrosAvanzadosVisibles = false;
+    
 
     public ConsultarLicenciasView() {
         initComponents();
@@ -34,13 +33,9 @@ public class ConsultarLicenciasView extends javax.swing.JFrame {
             // si no está el recurso, no rompemos la pantalla
         }
 
-        // Panel colapsable: por defecto oculto
-        filtrosAvanzadosPanel.setVisible(false);
-        filtrosAvanzadosVisibles = false;
-        filtrosAvanzadosButton.setText("Filtros avanzados ▾");
+       
 
-        // Toggle colapsable
-        filtrosAvanzadosButton.addActionListener(e -> toggleFiltrosAvanzados());
+        
 
         // UX: si Estado != "Vencen pronto", deshabilitar "Vencen en"
         // (controller puede también manejarlo, pero esto ayuda)
@@ -53,17 +48,6 @@ public class ConsultarLicenciasView extends javax.swing.JFrame {
         // Defaults razonables (opcional)
         // setEstados(new String[]{"Vigentes", "Expiradas", "Vencen pronto", "Todas"});
         // setVencenEnOpciones(new String[]{"7 días", "15 días", "30 días", "60 días"});
-    }
-
-    private void toggleFiltrosAvanzados() {
-        filtrosAvanzadosVisibles = !filtrosAvanzadosVisibles;
-        filtrosAvanzadosPanel.setVisible(filtrosAvanzadosVisibles);
-        filtrosAvanzadosButton.setText(filtrosAvanzadosVisibles ? "Filtros avanzados ▴" : "Filtros avanzados ▾");
-
-        // IMPORTANTÍSIMO: recalcular layout
-        filtrosCompletosPanel.revalidate();
-        filtrosCompletosPanel.repaint();
-        pack();
     }
 
     private void actualizarEnabledVencenEn() {
@@ -140,8 +124,7 @@ public class ConsultarLicenciasView extends javax.swing.JFrame {
 
         clasesComboBox.setSelectedIndex(-1);
 
-        // por UX: colapsar de nuevo
-        if (filtrosAvanzadosVisibles) toggleFiltrosAvanzados();
+       
         actualizarEnabledVencenEn();
     }
 
@@ -191,7 +174,6 @@ public class ConsultarLicenciasView extends javax.swing.JFrame {
         estadoComboBox = new javax.swing.JComboBox<>();
         vencenEnComboBox = new javax.swing.JComboBox<>();
         vencenEnLabel = new javax.swing.JLabel();
-        filtrosAvanzadosButton = new javax.swing.JButton();
         filtrosAvanzadosPanel = new javax.swing.JPanel();
         emisionDesdeLabel = new javax.swing.JLabel();
         emisionDesdeDateChooser = new com.toedter.calendar.JDateChooser();
@@ -201,8 +183,8 @@ public class ConsultarLicenciasView extends javax.swing.JFrame {
         vencimientoHastaLabel = new javax.swing.JLabel();
         vencimientoDesdeDateChooser = new com.toedter.calendar.JDateChooser();
         vencimientoHastaDateChooser = new com.toedter.calendar.JDateChooser();
-        clasesLabel = new javax.swing.JLabel();
         clasesComboBox = new javax.swing.JComboBox<>();
+        clasesLabel = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -282,8 +264,6 @@ public class ConsultarLicenciasView extends javax.swing.JFrame {
 
         vencenEnLabel.setText("Vencen en: ");
 
-        filtrosAvanzadosButton.setText("Filtros avanzados ▾");
-
         emisionDesdeLabel.setText("Emisión desde:");
 
         emisionHastaLabel.setText("Hasta:");
@@ -292,24 +272,18 @@ public class ConsultarLicenciasView extends javax.swing.JFrame {
 
         vencimientoHastaLabel.setText("Hasta:");
 
-        clasesLabel.setText("Clases:");
-
-        clasesComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-
         javax.swing.GroupLayout filtrosAvanzadosPanelLayout = new javax.swing.GroupLayout(filtrosAvanzadosPanel);
         filtrosAvanzadosPanel.setLayout(filtrosAvanzadosPanelLayout);
         filtrosAvanzadosPanelLayout.setHorizontalGroup(
             filtrosAvanzadosPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(filtrosAvanzadosPanelLayout.createSequentialGroup()
                 .addGroup(filtrosAvanzadosPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(clasesLabel)
                     .addComponent(emisionHastaLabel)
                     .addComponent(emisionDesdeLabel))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(filtrosAvanzadosPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(emisionDesdeDateChooser, javax.swing.GroupLayout.DEFAULT_SIZE, 121, Short.MAX_VALUE)
-                    .addComponent(emisionHastaDateChooser, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(clasesComboBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(emisionHastaDateChooser, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(70, 70, 70)
                 .addGroup(filtrosAvanzadosPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(vencimientoDesdeLabel)
@@ -335,12 +309,12 @@ public class ConsultarLicenciasView extends javax.swing.JFrame {
                     .addComponent(emisionHastaDateChooser, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(vencimientoHastaLabel)
                     .addComponent(vencimientoHastaDateChooser, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addGroup(filtrosAvanzadosPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(clasesLabel)
-                    .addComponent(clasesComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(12, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
+
+        clasesComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+
+        clasesLabel.setText("Clases:");
 
         javax.swing.GroupLayout filtrosCompletosPanelLayout = new javax.swing.GroupLayout(filtrosCompletosPanel);
         filtrosCompletosPanel.setLayout(filtrosCompletosPanelLayout);
@@ -359,15 +333,18 @@ public class ConsultarLicenciasView extends javax.swing.JFrame {
                             .addComponent(estadoLabel))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(filtrosCompletosPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(estadoComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(vencenEnComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGroup(filtrosCompletosPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, filtrosCompletosPanelLayout.createSequentialGroup()
-                                .addComponent(dniLabel)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(dniTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 136, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(filtrosAvanzadosButton, javax.swing.GroupLayout.Alignment.TRAILING))
+                            .addGroup(filtrosCompletosPanelLayout.createSequentialGroup()
+                                .addComponent(estadoComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(dniLabel))
+                            .addGroup(filtrosCompletosPanelLayout.createSequentialGroup()
+                                .addComponent(vencenEnComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(clasesLabel)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(filtrosCompletosPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(clasesComboBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(dniTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 136, Short.MAX_VALUE))
                         .addContainerGap())))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, filtrosCompletosPanelLayout.createSequentialGroup()
                 .addContainerGap()
@@ -395,7 +372,8 @@ public class ConsultarLicenciasView extends javax.swing.JFrame {
                 .addGroup(filtrosCompletosPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(vencenEnComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(vencenEnLabel)
-                    .addComponent(filtrosAvanzadosButton))
+                    .addComponent(clasesComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(clasesLabel))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(filtrosAvanzadosPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -476,7 +454,6 @@ public class ConsultarLicenciasView extends javax.swing.JFrame {
     private javax.swing.JPanel encabezadoPanel;
     private javax.swing.JComboBox<String> estadoComboBox;
     private javax.swing.JLabel estadoLabel;
-    private javax.swing.JButton filtrosAvanzadosButton;
     private javax.swing.JPanel filtrosAvanzadosPanel;
     private javax.swing.JPanel filtrosCompletosPanel;
     private javax.swing.JLabel informativoLabel;

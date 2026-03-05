@@ -10,6 +10,7 @@ import com.municipalidad.licencias.appLicencias.exception.ServiceException;
 import com.municipalidad.licencias.appLicencias.mapper.LicenciaMapper;
 import com.municipalidad.licencias.appLicencias.repository.LicenciaRepository;
 import com.municipalidad.licencias.appLicencias.repository.TitularRepository;
+import com.municipalidad.licencias.appLicencias.service.CostoLicenciaService;
 import com.municipalidad.licencias.appLicencias.service.LicenciaService;
 import com.municipalidad.licencias.appLicencias.session.CurrentUserProvider;
 import java.time.LocalDate;
@@ -19,25 +20,32 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class LicenciaServiceImpl implements LicenciaService {
 
+    private static final Logger logger = LoggerFactory.getLogger(LicenciaServiceImpl.class);
+    
     private final TitularRepository titularRepository;
     private final LicenciaRepository licenciaRepository;
     private final LicenciaMapper licenciaMapper;
     private final CurrentUserProvider currentUserProvider;
+    private final CostoLicenciaService costoLicenciaService;
 
     public LicenciaServiceImpl(TitularRepository titularRepo,
                                LicenciaRepository licenciaRepo,
                                LicenciaMapper licenciaMapper,
-                               CurrentUserProvider currentUserProvider) {
+                               CurrentUserProvider currentUserProvider,
+                               CostoLicenciaService costoLicenciaService) {
         this.titularRepository = titularRepo;
         this.licenciaRepository = licenciaRepo;
         this.licenciaMapper = licenciaMapper;
         this.currentUserProvider = currentUserProvider;
+        this.costoLicenciaService = costoLicenciaService;
     }
 
     @Override
@@ -131,14 +139,12 @@ public class LicenciaServiceImpl implements LicenciaService {
 
     @Override
     public int calcularCosto(ClaseLicencia clase, boolean esCopia, int vigencia) {
-        if (esCopia) return 50;
-        return switch (clase) {
-            case A, B, G -> switch (vigencia) { case 5 -> 48; case 4 -> 38; case 3 -> 33; case 1 -> 28; default -> 0; };
-            case C       -> switch (vigencia) { case 5 -> 55; case 4 -> 43; case 3 -> 38; case 1 -> 31; default -> 0; };
-            case D       -> switch (vigencia) { case 5 -> 108; case 4 -> 98; case 3 -> 78; case 1 -> 58; default -> 0; };
-            case E       -> switch (vigencia) { case 5 -> 67; case 4 -> 52; case 3 -> 47; case 1 -> 37; default -> 0; };
-            case F       -> switch (vigencia) { case 5 -> 28; case 4 -> 23; case 3 -> 18; case 1 -> 13; default -> 0; };
-        };
+        logger.debug("Calculando costo: clase={}, esCopia={}, vigencia={}", clase, esCopia, vigencia);
+
+        int costo = costoLicenciaService.obtenerCosto(clase, esCopia, vigencia);
+
+        logger.debug("Costo calculado: ${}", costo);
+        return costo;
     }
 
     @Override

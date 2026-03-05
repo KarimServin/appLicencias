@@ -178,17 +178,21 @@
                               </Group>
                               <EmptySpace max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="0" attributes="0">
-                                  <Component id="estadoComboBox" min="-2" pref="120" max="-2" attributes="0"/>
-                                  <Component id="vencenEnComboBox" min="-2" pref="120" max="-2" attributes="0"/>
-                              </Group>
-                              <EmptySpace max="32767" attributes="0"/>
-                              <Group type="103" groupAlignment="0" attributes="0">
-                                  <Group type="102" alignment="1" attributes="0">
+                                  <Group type="102" attributes="0">
+                                      <Component id="estadoComboBox" min="-2" pref="120" max="-2" attributes="0"/>
+                                      <EmptySpace max="32767" attributes="0"/>
                                       <Component id="dniLabel" min="-2" max="-2" attributes="0"/>
-                                      <EmptySpace max="-2" attributes="0"/>
-                                      <Component id="dniTextField" min="-2" pref="136" max="-2" attributes="0"/>
                                   </Group>
-                                  <Component id="filtrosAvanzadosButton" alignment="1" min="-2" max="-2" attributes="0"/>
+                                  <Group type="102" attributes="0">
+                                      <Component id="vencenEnComboBox" min="-2" pref="120" max="-2" attributes="0"/>
+                                      <EmptySpace max="32767" attributes="0"/>
+                                      <Component id="clasesLabel" min="-2" max="-2" attributes="0"/>
+                                  </Group>
+                              </Group>
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                                  <Component id="clasesComboBox" max="32767" attributes="0"/>
+                                  <Component id="dniTextField" pref="136" max="32767" attributes="0"/>
                               </Group>
                               <EmptySpace max="-2" attributes="0"/>
                           </Group>
@@ -225,11 +229,12 @@
                       <Group type="103" groupAlignment="3" attributes="0">
                           <Component id="vencenEnComboBox" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="vencenEnLabel" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="filtrosAvanzadosButton" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="clasesComboBox" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="clasesLabel" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="filtrosAvanzadosPanel" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                      <EmptySpace type="unrelated" min="-2" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="3" attributes="0">
                           <Component id="limpiarButton" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="aplicarFiltrosButton" alignment="3" min="-2" max="-2" attributes="0"/>
@@ -305,11 +310,6 @@
                 <Property name="text" type="java.lang.String" value="Vencen en: "/>
               </Properties>
             </Component>
-            <Component class="javax.swing.JButton" name="filtrosAvanzadosButton">
-              <Properties>
-                <Property name="text" type="java.lang.String" value="Filtros avanzados &#x25be;"/>
-              </Properties>
-            </Component>
             <Container class="javax.swing.JPanel" name="filtrosAvanzadosPanel">
 
               <Layout>
@@ -317,7 +317,6 @@
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Group type="102" alignment="0" attributes="0">
                           <Group type="103" groupAlignment="1" attributes="0">
-                              <Component id="clasesLabel" min="-2" max="-2" attributes="0"/>
                               <Component id="emisionHastaLabel" min="-2" max="-2" attributes="0"/>
                               <Component id="emisionDesdeLabel" min="-2" max="-2" attributes="0"/>
                           </Group>
@@ -325,7 +324,6 @@
                           <Group type="103" groupAlignment="0" max="-2" attributes="0">
                               <Component id="emisionDesdeDateChooser" alignment="0" pref="121" max="32767" attributes="0"/>
                               <Component id="emisionHastaDateChooser" alignment="0" max="32767" attributes="0"/>
-                              <Component id="clasesComboBox" alignment="0" max="32767" attributes="0"/>
                           </Group>
                           <EmptySpace min="-2" pref="70" max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="1" attributes="0">
@@ -358,12 +356,7 @@
                               <Component id="vencimientoHastaLabel" min="-2" max="-2" attributes="0"/>
                               <Component id="vencimientoHastaDateChooser" min="-2" max="-2" attributes="0"/>
                           </Group>
-                          <EmptySpace type="separate" max="-2" attributes="0"/>
-                          <Group type="103" groupAlignment="3" attributes="0">
-                              <Component id="clasesLabel" alignment="3" min="-2" max="-2" attributes="0"/>
-                              <Component id="clasesComboBox" alignment="3" min="-2" max="-2" attributes="0"/>
-                          </Group>
-                          <EmptySpace pref="12" max="32767" attributes="0"/>
+                          <EmptySpace max="32767" attributes="0"/>
                       </Group>
                   </Group>
                 </DimensionLayout>
@@ -397,28 +390,28 @@
                 </Component>
                 <Component class="com.toedter.calendar.JDateChooser" name="vencimientoHastaDateChooser">
                 </Component>
-                <Component class="javax.swing.JLabel" name="clasesLabel">
-                  <Properties>
-                    <Property name="text" type="java.lang.String" value="Clases:"/>
-                  </Properties>
-                </Component>
-                <Component class="javax.swing.JComboBox" name="clasesComboBox">
-                  <Properties>
-                    <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
-                      <StringArray count="4">
-                        <StringItem index="0" value="Item 1"/>
-                        <StringItem index="1" value="Item 2"/>
-                        <StringItem index="2" value="Item 3"/>
-                        <StringItem index="3" value="Item 4"/>
-                      </StringArray>
-                    </Property>
-                  </Properties>
-                  <AuxValues>
-                    <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
-                  </AuxValues>
-                </Component>
               </SubComponents>
             </Container>
+            <Component class="javax.swing.JComboBox" name="clasesComboBox">
+              <Properties>
+                <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
+                  <StringArray count="4">
+                    <StringItem index="0" value="Item 1"/>
+                    <StringItem index="1" value="Item 2"/>
+                    <StringItem index="2" value="Item 3"/>
+                    <StringItem index="3" value="Item 4"/>
+                  </StringArray>
+                </Property>
+              </Properties>
+              <AuxValues>
+                <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
+              </AuxValues>
+            </Component>
+            <Component class="javax.swing.JLabel" name="clasesLabel">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Clases:"/>
+              </Properties>
+            </Component>
           </SubComponents>
         </Container>
       </SubComponents>

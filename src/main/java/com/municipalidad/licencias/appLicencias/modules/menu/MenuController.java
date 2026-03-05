@@ -7,6 +7,7 @@ import com.municipalidad.licencias.appLicencias.modules.gestionarusuarios.Gestio
 import com.municipalidad.licencias.appLicencias.factory.ControllerFactory;
 import com.municipalidad.licencias.appLicencias.modules.consultarlicencias.ConsultarLicenciasController;
 import com.municipalidad.licencias.appLicencias.modules.emitircopialicencia.EmitirCopiaLicenciaController;
+import com.municipalidad.licencias.appLicencias.modules.gestionarcostos.GestionarCostosController;
 import com.municipalidad.licencias.appLicencias.modules.modificartitular.ModificarTitularController;
 import com.municipalidad.licencias.appLicencias.session.SessionController;
 import javax.swing.SwingUtilities;
@@ -41,7 +42,7 @@ public class MenuController {
     
     private void verificarPermisos() {
         if(!sessionController.esSuperusuario()) {
-            menuView.ocultarBotones();
+            menuView.desactivarBotones();
         } 
     }
     
@@ -54,7 +55,9 @@ public class MenuController {
             menuView.setConsultarLicenciasAction(e -> mostrarPantallaConsultarLicencias());
             menuView.setAltaUsuarioAction(e -> mostrarPantallaAltaUsuario());
             menuView.setModificarDatosUsuarioAction(e -> mostrarPantallaModificarUsuario());
+            menuView.setGestionarCostosAction(e -> mostrarPantallaGestionarCostos());
             menuView.setSalirAction(e -> salir());
+            
         
     }
     
@@ -94,6 +97,11 @@ public class MenuController {
 
     private void mostrarPantallaEmitirCopiaLicencia() {
         EmitirCopiaLicenciaController controller = controllerFactory.createEmitirCopiaLicenciaController();
+        controller.display();
+    }
+    
+    private void mostrarPantallaGestionarCostos() {
+        GestionarCostosController controller = controllerFactory.createGestionarCostosController();
         controller.display();
     }
 

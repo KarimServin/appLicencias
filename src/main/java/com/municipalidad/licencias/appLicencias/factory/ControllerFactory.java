@@ -5,6 +5,7 @@ import com.municipalidad.licencias.appLicencias.modules.altausuario.AltaUsuarioC
 import com.municipalidad.licencias.appLicencias.modules.emitirlicencia.EmitirLicenciaController;
 import com.municipalidad.licencias.appLicencias.modules.consultarlicencias.ConsultarLicenciasController;
 import com.municipalidad.licencias.appLicencias.modules.emitircopialicencia.EmitirCopiaLicenciaController;
+import com.municipalidad.licencias.appLicencias.modules.gestionarcostos.GestionarCostosController;
 import com.municipalidad.licencias.appLicencias.modules.gestionarusuarios.EditarUsuarioController;
 import com.municipalidad.licencias.appLicencias.modules.modificartitular.ModificarTitularController;
 import com.municipalidad.licencias.appLicencias.session.SessionController;
@@ -30,6 +31,7 @@ public class ControllerFactory {
     private final ComprobanteService comprobanteService;
     private final PrintService printService;
     private final ExcelExportService excelExportService;
+    private final CostoLicenciaService costoLicenciaService;
     @Autowired
     public ControllerFactory (
             LicenciaService licenciaService,
@@ -41,7 +43,8 @@ public class ControllerFactory {
             LicenciaConsultaService licenciaConsultaService,
             ComprobanteService comprobanteService,
             PrintService printService,
-            ExcelExportService excelExportService) {
+            ExcelExportService excelExportService,
+            CostoLicenciaService costoLicenciaService) {
         
         this.licenciaService = licenciaService;
         this.titularService = titularService;
@@ -51,6 +54,7 @@ public class ControllerFactory {
         this.comprobanteService = comprobanteService;
         this.printService = printService;
         this.excelExportService = excelExportService;
+        this.costoLicenciaService = costoLicenciaService;
     }
     
    
@@ -86,5 +90,9 @@ public class ControllerFactory {
 
     public EmitirCopiaLicenciaController createEmitirCopiaLicenciaController() {
         return new EmitirCopiaLicenciaController(licenciaService, titularService,comprobanteService,printService);
+    }
+
+    public GestionarCostosController createGestionarCostosController() {
+        return new GestionarCostosController(costoLicenciaService);
     }
 }

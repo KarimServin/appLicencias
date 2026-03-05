@@ -1,5 +1,6 @@
 package com.municipalidad.licencias.appLicencias.modules.menu;
 
+import com.municipalidad.licencias.appLicencias.service.CostoLicenciaService;
 import java.awt.Toolkit;
 import java.awt.event.ActionListener;
 import javax.swing.JFrame;
@@ -24,10 +25,12 @@ public class MenuView extends javax.swing.JFrame {
     
     }
     
-    public void ocultarBotones() {
+    public void desactivarBotones() {
     
         btnAltaUsuario.setEnabled(false);
         btnModificarDatosUsuario.setEnabled(false);
+        btnGestionarCostos.setEnabled(false);
+        btnConsultarOperaciones.setEnabled(false);
     }
     
     
@@ -59,6 +62,10 @@ public class MenuView extends javax.swing.JFrame {
     public void setModificarDatosUsuarioAction(ActionListener listener) {
         btnModificarDatosUsuario.addActionListener(listener);
     }
+    
+    public void setGestionarCostosAction(ActionListener listener) {
+        btnGestionarCostos.addActionListener(listener);
+    }
 
     public void setSalirAction(ActionListener listener) {
         btnSALIR.addActionListener(listener);
@@ -81,6 +88,8 @@ public class MenuView extends javax.swing.JFrame {
         btnEmitirNuevaLicencia = new javax.swing.JButton();
         btnModificarDatosTitular = new javax.swing.JButton();
         btnSALIR = new javax.swing.JButton();
+        btnGestionarCostos = new javax.swing.JButton();
+        btnConsultarOperaciones = new javax.swing.JButton();
         panelBienvenida = new javax.swing.JPanel();
         panelEncabezado = new javax.swing.JPanel();
         labelLogoSF = new javax.swing.JLabel();
@@ -130,6 +139,14 @@ public class MenuView extends javax.swing.JFrame {
         btnSALIR.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/salida-de-emergencia.png"))); // NOI18N
         btnSALIR.setText("Salir");
 
+        btnGestionarCostos.setBackground(new java.awt.Color(153, 255, 204));
+        btnGestionarCostos.setFont(new java.awt.Font("Microsoft YaHei UI", 1, 18)); // NOI18N
+        btnGestionarCostos.setText("Gestionar costos de licencia");
+
+        btnConsultarOperaciones.setBackground(new java.awt.Color(153, 255, 204));
+        btnConsultarOperaciones.setFont(new java.awt.Font("Microsoft YaHei UI", 1, 18)); // NOI18N
+        btnConsultarOperaciones.setText("Consultar registro de operaciones");
+
         javax.swing.GroupLayout panelOpcionesLayout = new javax.swing.GroupLayout(panelOpciones);
         panelOpciones.setLayout(panelOpcionesLayout);
         panelOpcionesLayout.setHorizontalGroup(
@@ -143,14 +160,18 @@ public class MenuView extends javax.swing.JFrame {
                                 .addComponent(btnEmitirCopiaLicencia, javax.swing.GroupLayout.DEFAULT_SIZE, 395, Short.MAX_VALUE)
                                 .addComponent(btnEmitirNuevaLicencia, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                             .addComponent(btnConsultarLicencias, javax.swing.GroupLayout.PREFERRED_SIZE, 395, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 49, Short.MAX_VALUE)
                         .addGroup(panelOpcionesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(btnAltaTitular, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 395, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(btnModificarDatosTitular, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 395, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(btnAltaUsuario, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 395, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(panelOpcionesLayout.createSequentialGroup()
                         .addComponent(btnModificarDatosUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, 395, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 48, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btnGestionarCostos, javax.swing.GroupLayout.PREFERRED_SIZE, 395, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelOpcionesLayout.createSequentialGroup()
+                        .addComponent(btnConsultarOperaciones, javax.swing.GroupLayout.PREFERRED_SIZE, 395, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(btnSALIR, javax.swing.GroupLayout.PREFERRED_SIZE, 396, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
@@ -169,10 +190,14 @@ public class MenuView extends javax.swing.JFrame {
                     .addComponent(btnConsultarLicencias, javax.swing.GroupLayout.DEFAULT_SIZE, 60, Short.MAX_VALUE)
                     .addComponent(btnAltaUsuario, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(18, 18, 18)
-                .addGroup(panelOpcionesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(btnModificarDatosUsuario, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btnSALIR, javax.swing.GroupLayout.DEFAULT_SIZE, 57, Short.MAX_VALUE))
-                .addContainerGap(11, Short.MAX_VALUE))
+                .addGroup(panelOpcionesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnModificarDatosUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnGestionarCostos, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 18, Short.MAX_VALUE)
+                .addGroup(panelOpcionesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnSALIR, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnConsultarOperaciones, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap())
         );
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
@@ -257,8 +282,10 @@ public class MenuView extends javax.swing.JFrame {
     private javax.swing.JButton btnAltaTitular;
     private javax.swing.JButton btnAltaUsuario;
     private javax.swing.JButton btnConsultarLicencias;
+    private javax.swing.JButton btnConsultarOperaciones;
     private javax.swing.JButton btnEmitirCopiaLicencia;
     private javax.swing.JButton btnEmitirNuevaLicencia;
+    private javax.swing.JButton btnGestionarCostos;
     private javax.swing.JButton btnModificarDatosTitular;
     private javax.swing.JButton btnModificarDatosUsuario;
     private javax.swing.JButton btnSALIR;

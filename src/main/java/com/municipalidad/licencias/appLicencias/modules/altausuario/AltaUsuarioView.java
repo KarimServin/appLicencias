@@ -3,6 +3,7 @@ package com.municipalidad.licencias.appLicencias.modules.altausuario;
 import com.municipalidad.licencias.appLicencias.viewforms.Dialogs;
 import java.awt.Toolkit;
 import java.awt.event.ActionListener;
+import javax.swing.JFrame;
 
 public class AltaUsuarioView extends javax.swing.JFrame {
 
@@ -14,6 +15,7 @@ public class AltaUsuarioView extends javax.swing.JFrame {
         setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource("/img/SantaFeCapital_Logo.png")));
         this.setLocationRelativeTo(null);
         configurarVerPassword();
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
     }
 
     // ── Listeners ──
