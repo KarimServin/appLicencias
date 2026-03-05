@@ -8,10 +8,12 @@ import com.municipalidad.licencias.appLicencias.service.ComprobanteService;
 import com.municipalidad.licencias.appLicencias.service.LicenciaService;
 import com.municipalidad.licencias.appLicencias.service.PrintService;
 import com.municipalidad.licencias.appLicencias.service.TitularService;
+import com.municipalidad.licencias.appLicencias.viewforms.DialogoProcesando;
 import com.municipalidad.licencias.appLicencias.viewforms.Dialogs;
 import java.util.Optional;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
+import javax.swing.SwingWorker;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -100,67 +102,97 @@ public class EmitirLicenciaController {
 
     private void aceptar() {
         logger.info("Iniciando emisión de licencia para DNI: {}", dniValidado);
-        try {
-            var clases = view.getClasesSeleccionadas();
-            if (clases.isEmpty()) {
-                logger.warn("No se seleccionó ninguna clase de licencia.");
-                Dialogs.error(view, "Debe seleccionar al menos una clase de licencia.");
-                return;
-            }
 
-            if (!view.isMantenerDatos()) {
-                logger.debug("Actualizando datos del titular.");
-                ActualizarTitularRequestDTO datosActualizados = view.getDatosTitular();
-                datosActualizados.setDni(dniValidado);
-                titularService.actualizarDatosTitular(datosActualizados);
-            } else {
-                logger.debug("Se mantienen los datos actuales del titular.");
-            }
-
-            // 1. Calcular vigencia y monto
-            int vigencia = licenciaService.calcularVigencia(dniValidado);
-            int monto = clases.stream()
-                    .mapToInt(c -> licenciaService.calcularCosto(c, false, vigencia))
-                    .sum();
-
-            // 2. Emitir licencia
-            EmisionLicenciaDTO emisionLicenciaDTO = new EmisionLicenciaDTO(dniValidado, clases);
-            LicenciaDTO licenciaEmitida = licenciaService.emitirLicencia(emisionLicenciaDTO);
-
-            // 3. Generar comprobante
-            ComprobanteDTO comprobante = comprobanteService.generarComprobante(
-                    licenciaEmitida, monto, "EMISIÓN"
-            );
-
-            // 4. Imprimir — la licencia YA ESTÁ GUARDADA aunque falle la impresión
-            try {
-                printService.imprimirComprobante(titularActual, licenciaEmitida, comprobante);
-                printService.imprimirLicencia(titularActual, licenciaEmitida);
-            } catch (ImpresionCanceladaException e) {
-                logger.warn("Impresión cancelada por el usuario para DNI: {}", dniValidado);
-                manejarErrorImpresion(view, licenciaEmitida, comprobante,
-                        "No se pudo imprimir.\n¿Desea intentar imprimir nuevamente?");
-            } catch (RuntimeException e) {
-                logger.error("Error de impresora para DNI: {}", dniValidado, e);
-                manejarErrorImpresion(view, licenciaEmitida, comprobante,
-                        "Error al imprimir.\n¿Desea intentar imprimir nuevamente?");
-            }
-
-            logger.info("Licencia emitida correctamente para DNI: {}", dniValidado);
-            Dialogs.exito(view, "La licencia fue emitida correctamente.");
-            view.dispose();
-
-        } catch (IllegalArgumentException e) {
-            logger.warn("Error en datos proporcionados: {}", e.getMessage());
-            Dialogs.error(view, "Error en los datos proporcionados: " + e.getMessage());
-        } catch (RuntimeException e) {
-            logger.error("Error de runtime al emitir licencia: {}", e.getMessage());
-            Dialogs.error(view, "No se pudo emitir la licencia: " + e.getMessage());
-        } catch (Exception e) {
-            logger.error("Error inesperado al emitir licencia: {}", e.getMessage(), e);
-            Dialogs.error(view, "Ocurrió un error inesperado: " + e.getMessage());
+        // ── Validaciones rápidas (en el EDT, está bien) ──
+        var clases = view.getClasesSeleccionadas();
+        if (clases.isEmpty()) {
+            Dialogs.error(view, "Debe seleccionar al menos una clase de licencia.");
+            return;
         }
+
+        // Capturar datos de la vista ANTES de salir del EDT
+        boolean mantenerDatos = view.isMantenerDatos();
+        ActualizarTitularRequestDTO datosActualizados = null;
+        if (!mantenerDatos) {
+            datosActualizados = view.getDatosTitular();
+            datosActualizados.setDni(dniValidado);
+        }
+
+        // ── Mostrar "Procesando..." y ejecutar en background ──
+        DialogoProcesando dialogo = new DialogoProcesando(view, "Emitiendo licencia, por favor espere...");
+
+        final ActualizarTitularRequestDTO datosFinal = datosActualizados;
+
+        SwingWorker<ResultadoEmision, String> worker = new SwingWorker<>() {
+
+            @Override
+            protected ResultadoEmision doInBackground() throws Exception {
+                // Todo esto corre FUERA del EDT
+
+                if (datosFinal != null) {
+                    publish("Actualizando datos del titular...");
+                    titularService.actualizarDatosTitular(datosFinal);
+                }
+
+                publish("Calculando costos...");
+                int vigencia = licenciaService.calcularVigencia(dniValidado);
+                int monto = clases.stream()
+                        .mapToInt(c -> licenciaService.calcularCosto(c, false, vigencia))
+                        .sum();
+
+                publish("Emitiendo licencia...");
+                EmisionLicenciaDTO emisionDTO = new EmisionLicenciaDTO(dniValidado, clases);
+                LicenciaDTO licenciaEmitida = licenciaService.emitirLicencia(emisionDTO);
+
+                publish("Generando comprobante...");
+                ComprobanteDTO comprobante = comprobanteService.generarComprobante(
+                        licenciaEmitida, monto, "EMISIÓN"
+                );
+
+                return new ResultadoEmision(licenciaEmitida, comprobante);
+            }
+
+            @Override
+            protected void process(java.util.List<String> chunks) {
+                // Actualizar el mensaje del diálogo (corre en EDT)
+                dialogo.actualizarMensaje(chunks.get(chunks.size() - 1));
+            }
+
+            @Override
+            protected void done() {
+                dialogo.dispose(); // Cerrar el "Procesando..."
+                try {
+                    ResultadoEmision resultado = get();
+
+                    // Imprimir (printDialog necesita el EDT, esto está bien)
+                    try {
+                        printService.imprimirComprobante(titularActual, resultado.licencia, resultado.comprobante);
+                        printService.imprimirLicencia(titularActual, resultado.licencia);
+                    } catch (ImpresionCanceladaException e) {
+                        manejarErrorImpresion(view, resultado.licencia, resultado.comprobante,
+                                "No se pudo imprimir.\n¿Desea intentar imprimir nuevamente?");
+                    } catch (RuntimeException e) {
+                        manejarErrorImpresion(view, resultado.licencia, resultado.comprobante,
+                                "Error al imprimir.\n¿Desea intentar imprimir nuevamente?");
+                    }
+
+                    Dialogs.exito(view, "La licencia fue emitida correctamente.");
+                    view.dispose();
+
+                } catch (Exception e) {
+                    Throwable cause = (e.getCause() != null) ? e.getCause() : e;
+                    logger.error("Error al emitir licencia: {}", cause.getMessage(), cause);
+                    Dialogs.error(view, cause.getMessage());
+                }
+            }
+        };
+
+        worker.execute();
+        dialogo.setVisible(true); // Modal: bloquea hasta que el worker haga dispose()
     }
+
+    // DTO interno simple para pasar el resultado
+    private record ResultadoEmision(LicenciaDTO licencia, ComprobanteDTO comprobante) {}
 
     private void manejarErrorImpresion(EmitirLicenciaView view,
                                        LicenciaDTO licenciaEmitida,
