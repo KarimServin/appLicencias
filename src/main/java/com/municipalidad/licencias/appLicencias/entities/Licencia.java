@@ -44,7 +44,7 @@ public class Licencia {
     // Detalle: clases habilitadas
     @OneToMany(mappedBy = "licencia", cascade = CascadeType.ALL, orphanRemoval = true)
     @Builder.Default
-    private Set<LicenciaClase> clases = new HashSet<>();
+    private Set<ClaseHabilitada> clases = new HashSet<>();
 
     /**
      * Agrega una clase a la licencia, evitando duplicados lógicos en memoria.
@@ -58,7 +58,7 @@ public class Licencia {
 
         if (existe) return;
 
-        LicenciaClase lc = new LicenciaClase();
+        ClaseHabilitada lc = new ClaseHabilitada();
         lc.setLicencia(this);
         lc.setClaseLicencia(clase);
         this.clases.add(lc);

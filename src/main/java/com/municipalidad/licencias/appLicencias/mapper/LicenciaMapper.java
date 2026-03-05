@@ -3,7 +3,7 @@ package com.municipalidad.licencias.appLicencias.mapper;
 import com.municipalidad.licencias.appLicencias.dto.LicenciaDTO;
 import com.municipalidad.licencias.appLicencias.entities.ClaseLicencia;
 import com.municipalidad.licencias.appLicencias.entities.Licencia;
-import com.municipalidad.licencias.appLicencias.entities.LicenciaClase;
+import com.municipalidad.licencias.appLicencias.entities.ClaseHabilitada;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
@@ -26,10 +26,10 @@ public interface LicenciaMapper {
     @Mapping(target = "clases", expression = "java(mapClases(entity.getClases()))")
     LicenciaDTO toDTO(Licencia entity);
 
-    default Set<ClaseLicencia> mapClases(Set<LicenciaClase> clases) {
+    default Set<ClaseLicencia> mapClases(Set<ClaseHabilitada> clases) {
         if (clases == null || clases.isEmpty()) return Collections.emptySet();
         return clases.stream()
-                .map(LicenciaClase::getClaseLicencia)
+                .map(ClaseHabilitada::getClaseLicencia)
                 .collect(Collectors.toSet());
     }
 }
