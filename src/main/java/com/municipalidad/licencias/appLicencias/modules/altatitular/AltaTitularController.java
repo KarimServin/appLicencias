@@ -2,9 +2,11 @@ package com.municipalidad.licencias.appLicencias.modules.altatitular;
 
 
 import com.municipalidad.licencias.appLicencias.dto.TitularDTO;
+import com.municipalidad.licencias.appLicencias.events.OperacionEvent;
 import com.municipalidad.licencias.appLicencias.exception.ServiceException;
 import com.municipalidad.licencias.appLicencias.exception.ValidationException;
 import com.municipalidad.licencias.appLicencias.service.TitularService;
+import com.municipalidad.licencias.appLicencias.session.SessionInfo;
 import com.municipalidad.licencias.appLicencias.validation.TitularValidator;
 import com.municipalidad.licencias.appLicencias.validation.ValidationResult;
 import com.municipalidad.licencias.appLicencias.viewforms.Dialogs;
@@ -13,6 +15,7 @@ import javax.swing.SwingUtilities;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -22,14 +25,20 @@ public class AltaTitularController {
 
     private final TitularService titularService;
     private final TitularValidator titularValidator;
+    private final ApplicationEventPublisher eventPublisher;
+    private final SessionInfo sessionInfo;
 
     private AltaTitularView view;
 
     @Autowired
     public AltaTitularController(TitularService titularService,
-                                 TitularValidator titularValidator) {
+                                 TitularValidator titularValidator,
+                                 ApplicationEventPublisher eventPublisher,
+                                 SessionInfo sessionInfo) {
         this.titularService = titularService;
         this.titularValidator = titularValidator;
+        this.eventPublisher = eventPublisher;
+        this.sessionInfo = sessionInfo;
         logger.debug("AltaTitularController instanciado correctamente.");
     }
 
@@ -72,6 +81,11 @@ public class AltaTitularController {
 
             logger.debug("Datos válidos. Guardando titular en el servicio.");
             titularService.guardarTitular(titularDTO);
+
+            eventPublisher.publishEvent(new OperacionEvent(this,
+                sessionInfo.getNombreUsuarioActual(),
+                "ALTA_TITULAR",
+                "Titular registrado - DNI: " + titularDTO.getDni() + " - Nombre: " + titularDTO.getNombre() + " " + titularDTO.getApellido()));
 
             logger.info("Titular registrado con éxito.");
             Dialogs.exito(view, "El titular ha sido registrado con éxito.");

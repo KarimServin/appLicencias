@@ -69,6 +69,10 @@ public class MenuView extends javax.swing.JFrame {
     public void setSalirAction(ActionListener listener) {
         btnSALIR.addActionListener(listener);
     }
+
+    public void setConsultarOperacionesAction(ActionListener listener) {
+        btnConsultarOperaciones.addActionListener(listener);
+    }
     
     
     

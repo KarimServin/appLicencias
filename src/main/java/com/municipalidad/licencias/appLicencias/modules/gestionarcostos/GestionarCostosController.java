@@ -1,12 +1,15 @@
 package com.municipalidad.licencias.appLicencias.modules.gestionarcostos;
 
 import com.municipalidad.licencias.appLicencias.entities.ClaseLicencia;
+import com.municipalidad.licencias.appLicencias.events.OperacionEvent;
 import com.municipalidad.licencias.appLicencias.service.CostoLicenciaService;
+import com.municipalidad.licencias.appLicencias.session.SessionInfo;
 import com.municipalidad.licencias.appLicencias.viewforms.Dialogs;
 
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Component;
 
 import javax.swing.JOptionPane;
@@ -24,6 +27,8 @@ public class GestionarCostosController {
     private static final int[] VIGENCIAS = {5, 4, 3, 1};
 
     private final CostoLicenciaService costoService;
+    private final ApplicationEventPublisher eventPublisher;
+    private final SessionInfo sessionInfo;
 
     private GestionarCostosView view;
 
@@ -35,8 +40,12 @@ public class GestionarCostosController {
     private Map<String, Long> idsPorClave = new HashMap<>(); // "A-5" → id
     private Long idCopia;
 
-    public GestionarCostosController(CostoLicenciaService costoService) {
+    public GestionarCostosController(CostoLicenciaService costoService,
+                                     ApplicationEventPublisher eventPublisher,
+                                     SessionInfo sessionInfo) {
         this.costoService = costoService;
+        this.eventPublisher = eventPublisher;
+        this.sessionInfo = sessionInfo;
     }
 
     // ══════════════════════════════════════════════════════════════
@@ -266,6 +275,10 @@ public class GestionarCostosController {
 
         if (fallidos == 0) {
             logger.info("Todos los costos actualizados exitosamente ({} cambios)", exitosos);
+            eventPublisher.publishEvent(new OperacionEvent(this,
+                sessionInfo.getNombreUsuarioActual(),
+                "CAMBIO_COSTOS",
+                exitosos + " costo(s) de licencias actualizados"));
             Dialogs.info(view, exitosos + " costo(s) actualizados exitosamente.");
             view.setStatus(exitosos + " costo(s) actualizados correctamente.");
         } else {

@@ -6,6 +6,7 @@ import com.municipalidad.licencias.appLicencias.modules.emitirlicencia.EmitirLic
 import com.municipalidad.licencias.appLicencias.modules.gestionarusuarios.GestionarUsuariosController;
 import com.municipalidad.licencias.appLicencias.factory.ControllerFactory;
 import com.municipalidad.licencias.appLicencias.modules.consultarlicencias.ConsultarLicenciasController;
+import com.municipalidad.licencias.appLicencias.modules.consultaroperaciones.ConsultarOperacionesController;
 import com.municipalidad.licencias.appLicencias.modules.emitircopialicencia.EmitirCopiaLicenciaController;
 import com.municipalidad.licencias.appLicencias.modules.gestionarcostos.GestionarCostosController;
 import com.municipalidad.licencias.appLicencias.modules.modificartitular.ModificarTitularController;
@@ -53,6 +54,7 @@ public class MenuController {
             menuView.setAltaTitularAction(e -> mostrarPantallaAltaTitular());
             menuView.setModificarDatosTitularAction(e -> mostrarPantallaModificarDatosTitular());
             menuView.setConsultarLicenciasAction(e -> mostrarPantallaConsultarLicencias());
+            menuView.setConsultarOperacionesAction(e -> mostrarPantallaConsultarOperaciones());
             menuView.setAltaUsuarioAction(e -> mostrarPantallaAltaUsuario());
             menuView.setModificarDatosUsuarioAction(e -> mostrarPantallaModificarUsuario());
             menuView.setGestionarCostosAction(e -> mostrarPantallaGestionarCostos());
@@ -102,6 +104,11 @@ public class MenuController {
     
     private void mostrarPantallaGestionarCostos() {
         GestionarCostosController controller = controllerFactory.createGestionarCostosController();
+        controller.display();
+    }
+
+    private void mostrarPantallaConsultarOperaciones() {
+        ConsultarOperacionesController controller = controllerFactory.createConsultarOperacionesController();
         controller.display();
     }
 
