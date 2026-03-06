@@ -263,5 +263,5 @@ Las contribuciones son bienvenidas. Por favor, seguí estos pasos:
 ---
 
 <p align="center">
-  Desarrollado para la <strong>Municipalidad de Santa Fe</strong>
+  Desarrollado para <strong>Seminario Integrador</strong>
 </p>
