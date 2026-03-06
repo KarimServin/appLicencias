@@ -4,6 +4,7 @@ import com.municipalidad.licencias.appLicencias.modules.altatitular.AltaTitularC
 import com.municipalidad.licencias.appLicencias.modules.altausuario.AltaUsuarioController;
 import com.municipalidad.licencias.appLicencias.modules.emitirlicencia.EmitirLicenciaController;
 import com.municipalidad.licencias.appLicencias.modules.consultarlicencias.ConsultarLicenciasController;
+import com.municipalidad.licencias.appLicencias.modules.consultaroperaciones.ConsultarOperacionesController;
 import com.municipalidad.licencias.appLicencias.modules.emitircopialicencia.EmitirCopiaLicenciaController;
 import com.municipalidad.licencias.appLicencias.modules.gestionarcostos.GestionarCostosController;
 import com.municipalidad.licencias.appLicencias.modules.gestionarusuarios.EditarUsuarioController;
@@ -14,6 +15,7 @@ import com.municipalidad.licencias.appLicencias.service.*;
 import com.municipalidad.licencias.appLicencias.session.SessionInfo;
 import com.municipalidad.licencias.appLicencias.validation.TitularValidator;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Component;
 
 
@@ -32,6 +34,10 @@ public class ControllerFactory {
     private final PrintService printService;
     private final ExcelExportService excelExportService;
     private final CostoLicenciaService costoLicenciaService;
+    private final RegistroOperacionService registroOperacionService;
+    private final ApplicationEventPublisher eventPublisher;
+    private final SessionInfo sessionInfo;
+
     @Autowired
     public ControllerFactory (
             LicenciaService licenciaService,
@@ -44,7 +50,9 @@ public class ControllerFactory {
             ComprobanteService comprobanteService,
             PrintService printService,
             ExcelExportService excelExportService,
-            CostoLicenciaService costoLicenciaService) {
+            CostoLicenciaService costoLicenciaService,
+            RegistroOperacionService registroOperacionService,
+            ApplicationEventPublisher eventPublisher) {
         
         this.licenciaService = licenciaService;
         this.titularService = titularService;
@@ -55,33 +63,36 @@ public class ControllerFactory {
         this.printService = printService;
         this.excelExportService = excelExportService;
         this.costoLicenciaService = costoLicenciaService;
+        this.registroOperacionService = registroOperacionService;
+        this.eventPublisher = eventPublisher;
+        this.sessionInfo = sessionInfo;
     }
     
    
 
     public AltaUsuarioController createAltaUsuarioController() {
-        return new AltaUsuarioController(usuarioService);
+        return new AltaUsuarioController(usuarioService, eventPublisher, sessionInfo);
     }
     
     public AltaTitularController createAltaTitularController() {
-        return new AltaTitularController(titularService,titularValidator);
+        return new AltaTitularController(titularService, titularValidator, eventPublisher, sessionInfo);
     }
 
     public EmitirLicenciaController createEmitirLicenciaController() {
-        return new EmitirLicenciaController(titularService, licenciaService,comprobanteService,printService);
+        return new EmitirLicenciaController(titularService, licenciaService, comprobanteService, printService, eventPublisher, sessionInfo);
     } 
 
     public ModificarTitularController createModificarTitularController() {
-        return new ModificarTitularController(titularService,licenciaService);
+        return new ModificarTitularController(titularService, licenciaService, eventPublisher, sessionInfo);
     }
 
     public ConsultarLicenciasController createConsultarLicenciasController() {
-        return new ConsultarLicenciasController(licenciaConsultaService,excelExportService);
+        return new ConsultarLicenciasController(licenciaConsultaService, excelExportService);
     }
 
 
     public GestionarUsuariosController createModificarUsuarioController() {
-        return new GestionarUsuariosController(usuarioService,createEditarUsuarioController());
+        return new GestionarUsuariosController(usuarioService, createEditarUsuarioController(), eventPublisher, sessionInfo);
     }
     
     private EditarUsuarioController createEditarUsuarioController() {
@@ -89,10 +100,14 @@ public class ControllerFactory {
     }
 
     public EmitirCopiaLicenciaController createEmitirCopiaLicenciaController() {
-        return new EmitirCopiaLicenciaController(licenciaService, titularService,comprobanteService,printService);
+        return new EmitirCopiaLicenciaController(licenciaService, titularService, comprobanteService, printService, eventPublisher, sessionInfo);
     }
 
     public GestionarCostosController createGestionarCostosController() {
-        return new GestionarCostosController(costoLicenciaService);
+        return new GestionarCostosController(costoLicenciaService, eventPublisher, sessionInfo);
+    }
+
+    public ConsultarOperacionesController createConsultarOperacionesController() {
+        return new ConsultarOperacionesController(registroOperacionService);
     }
 }
