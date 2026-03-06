@@ -128,13 +128,18 @@ public class LicenciaServiceImpl implements LicenciaService {
     @Override
     public int calcularVigencia(Titular titular) {
         int edad = Period.between(titular.getFechaNacimiento(), LocalDate.now()).getYears();
+
         if (edad < 21) {
-            boolean esPrimeraLicencia = licenciaRepository.findByTitularDni(titular.getDni()).isEmpty();
-            return esPrimeraLicencia ? 1 : 3;
+            return 1;
+        } else if (edad <= 46) {
+            return 5;
+        } else if (edad <= 65) {
+            return 4;
+        } else if (edad <= 70) {
+            return 3;
+        } else {
+            return 1;
         }
-        if (edad <= 65) return 5;
-        if (edad <= 70) return 3;
-        return 1;
     }
 
     @Override
