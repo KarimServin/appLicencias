@@ -230,11 +230,11 @@ public class GestionarCostosController {
         }
 
         // ── Confirmar con resumen ──
-        String resumen = construirResumen(cambios);
+        //String resumen = construirResumen(cambios);
 
         int confirmar = JOptionPane.showConfirmDialog(view,
-            "Se modificarán " + cambios.size() + " costo(s):\n\n"
-            + resumen + "\n"
+            "Se modificarán " + cambios.size() + " costo(s).\n\n"
+            + "\n"
             + "¿Confirma los cambios?",
             "Confirmar cambios de costos",
             JOptionPane.YES_NO_OPTION,
@@ -324,6 +324,7 @@ public class GestionarCostosController {
         return cambios;
     }
 
+    /*
     private String construirResumen(List<CambioDTO> cambios) {
         StringBuilder sb = new StringBuilder();
         for (CambioDTO c : cambios) {
@@ -334,7 +335,7 @@ public class GestionarCostosController {
         }
         return sb.toString();
     }
-
+    */
     // ══════════════════════════════════════════════════════════════
     //  CERRAR
     // ══════════════════════════════════════════════════════════════

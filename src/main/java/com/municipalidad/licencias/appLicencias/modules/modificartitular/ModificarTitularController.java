@@ -96,8 +96,8 @@ public class ModificarTitularController {
                     int opcion = JOptionPane.showConfirmDialog(
                         view,
                         "El titular tiene una licencia vigente.\n\n" +
-                        "Al modificar el domicilio, deberá emitir una copia\n" +
-                        "de la licencia con los datos actualizados.\n\n" +
+                        "Al modificar el domicilio, deberá emitir una \n" +
+                        "licencia con los datos actualizados.\n\n" +
                         "¿Desea continuar?",
                         "Advertencia — Cambio de domicilio",
                         JOptionPane.YES_NO_OPTION,
