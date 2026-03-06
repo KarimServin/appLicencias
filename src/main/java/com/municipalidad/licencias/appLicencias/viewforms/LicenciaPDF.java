@@ -69,7 +69,6 @@ public class LicenciaPDF extends javax.swing.JPanel implements Printable{
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jLabel5 = new javax.swing.JLabel();
         txtFechaVencimiento = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
         txtDonante = new javax.swing.JLabel();
@@ -91,7 +90,6 @@ public class LicenciaPDF extends javax.swing.JPanel implements Printable{
         txtLicencia = new javax.swing.JLabel();
         txtApellido = new javax.swing.JLabel();
         txtTipoLicencia = new javax.swing.JLabel();
-        jLabel20 = new javax.swing.JLabel();
         jLabel19 = new javax.swing.JLabel();
         jLabel9 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
@@ -101,10 +99,6 @@ public class LicenciaPDF extends javax.swing.JPanel implements Printable{
         setBackground(new java.awt.Color(255, 255, 255));
         setForeground(new java.awt.Color(255, 255, 255));
         setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-
-        jLabel5.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel5.setText("Ministerio  de  Transporte");
-        add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 330, 140, -1));
 
         txtFechaVencimiento.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         txtFechaVencimiento.setText("12/03/2024");
@@ -165,7 +159,7 @@ public class LicenciaPDF extends javax.swing.JPanel implements Printable{
         add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 330, -1, -1));
 
         jLabel13.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/escudo-de-armas (4).png"))); // NOI18N
-        add(jLabel13, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 330, -1, -1));
+        add(jLabel13, new org.netbeans.lib.awtextra.AbsoluteConstraints(430, 20, -1, -1));
 
         jLabel14.setText("Domicilio");
         add(jLabel14, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 110, 60, -1));
@@ -181,10 +175,6 @@ public class LicenciaPDF extends javax.swing.JPanel implements Printable{
         txtTipoLicencia.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         txtTipoLicencia.setText("A1");
         add(txtTipoLicencia, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 80, -1, -1));
-
-        jLabel20.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel20.setText("República  Argentina");
-        add(jLabel20, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 350, 140, -1));
 
         jLabel19.setForeground(new java.awt.Color(255, 255, 255));
         jLabel19.setText("SEGURIDAD");
@@ -217,9 +207,7 @@ public class LicenciaPDF extends javax.swing.JPanel implements Printable{
     private javax.swing.JLabel jLabel18;
     private javax.swing.JLabel jLabel19;
     private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel20;
     private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;

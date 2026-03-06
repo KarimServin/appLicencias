@@ -1,8 +1,10 @@
 package com.municipalidad.licencias.appLicencias.modules.gestionarusuarios;
 
 import com.municipalidad.licencias.appLicencias.dto.UsuarioDTO;
+import com.municipalidad.licencias.appLicencias.events.OperacionEvent;
 import com.municipalidad.licencias.appLicencias.exception.ServiceException;
 import com.municipalidad.licencias.appLicencias.service.UsuarioService;
+import com.municipalidad.licencias.appLicencias.session.SessionInfo;
 import com.municipalidad.licencias.appLicencias.viewforms.Dialogs;
 import java.util.Collections;
 import java.util.List;
@@ -12,6 +14,7 @@ import javax.swing.SwingWorker;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -21,13 +24,19 @@ public class GestionarUsuariosController {
 
     private final UsuarioService usuarioService;
     private final EditarUsuarioController editarUsuarioController;
+    private final ApplicationEventPublisher eventPublisher;
+    private final SessionInfo sessionInfo;
     private GestionarUsuariosView view;
 
     @Autowired
     public GestionarUsuariosController(UsuarioService usuarioService,
-                                       EditarUsuarioController editarUsuarioController) {
+                                       EditarUsuarioController editarUsuarioController,
+                                       ApplicationEventPublisher eventPublisher,
+                                       SessionInfo sessionInfo) {
         this.usuarioService = usuarioService;
         this.editarUsuarioController = editarUsuarioController;
+        this.eventPublisher = eventPublisher;
+        this.sessionInfo = sessionInfo;
     }
 
     public void display() {
@@ -117,10 +126,18 @@ public class GestionarUsuariosController {
             if (esActivar) {
                 usuarioService.activar(id);
                 logger.info("Usuario '{}' activado.", nombre);
+                eventPublisher.publishEvent(new OperacionEvent(this,
+                    sessionInfo.getNombreUsuarioActual(),
+                    "MODIFICACION_USUARIO",
+                    "Usuario activado: " + nombre));
                 Dialogs.exito(view, "El usuario \"" + nombre + "\" fue activado correctamente.");
             } else {
                 usuarioService.desactivar(id);
                 logger.info("Usuario '{}' desactivado.", nombre);
+                eventPublisher.publishEvent(new OperacionEvent(this,
+                    sessionInfo.getNombreUsuarioActual(),
+                    "MODIFICACION_USUARIO",
+                    "Usuario desactivado: " + nombre));
                 Dialogs.exito(view, "El usuario \"" + nombre + "\" fue desactivado correctamente.");
             }
             cargarUsuariosAsync();
@@ -167,10 +184,18 @@ public class GestionarUsuariosController {
             if (esAdmin) {
                 usuarioService.quitarPrivilegios(id);
                 logger.info("Privilegios de superusuario quitados a '{}'.", nombre);
+                eventPublisher.publishEvent(new OperacionEvent(this,
+                    sessionInfo.getNombreUsuarioActual(),
+                    "MODIFICACION_USUARIO",
+                    "Privilegios quitados a usuario: " + nombre));
                 Dialogs.exito(view, "Se quitaron los privilegios de superusuario a \"" + nombre + "\".");
             } else {
                 usuarioService.concederPrivilegios(id);
                 logger.info("Privilegios de superusuario concedidos a '{}'.", nombre);
+                eventPublisher.publishEvent(new OperacionEvent(this,
+                    sessionInfo.getNombreUsuarioActual(),
+                    "MODIFICACION_USUARIO",
+                    "Privilegios de superusuario concedidos a usuario: " + nombre));
                 Dialogs.exito(view, "Se concedieron privilegios de superusuario a \"" + nombre + "\".");
             }
             cargarUsuariosAsync();

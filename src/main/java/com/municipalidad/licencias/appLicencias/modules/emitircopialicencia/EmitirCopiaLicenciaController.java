@@ -3,12 +3,14 @@ package com.municipalidad.licencias.appLicencias.modules.emitircopialicencia;
 import com.municipalidad.licencias.appLicencias.dto.ComprobanteDTO;
 import com.municipalidad.licencias.appLicencias.dto.LicenciaDTO;
 import com.municipalidad.licencias.appLicencias.dto.TitularDTO;
+import com.municipalidad.licencias.appLicencias.events.OperacionEvent;
 import com.municipalidad.licencias.appLicencias.exception.ImpresionCanceladaException;
 import com.municipalidad.licencias.appLicencias.exception.ServiceException;
 import com.municipalidad.licencias.appLicencias.service.ComprobanteService;
 import com.municipalidad.licencias.appLicencias.service.LicenciaService;
 import com.municipalidad.licencias.appLicencias.service.PrintService;
 import com.municipalidad.licencias.appLicencias.service.TitularService;
+import com.municipalidad.licencias.appLicencias.session.SessionInfo;
 import com.municipalidad.licencias.appLicencias.viewforms.DialogoProcesando;
 import com.municipalidad.licencias.appLicencias.viewforms.Dialogs;
 import java.util.Optional;
@@ -18,6 +20,7 @@ import javax.swing.SwingWorker;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -29,6 +32,8 @@ public class EmitirCopiaLicenciaController {
     private final TitularService titularService;
     private final ComprobanteService comprobanteService;
     private final PrintService printService;
+    private final ApplicationEventPublisher eventPublisher;
+    private final SessionInfo sessionInfo;
     private EmitirCopiaLicenciaView view;
     private Long dniValidado;
     private TitularDTO titularActual;
@@ -37,11 +42,15 @@ public class EmitirCopiaLicenciaController {
     public EmitirCopiaLicenciaController(LicenciaService licenciaService,
                                          TitularService titularService,
                                          ComprobanteService comprobanteService,
-                                         PrintService printService) {
+                                         PrintService printService,
+                                         ApplicationEventPublisher eventPublisher,
+                                         SessionInfo sessionInfo) {
         this.licenciaService = licenciaService;
         this.titularService = titularService;
         this.comprobanteService = comprobanteService;
         this.printService = printService;
+        this.eventPublisher = eventPublisher;
+        this.sessionInfo = sessionInfo;
         logger.debug("EmitirCopiaLicenciaController instanciado.");
     }
 
@@ -135,6 +144,11 @@ public class EmitirCopiaLicenciaController {
                 dialogo.dispose();
                 try {
                     ResultadoCopia resultado = get();
+
+                    eventPublisher.publishEvent(new OperacionEvent(this,
+                        sessionInfo.getNombreUsuarioActual(),
+                        "EMISION_COPIA",
+                        "Copia de licencia emitida para DNI: " + dniValidado));
 
                     try {
                         if (emitirComprobante) {

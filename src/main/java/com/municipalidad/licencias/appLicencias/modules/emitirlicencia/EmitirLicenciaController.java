@@ -3,11 +3,13 @@ package com.municipalidad.licencias.appLicencias.modules.emitirlicencia;
 import com.municipalidad.licencias.appLicencias.dto.ComprobanteDTO;
 import com.municipalidad.licencias.appLicencias.dto.LicenciaDTO;
 import com.municipalidad.licencias.appLicencias.dto.TitularDTO;
+import com.municipalidad.licencias.appLicencias.events.OperacionEvent;
 import com.municipalidad.licencias.appLicencias.exception.ImpresionCanceladaException;
 import com.municipalidad.licencias.appLicencias.service.ComprobanteService;
 import com.municipalidad.licencias.appLicencias.service.LicenciaService;
 import com.municipalidad.licencias.appLicencias.service.PrintService;
 import com.municipalidad.licencias.appLicencias.service.TitularService;
+import com.municipalidad.licencias.appLicencias.session.SessionInfo;
 import com.municipalidad.licencias.appLicencias.viewforms.DialogoProcesando;
 import com.municipalidad.licencias.appLicencias.viewforms.Dialogs;
 import java.util.Optional;
@@ -17,6 +19,7 @@ import javax.swing.SwingWorker;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Component;
 
 
@@ -31,17 +34,23 @@ public class EmitirLicenciaController {
     private final LicenciaService licenciaService;
     private final ComprobanteService comprobanteService;
     private final PrintService printService;
+    private final ApplicationEventPublisher eventPublisher;
+    private final SessionInfo sessionInfo;
     private EmitirLicenciaView view;
     
     @Autowired
     public EmitirLicenciaController(TitularService titularService,
                                     LicenciaService licenciaService,
                                     ComprobanteService comprobanteService,
-                                    PrintService printService) {
+                                    PrintService printService,
+                                    ApplicationEventPublisher eventPublisher,
+                                    SessionInfo sessionInfo) {
         this.titularService = titularService;
         this.licenciaService = licenciaService;
         this.comprobanteService = comprobanteService;
         this.printService = printService;
+        this.eventPublisher = eventPublisher;
+        this.sessionInfo = sessionInfo;
         logger.debug("EmitirLicenciaController instanciado.");
     }
 
@@ -163,6 +172,11 @@ public class EmitirLicenciaController {
                 dialogo.dispose(); // Cerrar el "Procesando..."
                 try {
                     ResultadoEmision resultado = get();
+
+                    eventPublisher.publishEvent(new OperacionEvent(this,
+                        sessionInfo.getNombreUsuarioActual(),
+                        "EMISION_LICENCIA",
+                        "Licencia emitida para DNI: " + dniValidado + " - Clases: " + clases));
 
                     // Imprimir (printDialog necesita el EDT, esto está bien)
                     try {

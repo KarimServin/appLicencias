@@ -1,10 +1,12 @@
 package com.municipalidad.licencias.appLicencias.modules.modificartitular;
 
 import com.municipalidad.licencias.appLicencias.dto.TitularDTO;
+import com.municipalidad.licencias.appLicencias.events.OperacionEvent;
 import com.municipalidad.licencias.appLicencias.exception.ServiceException;
 import com.municipalidad.licencias.appLicencias.modules.emitirlicencia.ActualizarTitularRequestDTO;
 import com.municipalidad.licencias.appLicencias.service.LicenciaService;
 import com.municipalidad.licencias.appLicencias.service.TitularService;
+import com.municipalidad.licencias.appLicencias.session.SessionInfo;
 import com.municipalidad.licencias.appLicencias.viewforms.Dialogs;
 import java.time.LocalDate;
 import java.util.Objects;
@@ -14,6 +16,7 @@ import javax.swing.SwingUtilities;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -23,15 +26,21 @@ public class ModificarTitularController {
 
     private final TitularService titularService;
     private final LicenciaService licenciaService;
+    private final ApplicationEventPublisher eventPublisher;
+    private final SessionInfo sessionInfo;
     private ModificarTitularView view;
     private Long dniValidado;
     private String domicilioOriginal;
 
     @Autowired
     public ModificarTitularController(TitularService titularService,
-                                      LicenciaService licenciaService) {
+                                      LicenciaService licenciaService,
+                                      ApplicationEventPublisher eventPublisher,
+                                      SessionInfo sessionInfo) {
         this.titularService = titularService;
         this.licenciaService = licenciaService;
+        this.eventPublisher = eventPublisher;
+        this.sessionInfo = sessionInfo;
         logger.debug("ModificarTitularController instanciado.");
     }
 
@@ -96,8 +105,8 @@ public class ModificarTitularController {
                     int opcion = JOptionPane.showConfirmDialog(
                         view,
                         "El titular tiene una licencia vigente.\n\n" +
-                        "Al modificar el domicilio, deberá emitir una copia\n" +
-                        "de la licencia con los datos actualizados.\n\n" +
+                        "Al modificar el domicilio, deberá emitir una \n" +
+                        "licencia con los datos actualizados.\n\n" +
                         "¿Desea continuar?",
                         "Advertencia — Cambio de domicilio",
                         JOptionPane.YES_NO_OPTION,
@@ -112,6 +121,11 @@ public class ModificarTitularController {
             }
 
             titularService.actualizarDatosTitular(datos);
+
+            eventPublisher.publishEvent(new OperacionEvent(this,
+                sessionInfo.getNombreUsuarioActual(),
+                "MODIFICACION_TITULAR",
+                "Titular modificado - DNI: " + dniValidado));
 
             logger.info("Titular modificado correctamente. DNI: {}", dniValidado);
             Dialogs.exito(view, "Los datos del titular fueron modificados correctamente.");
